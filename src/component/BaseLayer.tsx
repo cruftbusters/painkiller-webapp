@@ -23,7 +23,7 @@ function BaseLayer({ width, height }: BaseLayerProps) {
       )
       context.drawImage(image, left, top, right - left, bottom - top)
     })()
-  }, [canvasRef])
+  }, [canvasRef, screenRef, width, height])
   return (
     <canvas
       width={width}
