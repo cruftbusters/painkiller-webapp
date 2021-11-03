@@ -1,6 +1,6 @@
 # painkiller-webapp
 
-painkillergis.com
+[painkillergis.com](https://painkillergis.com)
 
 ## run locally
 
