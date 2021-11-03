@@ -1,0 +1,1 @@
+aws cloudfront create-invalidation --distribution-id E2ELSINNBJU4IM --invalidation-batch "Paths={Quantity=1,Items=['/']},CallerReference=`uuidgen`"
