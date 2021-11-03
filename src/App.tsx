@@ -1,5 +1,9 @@
+import BaseLayer from './component/BaseLayer'
+
 function App() {
-  return <>hello world</>
+  return (
+    <BaseLayer width={window.innerWidth} height={window.innerHeight} />
+  )
 }
 
 export default App
