@@ -16,10 +16,10 @@ function NewScreen(width: number, height: number): Screen {
       const tileWidth = (width - 2 * marginLeft) / zpow
       const tileHeight = (height - 2 * marginTop) / zpow
       return [
-        marginLeft,
-        marginTop,
-        marginLeft + tileWidth,
-        marginTop + tileHeight,
+        marginLeft + tileWidth * x,
+        marginTop + tileHeight * y,
+        marginLeft + tileWidth * (x + 1),
+        marginTop + tileHeight * (y + 1),
       ]
     },
   }
