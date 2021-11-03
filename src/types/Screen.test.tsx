@@ -1,7 +1,13 @@
 import { NewScreen } from './Screen'
 
-test('every tile is center of screen', () => {
+test('stretch z=0 tile to fit wide screen', () => {
   expect(NewScreen(1024, 512).tileToScreenEnvelope(0, 0, 0)).toStrictEqual(
-    [512 - 128, 256 - 128, 512 + 128, 256 + 128],
+    [256, 0, 768, 512],
+  )
+})
+
+test('stretch z=0 tile to fit tall screen', () => {
+  expect(NewScreen(512, 1024).tileToScreenEnvelope(0, 0, 0)).toStrictEqual(
+    [0, 256, 512, 768],
   )
 })

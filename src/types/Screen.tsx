@@ -10,9 +10,13 @@ interface Screen {
 function NewScreen(width: number, height: number): Screen {
   return {
     tileToScreenEnvelope: function (this, x, y, z) {
-      const left = width / 2
-      const top = height / 2
-      return [left - 128, top - 128, left + 128, top + 128]
+      const marginWidth = (width - height) / 2
+      const marginHeight = (height - width) / 2
+      if (marginWidth > marginHeight) {
+        return [marginWidth, 0, width - marginWidth, height]
+      } else {
+        return [0, marginHeight, width, height - marginHeight]
+      }
     },
   }
 }
