@@ -8,17 +8,16 @@ interface Screen {
 }
 
 function NewScreen(width: number, height: number, zoom: number): Screen {
-  const baseTileWidth = Math.min(width, height) * Math.pow(2, zoom)
   return {
     tileToScreenEnvelope: function (this, x, y, z) {
-      const tileWidth = baseTileWidth / Math.pow(2, z)
-      const marginLeft = (width - baseTileWidth) / 2
-      const marginTop = (height - baseTileWidth) / 2
+      const fitWidth = Math.min(width, height)
+      const zpow = Math.pow(2, zoom)
+      const dzpow = Math.pow(2, zoom - z)
       return [
-        marginLeft + tileWidth * x,
-        marginTop + tileWidth * y,
-        marginLeft + tileWidth * (x + 1),
-        marginTop + tileWidth * (y + 1),
+        (width - fitWidth * zpow) / 2 + fitWidth * dzpow * x,
+        (height - fitWidth * zpow) / 2 + fitWidth * dzpow * y,
+        (width - fitWidth * zpow) / 2 + fitWidth * dzpow * (x + 1),
+        (height - fitWidth * zpow) / 2 + fitWidth * dzpow * (y + 1),
       ]
     },
   }
