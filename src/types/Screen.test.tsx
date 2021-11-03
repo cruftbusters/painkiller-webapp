@@ -11,3 +11,9 @@ test('stretch z=0 tile to fit tall screen', () => {
     [0, 256, 512, 768],
   )
 })
+
+test('stretch z=1 tile to fit quarter of z=0', () => {
+  expect(NewScreen(4, 2).tileToScreenEnvelope(0, 0, 1)).toStrictEqual([
+    1, 0, 2, 1,
+  ])
+})
