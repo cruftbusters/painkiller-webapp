@@ -7,10 +7,12 @@ interface Screen {
   ): number[]
 }
 
-function NewScreen(): Screen {
+function NewScreen(width: number, height: number): Screen {
   return {
     tileToScreenEnvelope: function (this, x, y, z) {
-      return [20, 20, 256, 256]
+      const left = width / 2
+      const top = height / 2
+      return [left - 128, top - 128, left + 128, top + 128]
     },
   }
 }
