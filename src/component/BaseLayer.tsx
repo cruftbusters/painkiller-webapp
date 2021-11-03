@@ -1,4 +1,5 @@
 import { MutableRefObject, useEffect, useRef } from 'react'
+import Screen, { NewScreen } from '../types/Screen'
 
 type BaseLayerProps = {
   width: number
@@ -7,13 +8,20 @@ type BaseLayerProps = {
 
 function BaseLayer({ width, height }: BaseLayerProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
+  const screenRef = useRef(NewScreen()) as MutableRefObject<Screen>
   useEffect(() => {
     ;(async () => {
+      const screen = screenRef.current
       const canvas = canvasRef.current
       const context = canvas.getContext('2d')!
       context.fillRect(0, 0, width, height)
       const image = await fetchBaseTile(0, 0, 0)
-      context.drawImage(image, 0, 0)
+      const [left, top, right, bottom] = screen.tileToScreenEnvelope(
+        0,
+        0,
+        0,
+      )
+      context.drawImage(image, left, top, right - left, bottom - top)
     })()
   }, [canvasRef])
   return (
@@ -29,6 +37,7 @@ function BaseLayer({ width, height }: BaseLayerProps) {
     />
   )
 }
+
 const fetchBaseTile = (tx: number, ty: number, tz: number) =>
   new Promise<HTMLImageElement>((resolve) => {
     const image = new Image()
