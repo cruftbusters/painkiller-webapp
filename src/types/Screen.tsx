@@ -5,19 +5,30 @@ interface Screen {
     y: number,
     z: number,
   ): number[]
+  tileToScreenPoint(
+    this: Screen,
+    x: number,
+    y: number,
+    z: number,
+  ): number[]
 }
 
 function NewScreen(width: number, height: number, zoom: number): Screen {
+  const fitWidth = Math.min(width, height)
+  const zpow = Math.pow(2, zoom)
+  const xCenter = (width - fitWidth * zpow) / 2
+  const yCenter = (height - fitWidth * zpow) / 2
   return {
     tileToScreenEnvelope: function (this, x, y, z) {
-      const fitWidth = Math.min(width, height)
-      const zpow = Math.pow(2, zoom)
+      const [left, top] = this.tileToScreenPoint(x, y, z)
+      const [right, bottom] = this.tileToScreenPoint(x + 1, y + 1, z)
+      return [left, top, right, bottom]
+    },
+    tileToScreenPoint: function (this, x, y, z) {
       const dzpow = Math.pow(2, zoom - z)
       return [
-        (width - fitWidth * zpow) / 2 + fitWidth * dzpow * x,
-        (height - fitWidth * zpow) / 2 + fitWidth * dzpow * y,
-        (width - fitWidth * zpow) / 2 + fitWidth * dzpow * (x + 1),
-        (height - fitWidth * zpow) / 2 + fitWidth * dzpow * (y + 1),
+        xCenter + fitWidth * dzpow * x,
+        yCenter + fitWidth * dzpow * y,
       ]
     },
   }
