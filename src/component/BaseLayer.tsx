@@ -1,5 +1,10 @@
-import { MutableRefObject, useEffect, useRef } from 'react'
-import Screen, { NewScreen } from '../types/Screen'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import Coordinate, {
+  DefaultCoordinate,
+  fromScreen,
+  fromTile,
+} from '../types/Coordinate'
+import Screen from '../types/Screen'
 
 type BaseLayerProps = {
   width: number
@@ -8,18 +13,32 @@ type BaseLayerProps = {
 
 function BaseLayer({ width, height }: BaseLayerProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
-  const screenRef = useRef(
-    NewScreen(width, height, 0),
-  ) as MutableRefObject<Screen>
+  const [screen] = useState<Screen>({ width, height, scale: 0 })
+  const [coordinate] = useState<Coordinate>(new DefaultCoordinate(0, 0))
   useEffect(() => {
     ;(async () => {
-      const screen = screenRef.current
       const canvas = canvasRef.current
       const context = canvas.getContext('2d')!
-      context.fillRect(0, 0, width, height)
-      drawTile(screen, context, 0, 0, 0)
+      context.fillRect(0, 0, screen.width, screen.height)
+
+      const z = 0
+      const [right, bottom] = fromScreen(
+        screen,
+        screen.width,
+        screen.height,
+      ).toTile(z)
+      for (let x = 0; x < right; x++) {
+        for (let y = 0; y < bottom; y++) {
+          const image = await fetchBaseTile(x, y, z)
+          const [left, top] = fromTile(x, y, z).toScreen(screen)
+          const [right, bottom] = fromTile(x + 1, y + 1, z).toScreen(
+            screen,
+          )
+          context.drawImage(image, left, top, right - left, bottom - top)
+        }
+      }
     })()
-  }, [canvasRef, screenRef, width, height])
+  }, [canvasRef, screen, coordinate])
   return (
     <canvas
       width={width}
@@ -32,19 +51,6 @@ function BaseLayer({ width, height }: BaseLayerProps) {
       ref={canvasRef}
     />
   )
-}
-
-const drawTile = async (
-  screen: Screen,
-  context: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  z: number,
-) => {
-  const image = await fetchBaseTile(x, y, z)
-  const [left, top] = screen.tileToScreenPoint(x, y, z)
-  const [right, bottom] = screen.tileToScreenPoint(x + 1, y + 1, z)
-  context.drawImage(image, left, top, right - left, bottom - top)
 }
 
 const fetchBaseTile = (tx: number, ty: number, tz: number) =>
