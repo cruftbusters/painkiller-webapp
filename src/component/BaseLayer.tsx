@@ -9,7 +9,7 @@ type BaseLayerProps = {
 function BaseLayer({ width, height }: BaseLayerProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
   const screenRef = useRef(
-    NewScreen(width, height),
+    NewScreen(width, height, 0),
   ) as MutableRefObject<Screen>
   useEffect(() => {
     ;(async () => {
