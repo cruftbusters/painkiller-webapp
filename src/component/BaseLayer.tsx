@@ -17,13 +17,7 @@ function BaseLayer({ width, height }: BaseLayerProps) {
       const canvas = canvasRef.current
       const context = canvas.getContext('2d')!
       context.fillRect(0, 0, width, height)
-      const image = await fetchBaseTile(0, 0, 0)
-      const [left, top, right, bottom] = screen.tileToScreenEnvelope(
-        0,
-        0,
-        0,
-      )
-      context.drawImage(image, left, top, right - left, bottom - top)
+      drawTile(screen, context, 0, 0, 0)
     })()
   }, [canvasRef, screenRef, width, height])
   return (
@@ -38,6 +32,18 @@ function BaseLayer({ width, height }: BaseLayerProps) {
       ref={canvasRef}
     />
   )
+}
+
+const drawTile = async (
+  screen: Screen,
+  context: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  z: number,
+) => {
+  const image = await fetchBaseTile(x, y, z)
+  const [left, top, right, bottom] = screen.tileToScreenEnvelope(x, y, z)
+  context.drawImage(image, left, top, right - left, bottom - top)
 }
 
 const fetchBaseTile = (tx: number, ty: number, tz: number) =>
