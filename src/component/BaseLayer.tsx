@@ -42,7 +42,8 @@ const drawTile = async (
   z: number,
 ) => {
   const image = await fetchBaseTile(x, y, z)
-  const [left, top, right, bottom] = screen.tileToScreenEnvelope(x, y, z)
+  const [left, top] = screen.tileToScreenPoint(x, y, z)
+  const [right, bottom] = screen.tileToScreenPoint(x + 1, y + 1, z)
   context.drawImage(image, left, top, right - left, bottom - top)
 }
 
