@@ -194,5 +194,11 @@ describe('coordinate', () => {
         1 / 2,
       ])
     })
+
+    it('latitude is out of bounds', () => {
+      expect(() =>
+        new DefaultCoordinate(-180, -maxMercatorLatitude - 1).toTile(1),
+      ).toThrow('latitude out of bounds -90 to 90')
+    })
   })
 })

@@ -26,6 +26,8 @@ export class DefaultCoordinate implements Coordinate {
   }
 
   toTile(zoom: number): number[] {
+    if (Math.abs(this.y) > maxMercatorLatitude)
+      throw Error('latitude out of bounds -90 to 90')
     const n = Math.pow(2, zoom)
 
     const xNormal = (this.x / 180 + 1) / 2
