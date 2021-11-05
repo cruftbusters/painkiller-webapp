@@ -4,7 +4,7 @@ import Coordinate, {
   fromMapPixel,
   fromTile,
 } from '../types/Coordinate'
-import MapState from '../types/MapState'
+import MapState, { DefaultMapState } from '../types/MapState'
 
 type BaseLayerProps = {
   width: number
@@ -13,7 +13,9 @@ type BaseLayerProps = {
 
 function BaseLayer({ width, height }: BaseLayerProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
-  const [mapState] = useState<MapState>({ width, height, scale: 0 })
+  const [mapState] = useState<MapState>(
+    new DefaultMapState({ width, height, scale: 0 }),
+  )
   const [coordinate] = useState<Coordinate>(new DefaultCoordinate(0, 0))
   useEffect(() => {
     ;(async () => {

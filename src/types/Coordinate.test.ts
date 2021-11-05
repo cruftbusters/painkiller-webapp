@@ -4,6 +4,7 @@ import {
   fromTile,
   maxMercatorLatitude,
 } from './Coordinate'
+import { DefaultMapState } from './MapState'
 
 describe('coordinate', () => {
   describe('from tile', () => {
@@ -29,48 +30,52 @@ describe('coordinate', () => {
 
   describe('to map pixel', () => {
     it('translates top left', () => {
-      const screen = { width: 2, height: 2, scale: 0 }
       expect(
         new DefaultCoordinate(-180, maxMercatorLatitude).toMapPixel(
-          screen,
+          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
         ),
       ).toStrictEqual([0, 0])
     })
 
     it('translates bottom right', () => {
-      const screen = { width: 2, height: 2, scale: 0 }
       expect(
         new DefaultCoordinate(180, -maxMercatorLatitude).toMapPixel(
-          screen,
+          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
         ),
       ).toStrictEqual([2, 2])
     })
 
     it('preserve mercator square', () => {
       expect(
-        new DefaultCoordinate(-180, maxMercatorLatitude).toMapPixel({
-          width: 4,
-          height: 2,
-          scale: 0,
-        }),
+        new DefaultCoordinate(-180, maxMercatorLatitude).toMapPixel(
+          new DefaultMapState({
+            width: 4,
+            height: 2,
+            scale: 0,
+          }),
+        ),
       ).toStrictEqual([0, 0])
 
       expect(
-        new DefaultCoordinate(-180, maxMercatorLatitude).toMapPixel({
-          width: 2,
-          height: 4,
-          scale: 0,
-        }),
+        new DefaultCoordinate(-180, maxMercatorLatitude).toMapPixel(
+          new DefaultMapState({
+            width: 2,
+            height: 4,
+            scale: 0,
+          }),
+        ),
       ).toStrictEqual([0, 0])
     })
 
     it('scale', () => {
       expect(
-        new DefaultCoordinate(180, -maxMercatorLatitude).toMapPixel({
-          width: 2,
-          height: 2,
-          scale: 1,
-        }),
+        new DefaultCoordinate(180, -maxMercatorLatitude).toMapPixel(
+          new DefaultMapState({
+            width: 2,
+            height: 2,
+            scale: 1,
+          }),
+        ),
       ).toStrictEqual([4, 4])
     })
   })
@@ -78,35 +83,59 @@ describe('coordinate', () => {
   describe('from map pixel', () => {
     it('translates top left', () => {
       expect(
-        fromMapPixel({ width: 2, height: 2, scale: 0 }, 0, 0),
+        fromMapPixel(
+          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
+          0,
+          0,
+        ),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
     })
 
     it('translates bottom right', () => {
       expect(
-        fromMapPixel({ width: 2, height: 2, scale: 0 }, 2, 2),
+        fromMapPixel(
+          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
+          2,
+          2,
+        ),
       ).toStrictEqual(new DefaultCoordinate(180, -maxMercatorLatitude))
     })
 
     it('translates center', () => {
       expect(
-        fromMapPixel({ width: 2, height: 2, scale: 0 }, 1, 1),
+        fromMapPixel(
+          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
+          1,
+          1,
+        ),
       ).toStrictEqual(new DefaultCoordinate(0, 0))
     })
 
     it('preserve mercator square', () => {
       expect(
-        fromMapPixel({ width: 2, height: 4, scale: 0 }, 0, 0),
+        fromMapPixel(
+          new DefaultMapState({ width: 2, height: 4, scale: 0 }),
+          0,
+          0,
+        ),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
 
       expect(
-        fromMapPixel({ width: 4, height: 2, scale: 0 }, 0, 0),
+        fromMapPixel(
+          new DefaultMapState({ width: 4, height: 2, scale: 0 }),
+          0,
+          0,
+        ),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
     })
 
     it('scale', () => {
       expect(
-        fromMapPixel({ width: 2, height: 2, scale: 1 }, 4, 4),
+        fromMapPixel(
+          new DefaultMapState({ width: 2, height: 2, scale: 1 }),
+          4,
+          4,
+        ),
       ).toStrictEqual(new DefaultCoordinate(180, -maxMercatorLatitude))
     })
   })
