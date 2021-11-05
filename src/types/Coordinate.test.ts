@@ -49,7 +49,7 @@ describe('coordinate', () => {
           height: 2,
           scale: 0,
         }),
-      ).toStrictEqual([1, 0])
+      ).toStrictEqual([0, 0])
 
       expect(
         new DefaultCoordinate(-180, maxMercatorLatitude).toScreen({
@@ -57,7 +57,7 @@ describe('coordinate', () => {
           height: 4,
           scale: 0,
         }),
-      ).toStrictEqual([0, 1])
+      ).toStrictEqual([0, 0])
     })
   })
 
@@ -82,11 +82,11 @@ describe('coordinate', () => {
 
     it('preserve mercator square', () => {
       expect(
-        fromScreen({ width: 2, height: 4, scale: 0 }, 0, 1),
+        fromScreen({ width: 2, height: 4, scale: 0 }, 0, 0),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
 
       expect(
-        fromScreen({ width: 4, height: 2, scale: 0 }, 1, 0),
+        fromScreen({ width: 4, height: 2, scale: 0 }, 0, 0),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
     })
   })
