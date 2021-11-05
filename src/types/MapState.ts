@@ -1,7 +1,7 @@
-interface Screen {
+interface MapState {
   width: number
   height: number
   scale: number
 }
 
-export default Screen
+export default MapState

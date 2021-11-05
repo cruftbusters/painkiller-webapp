@@ -1,10 +1,10 @@
-import Screen from './Screen'
+import MapState from './MapState'
 
 export default interface Coordinate {
   x: number
   y: number
 
-  toScreen(screen: Screen): number[]
+  toMapPixel(screen: MapState): number[]
   toTile(zoom: number): number[]
 }
 
@@ -16,7 +16,7 @@ export class DefaultCoordinate implements Coordinate {
     this.y = y
   }
 
-  toScreen(screen: Screen): number[] {
+  toMapPixel(screen: MapState): number[] {
     const tileSize =
       Math.min(screen.width, screen.height) * Math.pow(2, screen.scale)
     return [
@@ -44,8 +44,8 @@ export function fromTile(x: number, y: number, z: number): Coordinate {
   )
 }
 
-export function fromScreen(
-  screen: Screen,
+export function fromMapPixel(
+  screen: MapState,
   x: number,
   y: number,
 ): Coordinate {

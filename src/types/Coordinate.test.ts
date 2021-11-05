@@ -1,6 +1,6 @@
 import {
   DefaultCoordinate,
-  fromScreen,
+  fromMapPixel,
   fromTile,
   maxMercatorLatitude,
 } from './Coordinate'
@@ -27,24 +27,28 @@ describe('coordinate', () => {
     })
   })
 
-  describe('to screen', () => {
+  describe('to map pixel', () => {
     it('translates top left', () => {
       const screen = { width: 2, height: 2, scale: 0 }
       expect(
-        new DefaultCoordinate(-180, maxMercatorLatitude).toScreen(screen),
+        new DefaultCoordinate(-180, maxMercatorLatitude).toMapPixel(
+          screen,
+        ),
       ).toStrictEqual([0, 0])
     })
 
     it('translates bottom right', () => {
       const screen = { width: 2, height: 2, scale: 0 }
       expect(
-        new DefaultCoordinate(180, -maxMercatorLatitude).toScreen(screen),
+        new DefaultCoordinate(180, -maxMercatorLatitude).toMapPixel(
+          screen,
+        ),
       ).toStrictEqual([2, 2])
     })
 
     it('preserve mercator square', () => {
       expect(
-        new DefaultCoordinate(-180, maxMercatorLatitude).toScreen({
+        new DefaultCoordinate(-180, maxMercatorLatitude).toMapPixel({
           width: 4,
           height: 2,
           scale: 0,
@@ -52,7 +56,7 @@ describe('coordinate', () => {
       ).toStrictEqual([0, 0])
 
       expect(
-        new DefaultCoordinate(-180, maxMercatorLatitude).toScreen({
+        new DefaultCoordinate(-180, maxMercatorLatitude).toMapPixel({
           width: 2,
           height: 4,
           scale: 0,
@@ -62,7 +66,7 @@ describe('coordinate', () => {
 
     it('scale', () => {
       expect(
-        new DefaultCoordinate(180, -maxMercatorLatitude).toScreen({
+        new DefaultCoordinate(180, -maxMercatorLatitude).toMapPixel({
           width: 2,
           height: 2,
           scale: 1,
@@ -71,38 +75,38 @@ describe('coordinate', () => {
     })
   })
 
-  describe('from screen', () => {
+  describe('from map pixel', () => {
     it('translates top left', () => {
       expect(
-        fromScreen({ width: 2, height: 2, scale: 0 }, 0, 0),
+        fromMapPixel({ width: 2, height: 2, scale: 0 }, 0, 0),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
     })
 
     it('translates bottom right', () => {
       expect(
-        fromScreen({ width: 2, height: 2, scale: 0 }, 2, 2),
+        fromMapPixel({ width: 2, height: 2, scale: 0 }, 2, 2),
       ).toStrictEqual(new DefaultCoordinate(180, -maxMercatorLatitude))
     })
 
     it('translates center', () => {
       expect(
-        fromScreen({ width: 2, height: 2, scale: 0 }, 1, 1),
+        fromMapPixel({ width: 2, height: 2, scale: 0 }, 1, 1),
       ).toStrictEqual(new DefaultCoordinate(0, 0))
     })
 
     it('preserve mercator square', () => {
       expect(
-        fromScreen({ width: 2, height: 4, scale: 0 }, 0, 0),
+        fromMapPixel({ width: 2, height: 4, scale: 0 }, 0, 0),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
 
       expect(
-        fromScreen({ width: 4, height: 2, scale: 0 }, 0, 0),
+        fromMapPixel({ width: 4, height: 2, scale: 0 }, 0, 0),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
     })
 
     it('scale', () => {
       expect(
-        fromScreen({ width: 2, height: 2, scale: 1 }, 4, 4),
+        fromMapPixel({ width: 2, height: 2, scale: 1 }, 4, 4),
       ).toStrictEqual(new DefaultCoordinate(180, -maxMercatorLatitude))
     })
   })
