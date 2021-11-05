@@ -59,6 +59,16 @@ describe('coordinate', () => {
         }),
       ).toStrictEqual([0, 0])
     })
+
+    it('scale', () => {
+      expect(
+        new DefaultCoordinate(180, -maxMercatorLatitude).toScreen({
+          width: 2,
+          height: 2,
+          scale: 1,
+        }),
+      ).toStrictEqual([4, 4])
+    })
   })
 
   describe('from screen', () => {
@@ -88,6 +98,12 @@ describe('coordinate', () => {
       expect(
         fromScreen({ width: 4, height: 2, scale: 0 }, 0, 0),
       ).toStrictEqual(new DefaultCoordinate(-180, maxMercatorLatitude))
+    })
+
+    it('scale', () => {
+      expect(
+        fromScreen({ width: 2, height: 2, scale: 1 }, 4, 4),
+      ).toStrictEqual(new DefaultCoordinate(180, -maxMercatorLatitude))
     })
   })
 

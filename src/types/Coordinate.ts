@@ -17,7 +17,8 @@ export class DefaultCoordinate implements Coordinate {
   }
 
   toScreen(screen: Screen): number[] {
-    const tileSize = Math.min(screen.width, screen.height)
+    const tileSize =
+      Math.min(screen.width, screen.height) * Math.pow(2, screen.scale)
     return [
       ((this.x / 180 + 1) / 2) * tileSize,
       ((1 - this.y / maxMercatorLatitude) / 2) * tileSize,
@@ -48,7 +49,8 @@ export function fromScreen(
   x: number,
   y: number,
 ): Coordinate {
-  const tileSize = Math.min(screen.width, screen.height)
+  const tileSize =
+    Math.min(screen.width, screen.height) * Math.pow(2, screen.scale)
   return new DefaultCoordinate(
     (x / tileSize) * 360 - 180,
     (1 - (y / tileSize) * 2) * maxMercatorLatitude,
