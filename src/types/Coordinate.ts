@@ -27,9 +27,15 @@ export class DefaultCoordinate implements Coordinate {
 
   toTile(zoom: number): number[] {
     const n = Math.pow(2, zoom)
+
+    const xNormal = (this.x / 180 + 1) / 2
+
     const yRadians = (this.y * Math.PI) / 180
-    const term = Math.log(Math.tan(yRadians) + 1 / Math.cos(yRadians)) * n
-    return [(n * this.x + 180) / 360, (1 - term / Math.PI) / 2]
+    const yMercator =
+      Math.log(Math.tan(yRadians) + 1 / Math.cos(yRadians)) / Math.PI
+    const yNormal = (1 - yMercator) / 2
+
+    return [n * xNormal, n * yNormal]
   }
 }
 

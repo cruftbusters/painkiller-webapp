@@ -174,12 +174,9 @@ describe('coordinate', () => {
     }
 
     it('translates top left', () => {
-      expect(
-        snap(
-          64,
-          new DefaultCoordinate(-180, maxMercatorLatitude).toTile(0),
-        ),
-      ).toStrictEqual([0, 0])
+      const topLeft = new DefaultCoordinate(-180, maxMercatorLatitude)
+      expect(snap(64, topLeft.toTile(0))).toStrictEqual([0, 0])
+      expect(snap(64, topLeft.toTile(1))).toStrictEqual([0, 0])
     })
 
     it('translates bottom right', () => {
