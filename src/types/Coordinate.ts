@@ -20,8 +20,8 @@ export class DefaultCoordinate implements Coordinate {
     const tileSize =
       Math.min(screen.width, screen.height) * Math.pow(2, screen.scale)
     return [
-      ((this.x / 180 + 1) / 2) * tileSize,
-      ((1 - this.y / maxMercatorLatitude) / 2) * tileSize,
+      ((this.x - screen.x) / 360) * tileSize,
+      ((screen.y - this.y) / (2 * maxMercatorLatitude)) * tileSize,
     ]
   }
 
@@ -52,7 +52,7 @@ export function fromMapPixel(
   const tileSize =
     Math.min(screen.width, screen.height) * Math.pow(2, screen.scale)
   return new DefaultCoordinate(
-    (x / tileSize) * 360 - 180,
-    (1 - (y / tileSize) * 2) * maxMercatorLatitude,
+    (x / tileSize) * 360 + screen.x,
+    screen.y - (y / tileSize) * 2 * maxMercatorLatitude,
   )
 }

@@ -78,6 +78,18 @@ describe('coordinate', () => {
         ),
       ).toStrictEqual([4, 4])
     })
+
+    it('offset', () => {
+      expect(
+        new DefaultCoordinate(180, -maxMercatorLatitude).toMapPixel({
+          width: 2,
+          height: 2,
+          scale: 0,
+          x: 0,
+          y: 0,
+        }),
+      ).toStrictEqual([1, 1])
+    })
   })
 
   describe('from map pixel', () => {
@@ -135,6 +147,22 @@ describe('coordinate', () => {
           new DefaultMapState({ width: 2, height: 2, scale: 1 }),
           4,
           4,
+        ),
+      ).toStrictEqual(new DefaultCoordinate(180, -maxMercatorLatitude))
+    })
+
+    it('offset', () => {
+      expect(
+        fromMapPixel(
+          {
+            width: 2,
+            height: 2,
+            scale: 0,
+            x: 0,
+            y: 0,
+          },
+          1,
+          1,
         ),
       ).toStrictEqual(new DefaultCoordinate(180, -maxMercatorLatitude))
     })

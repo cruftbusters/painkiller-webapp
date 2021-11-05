@@ -1,13 +1,19 @@
+import { maxMercatorLatitude } from './Coordinate'
+
 export default interface MapState {
   width: number
   height: number
   scale: number
+  x: number
+  y: number
 }
 
 export class DefaultMapState implements MapState {
   width: number = window.innerWidth
   height: number = window.innerHeight
   scale: number = 0
+  x: number = -180
+  y: number = maxMercatorLatitude
   constructor({
     width,
     height,
