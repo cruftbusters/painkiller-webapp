@@ -6,6 +6,7 @@ export default interface Coordinate {
 
   toMapPixel(screen: MapState): number[]
   toTile(zoom: number): number[]
+  clamp(): Coordinate
 }
 
 export class DefaultCoordinate implements Coordinate {
@@ -38,6 +39,16 @@ export class DefaultCoordinate implements Coordinate {
     const yNormal = (1 - yMercator) / 2
 
     return [n * xNormal, n * yNormal]
+  }
+
+  clamp() {
+    return new DefaultCoordinate(
+      Math.max(Math.min(this.x, 180), -180),
+      Math.max(
+        Math.min(this.y, maxMercatorLatitude),
+        -maxMercatorLatitude,
+      ),
+    )
   }
 }
 

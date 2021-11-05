@@ -201,4 +201,27 @@ describe('coordinate', () => {
       ).toThrow('latitude out of bounds -90 to 90')
     })
   })
+
+  describe('clamp', () => {
+    it('clamps left edge', () => {
+      expect(new DefaultCoordinate(-181, 0).clamp()).toStrictEqual(
+        new DefaultCoordinate(-180, 0),
+      )
+    })
+    it('clamps top edge', () => {
+      expect(
+        new DefaultCoordinate(0, -maxMercatorLatitude - 1).clamp(),
+      ).toStrictEqual(new DefaultCoordinate(0, -maxMercatorLatitude))
+    })
+    it('clamps right edge', () => {
+      expect(new DefaultCoordinate(181, 0).clamp()).toStrictEqual(
+        new DefaultCoordinate(180, 0),
+      )
+    })
+    it('clamps bottom edge', () => {
+      expect(
+        new DefaultCoordinate(0, maxMercatorLatitude + 1).clamp(),
+      ).toStrictEqual(new DefaultCoordinate(0, maxMercatorLatitude))
+    })
+  })
 })
