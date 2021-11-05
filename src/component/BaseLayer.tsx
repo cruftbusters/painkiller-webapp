@@ -24,13 +24,14 @@ function BaseLayer({ width, height }: BaseLayerProps) {
       context.fillRect(0, 0, mapState.width, mapState.height)
 
       const z = 0
+      const [left, top] = fromMapPixel(mapState, 0, 0).toTile(z)
       const [right, bottom] = fromMapPixel(
         mapState,
         mapState.width,
         mapState.height,
       ).toTile(z)
-      for (let x = 0; x < right; x++) {
-        for (let y = 0; y < bottom; y++) {
+      for (let x = Math.floor(left); x < right; x++) {
+        for (let y = Math.floor(top); y < bottom; y++) {
           const image = await fetchBaseTile(x, y, z)
           const [left, top] = fromTile(x, y, z).toMapPixel(mapState)
           const [right, bottom] = fromTile(x + 1, y + 1, z).toMapPixel(
