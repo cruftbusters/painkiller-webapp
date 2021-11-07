@@ -46,16 +46,3 @@ export default class Epsg4326Coordinate {
 
 export const maxMercatorLatitude =
   (Math.atan(Math.sinh(Math.PI)) * 180) / Math.PI
-
-export function fromMapPixel(
-  screen: MapState,
-  x: number,
-  y: number,
-): Epsg4326Coordinate {
-  const tileSize =
-    Math.min(screen.width, screen.height) * Math.pow(2, screen.scale)
-  return new Epsg4326Coordinate(
-    (x / tileSize) * 360 + screen.x,
-    screen.y - (y / tileSize) * 2 * maxMercatorLatitude,
-  )
-}

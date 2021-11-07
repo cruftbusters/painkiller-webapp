@@ -1,5 +1,4 @@
 import Epsg4326Coordinate, {
-  fromMapPixel,
   maxMercatorLatitude,
 } from './Epsg4326Coordinate'
 import { DefaultMapState } from './MapState'
@@ -67,82 +66,6 @@ describe('epsg 4326 coordinate', () => {
           y: 0,
         }),
       ).toStrictEqual(new MapPixel(1, 1))
-    })
-  })
-
-  describe('from map pixel', () => {
-    it('translates top left', () => {
-      expect(
-        fromMapPixel(
-          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
-          0,
-          0,
-        ),
-      ).toStrictEqual(new Epsg4326Coordinate(-180, maxMercatorLatitude))
-    })
-
-    it('translates bottom right', () => {
-      expect(
-        fromMapPixel(
-          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
-          2,
-          2,
-        ),
-      ).toStrictEqual(new Epsg4326Coordinate(180, -maxMercatorLatitude))
-    })
-
-    it('translates center', () => {
-      expect(
-        fromMapPixel(
-          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
-          1,
-          1,
-        ),
-      ).toStrictEqual(new Epsg4326Coordinate(0, 0))
-    })
-
-    it('preserve mercator square', () => {
-      expect(
-        fromMapPixel(
-          new DefaultMapState({ width: 2, height: 4, scale: 0 }),
-          0,
-          0,
-        ),
-      ).toStrictEqual(new Epsg4326Coordinate(-180, maxMercatorLatitude))
-
-      expect(
-        fromMapPixel(
-          new DefaultMapState({ width: 4, height: 2, scale: 0 }),
-          0,
-          0,
-        ),
-      ).toStrictEqual(new Epsg4326Coordinate(-180, maxMercatorLatitude))
-    })
-
-    it('scale', () => {
-      expect(
-        fromMapPixel(
-          new DefaultMapState({ width: 2, height: 2, scale: 1 }),
-          4,
-          4,
-        ),
-      ).toStrictEqual(new Epsg4326Coordinate(180, -maxMercatorLatitude))
-    })
-
-    it('offset', () => {
-      expect(
-        fromMapPixel(
-          {
-            width: 2,
-            height: 2,
-            scale: 0,
-            x: 0,
-            y: 0,
-          },
-          1,
-          1,
-        ),
-      ).toStrictEqual(new Epsg4326Coordinate(180, -maxMercatorLatitude))
     })
   })
 
