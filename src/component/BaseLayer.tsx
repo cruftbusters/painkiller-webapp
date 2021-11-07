@@ -1,22 +1,14 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useEffect, useRef } from 'react'
 import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
 import Tile from '../types/Tile'
 
 type BaseLayerProps = {
-  width: number
-  height: number
+  mapState: MapState
 }
 
-function BaseLayer({ width, height }: BaseLayerProps) {
+function BaseLayer({ mapState }: BaseLayerProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
-  const [mapState] = useState<MapState>({
-    width,
-    height,
-    scale: 3,
-    x: -140,
-    y: 31,
-  })
   useEffect(() => {
     ;(async () => {
       const canvas = canvasRef.current
@@ -46,8 +38,8 @@ function BaseLayer({ width, height }: BaseLayerProps) {
   }, [canvasRef, mapState])
   return (
     <canvas
-      width={width}
-      height={height}
+      width={mapState.width}
+      height={mapState.height}
       style={{
         display: 'block',
         width: '100%',

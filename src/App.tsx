@@ -2,7 +2,15 @@ import BaseLayer from './component/BaseLayer'
 
 function App() {
   return (
-    <BaseLayer width={window.innerWidth} height={window.innerHeight} />
+    <BaseLayer
+      mapState={{
+        width: window.innerWidth,
+        height: window.innerHeight,
+        scale: 3,
+        x: -140,
+        y: 31,
+      }}
+    />
   )
 }
 
