@@ -1,7 +1,6 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import Epsg4326Coordinate, {
   fromMapPixel,
-  fromTile,
 } from '../types/Epsg4326Coordinate'
 import MapState, { DefaultMapState } from '../types/MapState'
 import Tile from '../types/Tile'
@@ -33,12 +32,12 @@ function BaseLayer({ width, height }: BaseLayerProps) {
       for (let x = Math.floor(left); x < right; x++) {
         for (let y = Math.floor(top); y < bottom; y++) {
           const image = await fetchBaseTile(x, y, z)
-          const [left, top] = fromTile(new Tile(x, y, z)).toMapPixel(
-            mapState,
-          )
-          const [right, bottom] = fromTile(
-            new Tile(x + 1, y + 1, z),
-          ).toMapPixel(mapState)
+          const [left, top] = new Tile(x, y, z)
+            .toEpsg4326Coordinate()
+            .toMapPixel(mapState)
+          const [right, bottom] = new Tile(x + 1, y + 1, z)
+            .toEpsg4326Coordinate()
+            .toMapPixel(mapState)
           context.drawImage(image, left, top, right - left, bottom - top)
         }
       }

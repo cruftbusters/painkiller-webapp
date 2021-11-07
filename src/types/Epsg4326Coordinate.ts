@@ -47,14 +47,6 @@ export default class Epsg4326Coordinate {
 export const maxMercatorLatitude =
   (Math.atan(Math.sinh(Math.PI)) * 180) / Math.PI
 
-export function fromTile({ x, y, z }: Tile): Epsg4326Coordinate {
-  const n = Math.pow(2, z)
-  return new Epsg4326Coordinate(
-    (x / n) * 360 - 180,
-    (Math.atan(Math.sinh(Math.PI * (1 - (2 * y) / n))) * 180) / Math.PI,
-  )
-}
-
 export function fromMapPixel(
   screen: MapState,
   x: number,
