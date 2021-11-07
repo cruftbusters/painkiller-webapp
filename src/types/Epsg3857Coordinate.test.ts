@@ -1,14 +1,14 @@
-import Epsg4326Coordinate, {
+import Epsg3857Coordinate, {
   maxMercatorLatitude,
-} from './Epsg4326Coordinate'
+} from './Epsg3857Coordinate'
 import { DefaultMapState } from './MapState'
 import MapPixel from './MapPixel'
 
-describe('epsg 4326 coordinate', () => {
+describe('epsg 3857 coordinate', () => {
   describe('to map pixel', () => {
     it('translates top left', () => {
       expect(
-        new Epsg4326Coordinate(-180, maxMercatorLatitude).toMapPixel(
+        new Epsg3857Coordinate(-180, maxMercatorLatitude).toMapPixel(
           new DefaultMapState({ width: 2, height: 2, scale: 0 }),
         ),
       ).toStrictEqual(new MapPixel(0, 0))
@@ -16,7 +16,7 @@ describe('epsg 4326 coordinate', () => {
 
     it('translates bottom right', () => {
       expect(
-        new Epsg4326Coordinate(180, -maxMercatorLatitude).toMapPixel(
+        new Epsg3857Coordinate(180, -maxMercatorLatitude).toMapPixel(
           new DefaultMapState({ width: 2, height: 2, scale: 0 }),
         ),
       ).toStrictEqual(new MapPixel(2, 2))
@@ -24,7 +24,7 @@ describe('epsg 4326 coordinate', () => {
 
     it('preserve mercator square', () => {
       expect(
-        new Epsg4326Coordinate(-180, maxMercatorLatitude).toMapPixel(
+        new Epsg3857Coordinate(-180, maxMercatorLatitude).toMapPixel(
           new DefaultMapState({
             width: 4,
             height: 2,
@@ -34,7 +34,7 @@ describe('epsg 4326 coordinate', () => {
       ).toStrictEqual(new MapPixel(0, 0))
 
       expect(
-        new Epsg4326Coordinate(-180, maxMercatorLatitude).toMapPixel(
+        new Epsg3857Coordinate(-180, maxMercatorLatitude).toMapPixel(
           new DefaultMapState({
             width: 2,
             height: 4,
@@ -46,7 +46,7 @@ describe('epsg 4326 coordinate', () => {
 
     it('scale', () => {
       expect(
-        new Epsg4326Coordinate(180, -maxMercatorLatitude).toMapPixel(
+        new Epsg3857Coordinate(180, -maxMercatorLatitude).toMapPixel(
           new DefaultMapState({
             width: 2,
             height: 2,
@@ -58,7 +58,7 @@ describe('epsg 4326 coordinate', () => {
 
     it('offset', () => {
       expect(
-        new Epsg4326Coordinate(180, -maxMercatorLatitude).toMapPixel({
+        new Epsg3857Coordinate(180, -maxMercatorLatitude).toMapPixel({
           width: 2,
           height: 2,
           scale: 0,
@@ -75,7 +75,7 @@ describe('epsg 4326 coordinate', () => {
     }
 
     it('translates top left', () => {
-      const topLeft = new Epsg4326Coordinate(-180, maxMercatorLatitude)
+      const topLeft = new Epsg3857Coordinate(-180, maxMercatorLatitude)
       expect(snap(64, topLeft.toTile(0))).toStrictEqual([0, 0])
       expect(snap(64, topLeft.toTile(1))).toStrictEqual([0, 0])
     })
@@ -84,13 +84,13 @@ describe('epsg 4326 coordinate', () => {
       expect(
         snap(
           64,
-          new Epsg4326Coordinate(180, -maxMercatorLatitude).toTile(0),
+          new Epsg3857Coordinate(180, -maxMercatorLatitude).toTile(0),
         ),
       ).toStrictEqual([1, 1])
     })
 
     it('translates origin', () => {
-      expect(new Epsg4326Coordinate(0, 0).toTile(0)).toStrictEqual([
+      expect(new Epsg3857Coordinate(0, 0).toTile(0)).toStrictEqual([
         1 / 2,
         1 / 2,
       ])
@@ -98,31 +98,31 @@ describe('epsg 4326 coordinate', () => {
 
     it('latitude is out of bounds', () => {
       expect(() =>
-        new Epsg4326Coordinate(-180, -maxMercatorLatitude - 1).toTile(1),
+        new Epsg3857Coordinate(-180, -maxMercatorLatitude - 1).toTile(1),
       ).toThrow('latitude out of bounds -90 to 90')
     })
   })
 
   describe('clamp', () => {
     it('clamps left edge', () => {
-      expect(new Epsg4326Coordinate(-181, 0).clamp()).toStrictEqual(
-        new Epsg4326Coordinate(-180, 0),
+      expect(new Epsg3857Coordinate(-181, 0).clamp()).toStrictEqual(
+        new Epsg3857Coordinate(-180, 0),
       )
     })
     it('clamps top edge', () => {
       expect(
-        new Epsg4326Coordinate(0, -maxMercatorLatitude - 1).clamp(),
-      ).toStrictEqual(new Epsg4326Coordinate(0, -maxMercatorLatitude))
+        new Epsg3857Coordinate(0, -maxMercatorLatitude - 1).clamp(),
+      ).toStrictEqual(new Epsg3857Coordinate(0, -maxMercatorLatitude))
     })
     it('clamps right edge', () => {
-      expect(new Epsg4326Coordinate(181, 0).clamp()).toStrictEqual(
-        new Epsg4326Coordinate(180, 0),
+      expect(new Epsg3857Coordinate(181, 0).clamp()).toStrictEqual(
+        new Epsg3857Coordinate(180, 0),
       )
     })
     it('clamps bottom edge', () => {
       expect(
-        new Epsg4326Coordinate(0, maxMercatorLatitude + 1).clamp(),
-      ).toStrictEqual(new Epsg4326Coordinate(0, maxMercatorLatitude))
+        new Epsg3857Coordinate(0, maxMercatorLatitude + 1).clamp(),
+      ).toStrictEqual(new Epsg3857Coordinate(0, maxMercatorLatitude))
     })
   })
 })

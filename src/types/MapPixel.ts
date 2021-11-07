@@ -1,6 +1,5 @@
-import Epsg4326Coordinate, {
-  maxMercatorLatitude,
-} from './Epsg4326Coordinate'
+import Epsg3857Coordinate from './Epsg3857Coordinate'
+import { maxMercatorLatitude } from './Epsg3857Coordinate'
 import MapState from './MapState'
 
 export default class MapPixel {
@@ -10,9 +9,15 @@ export default class MapPixel {
     this.x = x
     this.y = y
   }
-  toEpsg4326Coordinate({ width, height, scale, x, y }: MapState): any {
+  toEpsg3857Coordinate({
+    width,
+    height,
+    scale,
+    x,
+    y,
+  }: MapState): Epsg3857Coordinate {
     const tileSize = Math.min(width, height) * Math.pow(2, scale)
-    return new Epsg4326Coordinate(
+    return new Epsg3857Coordinate(
       (this.x / tileSize) * 360 + x,
       y - (this.y / tileSize) * 2 * maxMercatorLatitude,
     )

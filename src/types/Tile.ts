@@ -1,4 +1,6 @@
-import Epsg4326Coordinate from './Epsg4326Coordinate'
+import Epsg3857Coordinate, {
+  maxMercatorLatitude,
+} from './Epsg3857Coordinate'
 
 export default class Tile {
   x: number
@@ -9,12 +11,11 @@ export default class Tile {
     this.y = y
     this.z = z
   }
-  toEpsg4326Coordinate(): Epsg4326Coordinate {
+  toEpsg3857Coordinate(): any {
     const n = Math.pow(2, this.z)
-    return new Epsg4326Coordinate(
+    return new Epsg3857Coordinate(
       (this.x / n) * 360 - 180,
-      (Math.atan(Math.sinh(Math.PI * (1 - (2 * this.y) / n))) * 180) /
-        Math.PI,
+      maxMercatorLatitude - (this.y / n) * maxMercatorLatitude * 2,
     )
   }
 }
