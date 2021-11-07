@@ -1,4 +1,4 @@
-import { maxMercatorLatitude } from './Coordinate'
+import { maxMercatorLatitude } from './Epsg4326Coordinate'
 
 export default interface MapState {
   width: number

@@ -1,15 +1,6 @@
 import MapState from './MapState'
 
-export default interface Coordinate {
-  x: number
-  y: number
-
-  toMapPixel(screen: MapState): number[]
-  toTile(zoom: number): number[]
-  clamp(): Coordinate
-}
-
-export class DefaultCoordinate implements Coordinate {
+export default class Epsg4326Coordinate {
   x: number
   y: number
   constructor(x: number, y: number) {
@@ -42,7 +33,7 @@ export class DefaultCoordinate implements Coordinate {
   }
 
   clamp() {
-    return new DefaultCoordinate(
+    return new Epsg4326Coordinate(
       Math.max(Math.min(this.x, 180), -180),
       Math.max(
         Math.min(this.y, maxMercatorLatitude),
@@ -55,9 +46,13 @@ export class DefaultCoordinate implements Coordinate {
 export const maxMercatorLatitude =
   (Math.atan(Math.sinh(Math.PI)) * 180) / Math.PI
 
-export function fromTile(x: number, y: number, z: number): Coordinate {
+export function fromTile(
+  x: number,
+  y: number,
+  z: number,
+): Epsg4326Coordinate {
   const n = Math.pow(2, z)
-  return new DefaultCoordinate(
+  return new Epsg4326Coordinate(
     (x / n) * 360 - 180,
     (Math.atan(Math.sinh(Math.PI * (1 - (2 * y) / n))) * 180) / Math.PI,
   )
@@ -67,10 +62,10 @@ export function fromMapPixel(
   screen: MapState,
   x: number,
   y: number,
-): Coordinate {
+): Epsg4326Coordinate {
   const tileSize =
     Math.min(screen.width, screen.height) * Math.pow(2, screen.scale)
-  return new DefaultCoordinate(
+  return new Epsg4326Coordinate(
     (x / tileSize) * 360 + screen.x,
     screen.y - (y / tileSize) * 2 * maxMercatorLatitude,
   )

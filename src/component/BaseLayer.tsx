@@ -1,9 +1,8 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
-import Coordinate, {
-  DefaultCoordinate,
+import Epsg4326Coordinate, {
   fromMapPixel,
   fromTile,
-} from '../types/Coordinate'
+} from '../types/Epsg4326Coordinate'
 import MapState, { DefaultMapState } from '../types/MapState'
 
 type BaseLayerProps = {
@@ -16,7 +15,7 @@ function BaseLayer({ width, height }: BaseLayerProps) {
   const [mapState] = useState<MapState>(
     new DefaultMapState({ width, height, scale: 0 }),
   )
-  const [coordinate] = useState<Coordinate>(new DefaultCoordinate(0, 0))
+  const [coordinate] = useState(new Epsg4326Coordinate(0, 0))
   useEffect(() => {
     ;(async () => {
       const canvas = canvasRef.current
