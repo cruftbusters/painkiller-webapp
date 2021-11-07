@@ -1,6 +1,6 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import MapPixel from '../types/MapPixel'
-import MapState, { DefaultMapState } from '../types/MapState'
+import MapState from '../types/MapState'
 import Tile from '../types/Tile'
 
 type BaseLayerProps = {
@@ -10,16 +10,20 @@ type BaseLayerProps = {
 
 function BaseLayer({ width, height }: BaseLayerProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
-  const [mapState] = useState<MapState>(
-    new DefaultMapState({ width, height, scale: 0 }),
-  )
+  const [mapState] = useState<MapState>({
+    width,
+    height,
+    scale: 3,
+    x: -140,
+    y: 31,
+  })
   useEffect(() => {
     ;(async () => {
       const canvas = canvasRef.current
       const context = canvas.getContext('2d')!
       context.fillRect(0, 0, mapState.width, mapState.height)
 
-      const z = 0
+      const z = 4
       const [left, top] = new MapPixel(0, 0)
         .toEpsg3857Coordinate(mapState)
         .toTile(z)
