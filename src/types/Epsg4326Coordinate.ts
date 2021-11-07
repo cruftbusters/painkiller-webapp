@@ -1,5 +1,5 @@
 import MapState from './MapState'
-import Tile from './Tile'
+import MapPixel from './MapPixel'
 
 export default class Epsg4326Coordinate {
   x: number
@@ -9,13 +9,13 @@ export default class Epsg4326Coordinate {
     this.y = y
   }
 
-  toMapPixel(screen: MapState): number[] {
+  toMapPixel(screen: MapState): MapPixel {
     const tileSize =
       Math.min(screen.width, screen.height) * Math.pow(2, screen.scale)
-    return [
+    return new MapPixel(
       ((this.x - screen.x) / 360) * tileSize,
       ((screen.y - this.y) / (2 * maxMercatorLatitude)) * tileSize,
-    ]
+    )
   }
 
   toTile(zoom: number): number[] {

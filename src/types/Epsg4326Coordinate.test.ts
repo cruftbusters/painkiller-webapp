@@ -3,6 +3,7 @@ import Epsg4326Coordinate, {
   maxMercatorLatitude,
 } from './Epsg4326Coordinate'
 import { DefaultMapState } from './MapState'
+import MapPixel from './MapPixel'
 
 describe('epsg 4326 coordinate', () => {
   describe('to map pixel', () => {
@@ -11,7 +12,7 @@ describe('epsg 4326 coordinate', () => {
         new Epsg4326Coordinate(-180, maxMercatorLatitude).toMapPixel(
           new DefaultMapState({ width: 2, height: 2, scale: 0 }),
         ),
-      ).toStrictEqual([0, 0])
+      ).toStrictEqual(new MapPixel(0, 0))
     })
 
     it('translates bottom right', () => {
@@ -19,7 +20,7 @@ describe('epsg 4326 coordinate', () => {
         new Epsg4326Coordinate(180, -maxMercatorLatitude).toMapPixel(
           new DefaultMapState({ width: 2, height: 2, scale: 0 }),
         ),
-      ).toStrictEqual([2, 2])
+      ).toStrictEqual(new MapPixel(2, 2))
     })
 
     it('preserve mercator square', () => {
@@ -31,7 +32,7 @@ describe('epsg 4326 coordinate', () => {
             scale: 0,
           }),
         ),
-      ).toStrictEqual([0, 0])
+      ).toStrictEqual(new MapPixel(0, 0))
 
       expect(
         new Epsg4326Coordinate(-180, maxMercatorLatitude).toMapPixel(
@@ -41,7 +42,7 @@ describe('epsg 4326 coordinate', () => {
             scale: 0,
           }),
         ),
-      ).toStrictEqual([0, 0])
+      ).toStrictEqual(new MapPixel(0, 0))
     })
 
     it('scale', () => {
@@ -53,7 +54,7 @@ describe('epsg 4326 coordinate', () => {
             scale: 1,
           }),
         ),
-      ).toStrictEqual([4, 4])
+      ).toStrictEqual(new MapPixel(4, 4))
     })
 
     it('offset', () => {
@@ -65,7 +66,7 @@ describe('epsg 4326 coordinate', () => {
           x: 0,
           y: 0,
         }),
-      ).toStrictEqual([1, 1])
+      ).toStrictEqual(new MapPixel(1, 1))
     })
   })
 

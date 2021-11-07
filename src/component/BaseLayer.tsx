@@ -32,10 +32,10 @@ function BaseLayer({ width, height }: BaseLayerProps) {
       for (let x = Math.floor(left); x < right; x++) {
         for (let y = Math.floor(top); y < bottom; y++) {
           const image = await fetchBaseTile(x, y, z)
-          const [left, top] = new Tile(x, y, z)
+          const { x: left, y: top } = new Tile(x, y, z)
             .toEpsg4326Coordinate()
             .toMapPixel(mapState)
-          const [right, bottom] = new Tile(x + 1, y + 1, z)
+          const { x: right, y: bottom } = new Tile(x + 1, y + 1, z)
             .toEpsg4326Coordinate()
             .toMapPixel(mapState)
           context.drawImage(image, left, top, right - left, bottom - top)
