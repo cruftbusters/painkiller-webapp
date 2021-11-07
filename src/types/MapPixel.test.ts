@@ -1,7 +1,7 @@
 import Epsg3857Coordinate, {
   maxMercatorLatitude,
 } from './Epsg3857Coordinate'
-import { DefaultMapState } from './MapState'
+import MapState from './MapState'
 import MapPixel from './MapPixel'
 
 describe('map pixel', () => {
@@ -9,7 +9,7 @@ describe('map pixel', () => {
     it('translates top left', () => {
       expect(
         new MapPixel(0, 0).toEpsg3857Coordinate(
-          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
+          new MapState({ width: 2, height: 2, scale: 0 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(-180, maxMercatorLatitude))
     })
@@ -17,7 +17,7 @@ describe('map pixel', () => {
     it('translates bottom right', () => {
       expect(
         new MapPixel(2, 2).toEpsg3857Coordinate(
-          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
+          new MapState({ width: 2, height: 2, scale: 0 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(180, -maxMercatorLatitude))
     })
@@ -25,7 +25,7 @@ describe('map pixel', () => {
     it('translates center', () => {
       expect(
         new MapPixel(1, 1).toEpsg3857Coordinate(
-          new DefaultMapState({ width: 2, height: 2, scale: 0 }),
+          new MapState({ width: 2, height: 2, scale: 0 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(0, 0))
     })
@@ -33,13 +33,13 @@ describe('map pixel', () => {
     it('preserve mercator square', () => {
       expect(
         new MapPixel(0, 0).toEpsg3857Coordinate(
-          new DefaultMapState({ width: 2, height: 4, scale: 0 }),
+          new MapState({ width: 2, height: 4, scale: 0 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(-180, maxMercatorLatitude))
 
       expect(
         new MapPixel(0, 0).toEpsg3857Coordinate(
-          new DefaultMapState({ width: 4, height: 2, scale: 0 }),
+          new MapState({ width: 4, height: 2, scale: 0 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(-180, maxMercatorLatitude))
     })
@@ -47,7 +47,7 @@ describe('map pixel', () => {
     it('scale', () => {
       expect(
         new MapPixel(4, 4).toEpsg3857Coordinate(
-          new DefaultMapState({ width: 2, height: 2, scale: 1 }),
+          new MapState({ width: 2, height: 2, scale: 1 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(180, -maxMercatorLatitude))
     })

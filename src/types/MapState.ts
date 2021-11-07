@@ -1,14 +1,6 @@
 import { maxMercatorLatitude } from './Epsg3857Coordinate'
 
-export default interface MapState {
-  width: number
-  height: number
-  scale: number
-  x: number
-  y: number
-}
-
-export class DefaultMapState implements MapState {
+export default class MapState {
   width: number = window.innerWidth
   height: number = window.innerHeight
   scale: number = 0
