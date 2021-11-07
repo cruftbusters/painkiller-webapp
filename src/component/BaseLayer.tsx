@@ -4,6 +4,7 @@ import Epsg4326Coordinate, {
   fromTile,
 } from '../types/Epsg4326Coordinate'
 import MapState, { DefaultMapState } from '../types/MapState'
+import Tile from '../types/Tile'
 
 type BaseLayerProps = {
   width: number
@@ -32,10 +33,12 @@ function BaseLayer({ width, height }: BaseLayerProps) {
       for (let x = Math.floor(left); x < right; x++) {
         for (let y = Math.floor(top); y < bottom; y++) {
           const image = await fetchBaseTile(x, y, z)
-          const [left, top] = fromTile(x, y, z).toMapPixel(mapState)
-          const [right, bottom] = fromTile(x + 1, y + 1, z).toMapPixel(
+          const [left, top] = fromTile(new Tile(x, y, z)).toMapPixel(
             mapState,
           )
+          const [right, bottom] = fromTile(
+            new Tile(x + 1, y + 1, z),
+          ).toMapPixel(mapState)
           context.drawImage(image, left, top, right - left, bottom - top)
         }
       }

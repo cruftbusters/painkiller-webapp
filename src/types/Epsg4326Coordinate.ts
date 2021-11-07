@@ -1,4 +1,5 @@
 import MapState from './MapState'
+import Tile from './Tile'
 
 export default class Epsg4326Coordinate {
   x: number
@@ -46,11 +47,7 @@ export default class Epsg4326Coordinate {
 export const maxMercatorLatitude =
   (Math.atan(Math.sinh(Math.PI)) * 180) / Math.PI
 
-export function fromTile(
-  x: number,
-  y: number,
-  z: number,
-): Epsg4326Coordinate {
+export function fromTile({ x, y, z }: Tile): Epsg4326Coordinate {
   const n = Math.pow(2, z)
   return new Epsg4326Coordinate(
     (x / n) * 360 - 180,

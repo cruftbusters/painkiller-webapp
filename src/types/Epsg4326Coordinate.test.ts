@@ -4,26 +4,35 @@ import Epsg4326Coordinate, {
   maxMercatorLatitude,
 } from './Epsg4326Coordinate'
 import { DefaultMapState } from './MapState'
+import Tile from './Tile'
 
 describe('epsg 4326 coordinate', () => {
   describe('from tile', () => {
     it('translates top left', () => {
-      expect(fromTile(0, 0, 0)).toStrictEqual(
+      expect(fromTile(new Tile(0, 0, 0))).toStrictEqual(
         new Epsg4326Coordinate(-180, maxMercatorLatitude),
       )
     })
 
     it('translates bottom right', () => {
-      expect(fromTile(1, 1, 0)).toStrictEqual(
+      expect(fromTile(new Tile(1, 1, 0))).toStrictEqual(
         new Epsg4326Coordinate(180, -maxMercatorLatitude),
       )
     })
 
     it('translates origin ', () => {
-      expect(fromTile(1, 1, 1)).toStrictEqual(new Epsg4326Coordinate(0, 0))
-      expect(fromTile(2, 2, 2)).toStrictEqual(new Epsg4326Coordinate(0, 0))
-      expect(fromTile(4, 4, 3)).toStrictEqual(new Epsg4326Coordinate(0, 0))
-      expect(fromTile(8, 8, 4)).toStrictEqual(new Epsg4326Coordinate(0, 0))
+      expect(fromTile(new Tile(1, 1, 1))).toStrictEqual(
+        new Epsg4326Coordinate(0, 0),
+      )
+      expect(fromTile(new Tile(2, 2, 2))).toStrictEqual(
+        new Epsg4326Coordinate(0, 0),
+      )
+      expect(fromTile(new Tile(4, 4, 3))).toStrictEqual(
+        new Epsg4326Coordinate(0, 0),
+      )
+      expect(fromTile(new Tile(8, 8, 4))).toStrictEqual(
+        new Epsg4326Coordinate(0, 0),
+      )
     })
   })
 
