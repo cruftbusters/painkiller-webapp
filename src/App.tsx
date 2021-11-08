@@ -7,8 +7,8 @@ function App() {
         width: window.innerWidth,
         height: window.innerHeight,
         scale: 3,
-        x: -140,
-        y: 31,
+        left: -140,
+        top: 31,
       }}
     />
   )

@@ -4,8 +4,8 @@ export default class MapState {
   width: number = window.innerWidth
   height: number = window.innerHeight
   scale: number = 0
-  x: number = -180
-  y: number = maxMercatorLatitude
+  left: number = -180
+  top: number = maxMercatorLatitude
   constructor({
     width,
     height,

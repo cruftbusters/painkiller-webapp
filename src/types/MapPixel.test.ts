@@ -58,8 +58,8 @@ describe('map pixel', () => {
           width: 2,
           height: 2,
           scale: 0,
-          x: 0,
-          y: 0,
+          left: 0,
+          top: 0,
         }),
       ).toStrictEqual(new Epsg3857Coordinate(180, -maxMercatorLatitude))
     })

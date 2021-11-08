@@ -62,8 +62,8 @@ describe('epsg 3857 coordinate', () => {
           width: 2,
           height: 2,
           scale: 0,
-          x: 0,
-          y: 0,
+          left: 0,
+          top: 0,
         }),
       ).toStrictEqual(new MapPixel(1, 1))
     })
