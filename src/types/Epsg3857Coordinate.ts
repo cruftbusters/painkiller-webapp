@@ -11,11 +11,11 @@ export default class Epsg3857Coordinate {
       ),
     )
   }
-  toMapPixel({ scale, width, height, left, top }: MapState): any {
-    const tileSize = 256 * Math.pow(2, scale)
+  toMapPixel({ scale, tileSize, left, top }: MapState): any {
+    const scaledTileSize = tileSize * Math.pow(2, scale)
     return new MapPixel(
-      ((this.x - left) / 360) * tileSize,
-      ((top - this.y) / (2 * maxMercatorLatitude)) * tileSize,
+      ((this.x - left) / 360) * scaledTileSize,
+      ((top - this.y) / (2 * maxMercatorLatitude)) * scaledTileSize,
     )
   }
   toTile(zoom: number): number[] {
