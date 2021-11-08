@@ -18,9 +18,11 @@ function BaseLayer({ mapState }: BaseLayerProps) {
       const z = 4
       const [left, top] = new MapPixel(0, 0)
         .toEpsg3857Coordinate(mapState)
+        .clamp()
         .toTile(z)
       const [right, bottom] = new MapPixel(mapState.width, mapState.height)
         .toEpsg3857Coordinate(mapState)
+        .clamp()
         .toTile(z)
       for (let x = Math.floor(left); x < right; x++) {
         for (let y = Math.floor(top); y < bottom; y++) {
