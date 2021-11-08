@@ -20,8 +20,8 @@ export default function BaseLayerTile({
     .bottomRight()
     .toEpsg3857Coordinate()
     .toMapPixel(mapState)
-  const width = Math.ceil(right - left)
-  const height = Math.ceil(bottom - top)
+  const width = Math.round(right - left)
+  const height = Math.round(bottom - top)
   const tileURL = useMemo(
     () =>
       `https://mt0.google.com/vt/lyrs=y&hl=en&x=${tile.x}&y=${tile.y}&z=${tile.z}`,

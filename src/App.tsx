@@ -8,9 +8,9 @@ function App() {
     new MapState({
       width: window.innerWidth,
       height: window.innerHeight,
-      scale: 3,
-      left: -140,
-      top: 30,
+      scale: 5,
+      left: -130,
+      top: 27.5,
     }),
   )
   return (

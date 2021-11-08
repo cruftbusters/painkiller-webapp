@@ -16,16 +16,16 @@ describe('map pixel', () => {
 
     it('translates bottom right', () => {
       expect(
-        new MapPixel(2, 2).toEpsg3857Coordinate(
-          new MapState({ width: 2, height: 2, scale: 0 }),
+        new MapPixel(256, 256).toEpsg3857Coordinate(
+          new MapState({ width: 256, height: 256, scale: 0 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(180, -maxMercatorLatitude))
     })
 
     it('translates center', () => {
       expect(
-        new MapPixel(1, 1).toEpsg3857Coordinate(
-          new MapState({ width: 2, height: 2, scale: 0 }),
+        new MapPixel(128, 128).toEpsg3857Coordinate(
+          new MapState({ width: 256, height: 256, scale: 0 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(0, 0))
     })
@@ -46,18 +46,18 @@ describe('map pixel', () => {
 
     it('scale', () => {
       expect(
-        new MapPixel(4, 4).toEpsg3857Coordinate(
-          new MapState({ width: 2, height: 2, scale: 1 }),
+        new MapPixel(512, 512).toEpsg3857Coordinate(
+          new MapState({ width: 256, height: 256, scale: 1 }),
         ),
       ).toStrictEqual(new Epsg3857Coordinate(180, -maxMercatorLatitude))
     })
 
     it('offset', () => {
       expect(
-        new MapPixel(1, 1).toEpsg3857Coordinate(
+        new MapPixel(128, 128).toEpsg3857Coordinate(
           new MapState({
-            width: 2,
-            height: 2,
+            width: 256,
+            height: 256,
             scale: 0,
             left: 0,
             top: 0,

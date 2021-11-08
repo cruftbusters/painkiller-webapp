@@ -10,13 +10,11 @@ export default class MapPixel {
     this.y = y
   }
   toEpsg3857Coordinate({
-    width,
-    height,
     scale,
     left,
     top,
   }: MapState): Epsg3857Coordinate {
-    const tileSize = Math.min(width, height) * Math.pow(2, scale)
+    const tileSize = 256 * Math.pow(2, scale)
     return new Epsg3857Coordinate(
       (this.x / tileSize) * 360 + left,
       top - (this.y / tileSize) * 2 * maxMercatorLatitude,
