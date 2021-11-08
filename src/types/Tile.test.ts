@@ -38,4 +38,18 @@ describe('tile', () => {
       )
     })
   })
+
+  describe('bottom right', () => {
+    it('returns tile to the bottom right', () => {
+      expect(new Tile(0, 0, 0).bottomRight()).toStrictEqual(
+        new Tile(1, 1, 0),
+      )
+    })
+  })
+
+  describe('string', () => {
+    it('returns x y z as string', () => {
+      expect(new Tile(1, 2, 3).string()).toBe('1-2-3')
+    })
+  })
 })
