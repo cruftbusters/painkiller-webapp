@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from 'react'
+import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import MapState from '../types/MapState'
 import Tile from '../types/Tile'
 
@@ -22,13 +22,18 @@ export default function BaseLayerTile({
     .toMapPixel(mapState)
   const width = Math.ceil(right - left)
   const height = Math.ceil(bottom - top)
+  const tileURL = useMemo(
+    () =>
+      `https://mt0.google.com/vt/lyrs=y&hl=en&x=${tile.x}&y=${tile.y}&z=${tile.z}`,
+    [tile],
+  )
   useEffect(() => {
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')!
     const image = new Image()
     image.onload = () => context.drawImage(image, 0, 0, width, height)
-    image.src = `https://mt0.google.com/vt/lyrs=y&hl=en&x=${tile.x}&y=${tile.y}&z=${tile.z}`
-  }, [canvasRef, tile, width, height])
+    image.src = tileURL
+  }, [canvasRef, tileURL, width, height])
 
   return (
     <canvas
