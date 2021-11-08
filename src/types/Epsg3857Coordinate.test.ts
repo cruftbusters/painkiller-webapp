@@ -58,13 +58,15 @@ describe('epsg 3857 coordinate', () => {
 
     it('offset', () => {
       expect(
-        new Epsg3857Coordinate(180, -maxMercatorLatitude).toMapPixel({
-          width: 2,
-          height: 2,
-          scale: 0,
-          left: 0,
-          top: 0,
-        }),
+        new Epsg3857Coordinate(180, -maxMercatorLatitude).toMapPixel(
+          new MapState({
+            width: 2,
+            height: 2,
+            scale: 0,
+            left: 0,
+            top: 0,
+          }),
+        ),
       ).toStrictEqual(new MapPixel(1, 1))
     })
   })

@@ -1,22 +1,28 @@
 import { maxMercatorLatitude } from './Epsg3857Coordinate'
 
 export default class MapState {
-  width: number = window.innerWidth
-  height: number = window.innerHeight
-  scale: number = 0
-  left: number = -180
-  top: number = maxMercatorLatitude
+  width: number
+  height: number
+  scale: number
+  left: number
+  top: number
   constructor({
-    width,
-    height,
-    scale,
+    width = window.innerWidth,
+    height = window.innerHeight,
+    scale = 0,
+    left = -180,
+    top = maxMercatorLatitude,
   }: {
-    width: number
-    height: number
-    scale: number
+    width?: number
+    height?: number
+    scale?: number
+    left?: number
+    top?: number
   }) {
     this.width = width
     this.height = height
     this.scale = scale
+    this.left = left
+    this.top = top
   }
 }
