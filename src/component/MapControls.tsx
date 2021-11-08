@@ -17,6 +17,7 @@ function MapControls({ pan }: MapControlsProps) {
         })
       }
       onMouseUp={() => (dragStateRef.current.dragging = false)}
+      onMouseLeave={() => (dragStateRef.current.dragging = false)}
       onMouseMove={(e) => {
         if (!dragStateRef.current.dragging) return
         const dx = e.pageX - dragStateRef.current.lastX
