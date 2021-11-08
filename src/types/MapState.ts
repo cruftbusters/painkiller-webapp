@@ -25,4 +25,13 @@ export default class MapState {
     this.left = left
     this.top = top
   }
+  pan(dx: number, dy: number): MapState {
+    const tileSize =
+      Math.min(this.width, this.height) * Math.pow(2, this.scale)
+    return new MapState({
+      ...this,
+      left: this.left - (dx * 360) / tileSize,
+      top: this.top + (dy * 180) / tileSize,
+    })
+  }
 }
