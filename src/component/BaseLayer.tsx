@@ -13,7 +13,6 @@ function BaseLayer({ mapState }: BaseLayerProps) {
     ;(async () => {
       const canvas = canvasRef.current
       const context = canvas.getContext('2d')!
-      context.fillRect(0, 0, mapState.width, mapState.height)
 
       const z = 4
       const [left, top] = new MapPixel(0, 0)
