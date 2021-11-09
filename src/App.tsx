@@ -18,6 +18,7 @@ function App() {
       <BaseLayer mapState={mapState} />
       <MapControls
         pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
+        zoom={(dz) => setMapState((mapState) => mapState.zoom(dz))}
       />
     </div>
   )

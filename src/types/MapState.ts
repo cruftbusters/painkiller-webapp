@@ -37,4 +37,10 @@ export default class MapState {
       top: this.top + (dy * 180) / scaledTileSize,
     })
   }
+  zoom(dz: number): MapState {
+    return new MapState({
+      ...this,
+      scale: this.scale + dz / 114 / 8,
+    })
+  }
 }

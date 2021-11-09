@@ -10,7 +10,7 @@ describe('map state', () => {
           scale: 0,
           left: 0,
           top: 0,
-        }).pan(256,256),
+        }).pan(256, 256),
       ).toStrictEqual(
         new MapState({
           width: 256,
@@ -76,6 +76,21 @@ describe('map state', () => {
           left: -180,
           top: 90,
         }),
+      )
+    })
+  })
+  describe('zoom', () => {
+    it('zoom impacts scale linearly', () => {
+      expect(
+        new MapState({ width: 256, height: 256 }).zoom(114),
+      ).toStrictEqual(
+        new MapState({ width: 256, height: 256, scale: 0.125 }),
+      )
+
+      expect(
+        new MapState({ width: 256, height: 256, scale: 1 }).zoom(114),
+      ).toStrictEqual(
+        new MapState({ width: 256, height: 256, scale: 1.125 }),
       )
     })
   })
