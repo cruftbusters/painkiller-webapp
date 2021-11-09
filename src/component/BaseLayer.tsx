@@ -8,7 +8,7 @@ interface BaseLayerProps {
 }
 
 export default function BaseLayer({ mapState }: BaseLayerProps) {
-  const z = Math.ceil(mapState.scale)
+  const z = Math.floor(mapState.scale)
   const [left, top] = new MapPixel(0, 0)
     .toEpsg3857Coordinate(mapState)
     .clamp()
