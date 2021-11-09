@@ -46,7 +46,7 @@ export default function BaseLayer({ mapState }: BaseLayerProps) {
               left: offset.x + (tile.x - origin.x) * width,
               top: offset.y + (tile.y - origin.y) * width,
             }}
-            size={{ width, height: width }}
+            width={width}
           />
         ))}
     </div>
