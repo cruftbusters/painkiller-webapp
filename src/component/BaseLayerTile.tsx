@@ -3,17 +3,17 @@ import Tile from '../types/Tile'
 
 interface BaseLayerTileProps {
   tile: Tile
-  envelope: { left: number; top: number; right: number; bottom: number }
+  position: { left: number; top: number }
+  size: { width: number; height: number }
 }
 
 export default function BaseLayerTile({
   tile,
-  envelope: { left, top, right, bottom },
+  position: { left, top },
+  size: { width, height },
 }: BaseLayerTileProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
 
-  const width = Math.round(right - left)
-  const height = Math.round(bottom - top)
   const tileURL = useMemo(
     () =>
       `https://mt0.google.com/vt/lyrs=y&hl=en&x=${tile.x}&y=${tile.y}&z=${tile.z}`,

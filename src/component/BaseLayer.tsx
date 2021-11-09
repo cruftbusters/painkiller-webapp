@@ -40,11 +40,14 @@ export default function BaseLayer({ mapState }: BaseLayerProps) {
           .bottomRight()
           .toEpsg3857Coordinate()
           .toMapPixel(mapState)
+        const width = Math.round(right - left)
+        const height = Math.round(bottom - top)
         return (
           <BaseLayerTile
             key={tile.string()}
             tile={tile}
-            envelope={{ left, top, right, bottom }}
+            position={{ left, top }}
+            size={{ width, height }}
           />
         )
       })}
