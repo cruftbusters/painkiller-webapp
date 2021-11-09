@@ -18,6 +18,10 @@ export default function BaseLayer({ mapState }: BaseLayerProps) {
     .clamp()
     .toTile(z)
 
+  const width = Math.floor(mapState.width / (right - left))
+  const origin = new Tile(Math.floor(left), Math.floor(top), z)
+  const offset = origin.toEpsg3857Coordinate().toMapPixel(mapState)
+
   return (
     <div
       style={{
@@ -34,25 +38,17 @@ export default function BaseLayer({ mapState }: BaseLayerProps) {
         Math.ceil(bottom),
       )
         .map(([x, y]) => new Tile(x, y, z))
-        .map((tile) => {
-          const { x: left, y: top } = tile
-            .toEpsg3857Coordinate()
-            .toMapPixel(mapState)
-          const { x: right, y: bottom } = tile
-            .bottomRight()
-            .toEpsg3857Coordinate()
-            .toMapPixel(mapState)
-          const width = Math.round(right - left)
-          const height = Math.round(bottom - top)
-          return (
-            <BaseLayerTile
-              key={tile.string()}
-              tile={tile}
-              position={{ left, top }}
-              size={{ width, height }}
-            />
-          )
-        })}
+        .map((tile) => (
+          <BaseLayerTile
+            key={tile.string()}
+            tile={tile}
+            position={{
+              left: offset.x + (tile.x - origin.x) * width,
+              top: offset.y + (tile.y - origin.y) * width,
+            }}
+            size={{ width, height: width }}
+          />
+        ))}
     </div>
   )
 }
