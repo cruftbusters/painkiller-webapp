@@ -2,7 +2,7 @@ import MapPixel from './MapPixel'
 import MapState from './MapState'
 
 export default class Epsg3857Coordinate {
-  clamp(): any {
+  clamp(): Epsg3857Coordinate {
     return new Epsg3857Coordinate(
       Math.max(Math.min(this.x, 180), -180),
       Math.max(
@@ -11,7 +11,7 @@ export default class Epsg3857Coordinate {
       ),
     )
   }
-  toMapPixel({ scale, tileSize, left, top }: MapState): any {
+  toMapPixel({ scale, tileSize, left, top }: MapState): MapPixel {
     const scaledTileSize = tileSize * Math.pow(2, scale)
     return new MapPixel(
       ((this.x - left) / 360) * scaledTileSize,
