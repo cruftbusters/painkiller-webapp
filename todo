@@ -1,2 +1,6 @@
 # todo
-## display hillshade for map extent
+## clear hillshade
+## display hillshade link
+## shrink hillshade to center quarter screen
+## hillshade follows base layer upon pan/zoom
+## display hillshade metadata

@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import BaseLayer from './component/BaseLayer'
+import Heightmap from './component/Heightmap'
 import MapControls from './component/MapControls'
+import Sidebar from './component/Sidebar'
 import MapState from './types/MapState'
 
 function App() {
+  const [heightmapID, setHeightmapID] = useState<string>()
   const [mapState, setMapState] = useState(
     new MapState({
       width: window.innerWidth,
@@ -16,9 +19,14 @@ function App() {
   return (
     <div style={{ height: '100%', position: 'relative' }}>
       <BaseLayer mapState={mapState} />
+      <Heightmap id={heightmapID} />
       <MapControls
         pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
         zoom={(dz) => setMapState((mapState) => mapState.zoom(dz))}
+      />
+      <Sidebar
+        mapState={mapState}
+        onHeightmapIDChange={(id) => setHeightmapID(id)}
       />
     </div>
   )
