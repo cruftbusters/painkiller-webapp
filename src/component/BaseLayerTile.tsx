@@ -1,25 +1,17 @@
 import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
-import MapState from '../types/MapState'
 import Tile from '../types/Tile'
 
 interface BaseLayerTileProps {
   tile: Tile
-  mapState: MapState
+  envelope: { left: number; top: number; right: number; bottom: number }
 }
 
 export default function BaseLayerTile({
   tile,
-  mapState,
+  envelope: { left, top, right, bottom },
 }: BaseLayerTileProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
 
-  const { x: left, y: top } = tile
-    .toEpsg3857Coordinate()
-    .toMapPixel(mapState)
-  const { x: right, y: bottom } = tile
-    .bottomRight()
-    .toEpsg3857Coordinate()
-    .toMapPixel(mapState)
   const width = Math.round(right - left)
   const height = Math.round(bottom - top)
   const tileURL = useMemo(

@@ -32,13 +32,22 @@ export default function BaseLayer({ mapState }: BaseLayerProps) {
         overflow: 'hidden',
       }}
     >
-      {tiles.map((tile) => (
-        <BaseLayerTile
-          key={tile.string()}
-          tile={tile}
-          mapState={mapState}
-        />
-      ))}
+      {tiles.map((tile) => {
+        const { x: left, y: top } = tile
+          .toEpsg3857Coordinate()
+          .toMapPixel(mapState)
+        const { x: right, y: bottom } = tile
+          .bottomRight()
+          .toEpsg3857Coordinate()
+          .toMapPixel(mapState)
+        return (
+          <BaseLayerTile
+            key={tile.string()}
+            tile={tile}
+            envelope={{ left, top, right, bottom }}
+          />
+        )
+      })}
     </div>
   )
 }
