@@ -16,7 +16,7 @@ export default function Heightmap({ id }: HeightmapProps) {
     }
     intervalRef.current = setInterval(async () => {
       const response = await fetch(
-        `https://gallery.painkillergis.com/v1/heightmaps/${id}`,
+        `https://gallery.painkillergis.com/v1/maps/${id}`,
       )
       const { imageURL } = await response.json()
       if (imageURL) {

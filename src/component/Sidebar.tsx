@@ -15,7 +15,7 @@ export default function Sidebar({
         style={{ margin: '0.5em', fontSize: '1em' }}
         onClick={async () => {
           const response = await fetch(
-            'https://gallery.painkillergis.com/v1/heightmaps',
+            'https://gallery.painkillergis.com/v1/maps',
             {
               method: 'POST',
               body: JSON.stringify({
