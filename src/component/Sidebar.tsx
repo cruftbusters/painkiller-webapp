@@ -29,7 +29,7 @@ export default function Sidebar({
           onHeightmapIDChange(id)
         }}
       >
-        Generate hillshade
+        Generate heightmap
       </button>
     </div>
   )
