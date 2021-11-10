@@ -40,7 +40,7 @@ export default class MapState {
   zoom(dz: number): MapState {
     return new MapState({
       ...this,
-      scale: this.scale + dz / 114 / 8,
+      scale: this.scale - dz / 114 / 8,
     })
   }
 }

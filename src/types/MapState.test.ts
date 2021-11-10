@@ -82,13 +82,13 @@ describe('map state', () => {
   describe('zoom', () => {
     it('zoom impacts scale linearly', () => {
       expect(
-        new MapState({ width: 256, height: 256 }).zoom(114),
+        new MapState({ width: 256, height: 256 }).zoom(-114),
       ).toStrictEqual(
         new MapState({ width: 256, height: 256, scale: 0.125 }),
       )
 
       expect(
-        new MapState({ width: 256, height: 256, scale: 1 }).zoom(114),
+        new MapState({ width: 256, height: 256, scale: 1 }).zoom(-114),
       ).toStrictEqual(
         new MapState({ width: 256, height: 256, scale: 1.125 }),
       )
