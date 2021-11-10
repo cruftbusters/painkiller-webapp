@@ -35,5 +35,12 @@ export default function BaseLayerTile({
     image.src = tileURL
   }, [canvasRef, tileURL, mapState.tileSize])
 
-  return <canvas ref={canvasRef} width={256} height={256} style={style} />
+  return (
+    <canvas
+      ref={canvasRef}
+      width={mapState.tileSize}
+      height={mapState.tileSize}
+      style={style}
+    />
+  )
 }
