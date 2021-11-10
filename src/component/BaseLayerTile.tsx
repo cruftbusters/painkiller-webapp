@@ -1,16 +1,23 @@
-import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
+import {
+  CSSProperties,
+  MutableRefObject,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react'
+import MapState from '../types/MapState'
 import Tile from '../types/Tile'
 
 interface BaseLayerTileProps {
+  mapState: MapState
+  style: CSSProperties
   tile: Tile
-  position: { left: number; top: number }
-  width: number
 }
 
 export default function BaseLayerTile({
+  mapState,
+  style,
   tile,
-  position: { left, top },
-  width,
 }: BaseLayerTileProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
 
@@ -23,22 +30,10 @@ export default function BaseLayerTile({
     const canvas = canvasRef.current
     const context = canvas.getContext('2d')!
     const image = new Image()
-    image.onload = () => context.drawImage(image, 0, 0, width, width)
+    image.onload = () =>
+      context.drawImage(image, 0, 0, mapState.tileSize, mapState.tileSize)
     image.src = tileURL
-  }, [canvasRef, tileURL, width])
+  }, [canvasRef, tileURL, mapState.tileSize])
 
-  return (
-    <canvas
-      ref={canvasRef}
-      width={width}
-      height={width}
-      style={{
-        position: 'absolute',
-        width: `${width}px`,
-        height: `${width}px`,
-        left: `${left}px`,
-        top: `${top}px`,
-      }}
-    />
-  )
+  return <canvas ref={canvasRef} width={256} height={256} style={style} />
 }

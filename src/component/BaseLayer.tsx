@@ -41,12 +41,15 @@ export default function BaseLayer({ mapState }: BaseLayerProps) {
         .map((tile) => (
           <BaseLayerTile
             key={tile.string()}
+            mapState={mapState}
             tile={tile}
-            position={{
-              left: offset.x + (tile.x - origin.x) * width,
-              top: offset.y + (tile.y - origin.y) * width,
+            style={{
+              position: 'absolute',
+              width: px(width),
+              height: px(width),
+              left: px(offset.x + (tile.x - origin.x) * width),
+              top: px(offset.y + (tile.y - origin.y) * width),
             }}
-            width={width}
           />
         ))}
     </div>
@@ -66,4 +69,8 @@ function grid(
       ),
     )
     .flat()
+}
+
+function px(n: number) {
+  return `${n}px`
 }

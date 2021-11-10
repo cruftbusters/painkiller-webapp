@@ -1,5 +1,4 @@
 # todo
-## render base tile once at 256x256 and scale with css
 ## clear hillshade
 ## display hillshade link
 ## shrink hillshade to center quarter screen
