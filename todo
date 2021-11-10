@@ -1,6 +1,6 @@
 # todo
-## clear hillshade
-## display hillshade link
-## shrink hillshade to center quarter screen
-## hillshade follows base layer upon pan/zoom
-## display hillshade metadata
+## clear heightmap
+## display heightmap link
+## shrink heightmap to center quarter screen
+## heightmap follows base layer upon pan/zoom
+## display heightmap metadata
