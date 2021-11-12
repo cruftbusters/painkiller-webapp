@@ -1,26 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
+import Metadata from '../types/Metadata'
 
 interface HeightmapProps {
   id?: string
 }
 
 export default function Heightmap({ id }: HeightmapProps) {
-  const [url, setURL] = useState()
+  const [heightmap, setHeightmap] = useState<Metadata>()
   const intervalRef = useRef<NodeJS.Timeout>()
 
   useEffect(() => {
     if (intervalRef.current) clearInterval(intervalRef.current)
     if (!id) {
-      setURL(undefined)
+      setHeightmap(undefined)
       return
     }
     intervalRef.current = setInterval(async () => {
       const response = await fetch(
         `https://gallery.painkillergis.com/v1/maps/${id}`,
       )
-      const { imageURL } = await response.json()
-      if (imageURL) {
-        setURL(imageURL)
+      const heightmap = await response.json()
+      setHeightmap(heightmap)
+      if (heightmap.imageURL) {
         clearInterval(intervalRef.current!)
       }
     }, 2500)
@@ -35,7 +36,11 @@ export default function Heightmap({ id }: HeightmapProps) {
         opacity: 0.5,
       }}
     >
-      <img style={{ display: 'block' }} alt="" src={url} />
+      <img
+        style={{ display: 'block', position: 'absolute' }}
+        alt=""
+        src={heightmap?.imageURL}
+      />
     </div>
   )
 }
