@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import BaseLayer from './component/BaseLayer'
 import Heightmap from './component/Heightmap'
 import MapControls from './component/MapControls'
 import Sidebar from './component/Sidebar'
+import {
+  maxMercatorLatitude,
+  maxMercatorLongitude,
+} from './types/Epsg3857Coordinate'
 import MapState from './types/MapState'
 
 function App() {
@@ -12,8 +16,8 @@ function App() {
       width: window.innerWidth,
       height: window.innerHeight,
       scale: 5,
-      left: -130,
-      top: 27.5,
+      left: (-130 / 180) * maxMercatorLongitude,
+      top: (27.5 / 90) * maxMercatorLatitude,
     }),
   )
   return (

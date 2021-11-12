@@ -39,6 +39,5 @@ export default class Epsg3857Coordinate {
   }
 }
 
-export const maxMercatorLongitude = 180
-export const maxMercatorLatitude =
-  (Math.atan(Math.sinh(Math.PI)) * 180) / Math.PI
+export const maxMercatorLongitude = 6378137 * Math.PI
+export const maxMercatorLatitude = 6378137 * Math.PI
