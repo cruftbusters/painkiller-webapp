@@ -1,3 +1,4 @@
+import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
 
 interface SidebarProps {
@@ -14,13 +15,18 @@ export default function Sidebar({
       <button
         style={{ margin: '0.5em', fontSize: '1em' }}
         onClick={async () => {
+          const { width, height, left, top } = mapState
+          const { x: right, y: bottom } = new MapPixel(
+            width,
+            height,
+          ).toEpsg3857Coordinate(mapState)
           const response = await fetch(
             'https://gallery.painkillergis.com/v1/maps',
             {
               method: 'POST',
               body: JSON.stringify({
-                size: { width: mapState.width, height: mapState.height },
-                position: { left: mapState.left, top: mapState.top },
+                size: { width, height },
+                bounds: { left, top, right, bottom },
               }),
             },
           )

@@ -27,7 +27,14 @@ export default function Heightmap({ id }: HeightmapProps) {
   }, [id])
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        opacity: 0.5,
+      }}
+    >
       <img style={{ display: 'block' }} alt="" src={url} />
     </div>
   )
