@@ -4,7 +4,10 @@ import MapState from './MapState'
 export default class Epsg3857Coordinate {
   clamp(): Epsg3857Coordinate {
     return new Epsg3857Coordinate(
-      Math.max(Math.min(this.x, 180), -180),
+      Math.max(
+        Math.min(this.x, maxMercatorLongitude),
+        -maxMercatorLongitude,
+      ),
       Math.max(
         Math.min(this.y, maxMercatorLatitude),
         -maxMercatorLatitude,
@@ -14,7 +17,7 @@ export default class Epsg3857Coordinate {
   toMapPixel({ scale, tileSize, left, top }: MapState): MapPixel {
     const scaledTileSize = tileSize * Math.pow(2, scale)
     return new MapPixel(
-      ((this.x - left) / 360) * scaledTileSize,
+      ((this.x - left) / (2 * maxMercatorLongitude)) * scaledTileSize,
       ((top - this.y) / (2 * maxMercatorLatitude)) * scaledTileSize,
     )
   }
@@ -23,7 +26,7 @@ export default class Epsg3857Coordinate {
       throw Error('latitude out of bounds -90 to 90')
     const n = Math.pow(2, zoom)
 
-    const xNormal = (this.x / 180 + 1) / 2
+    const xNormal = (this.x / maxMercatorLongitude + 1) / 2
     const yNormal = (1 - this.y / maxMercatorLatitude) / 2
 
     return [n * xNormal, n * yNormal]
@@ -36,5 +39,6 @@ export default class Epsg3857Coordinate {
   }
 }
 
+export const maxMercatorLongitude = 180
 export const maxMercatorLatitude =
   (Math.atan(Math.sinh(Math.PI)) * 180) / Math.PI
