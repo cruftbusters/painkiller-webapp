@@ -1,4 +1,5 @@
 export default interface Metadata {
+  id: string
   size: {
     width: string
     height: string

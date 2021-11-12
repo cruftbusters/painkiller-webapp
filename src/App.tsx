@@ -4,16 +4,18 @@ import Heightmap from './component/Heightmap'
 import HorizontalDrag from './component/HorizontalDrag'
 import MapControls from './component/MapControls'
 import Sidebar from './component/Sidebar'
-import useMapMetadata from './hook/useMapMetadata'
+import usePollImageURL from './hook/usePollImageURL'
 import {
   maxMercatorLatitude,
   maxMercatorLongitude,
 } from './types/Epsg3857Coordinate'
 import MapState from './types/MapState'
+import Metadata from './types/Metadata'
 
 function App() {
-  const [mapID, setMapID] = useState<string>()
-  const mapMetadata = useMapMetadata(mapID)
+  const [mapMetadata, setMapMetadata] = useState<Metadata>()
+  usePollImageURL(mapMetadata, setMapMetadata)
+
   const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
   const [mapState, setMapState] = useState(
     new MapState({
@@ -48,7 +50,7 @@ function App() {
         <Sidebar
           mapMetadata={mapMetadata}
           mapState={mapState}
-          onHeightmapIDChange={(id) => setMapID(id)}
+          onCreateMap={setMapMetadata}
         />
       </div>
       <div

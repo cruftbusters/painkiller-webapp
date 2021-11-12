@@ -6,13 +6,13 @@ import MapMetadataSummary from './MapMetadataSummary'
 interface SidebarProps {
   mapMetadata?: Metadata
   mapState: MapState
-  onHeightmapIDChange: (id: string) => void
+  onCreateMap: (mapMetadata: Metadata) => void
 }
 
 export default function Sidebar({
   mapMetadata,
   mapState,
-  onHeightmapIDChange,
+  onCreateMap,
 }: SidebarProps) {
   return (
     <div
@@ -42,8 +42,7 @@ export default function Sidebar({
             },
           )
 
-          const { id } = await response.json()
-          onHeightmapIDChange(id)
+          onCreateMap(await response.json())
         }}
       >
         Generate heightmap
