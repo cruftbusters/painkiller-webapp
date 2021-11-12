@@ -46,6 +46,7 @@ function App() {
     >
       <div style={{ flex: `0 0 calc(20% + ${dividerOffset}px)` }}>
         <Sidebar
+          mapMetadata={mapMetadata}
           mapState={mapState}
           onHeightmapIDChange={(id) => setMapID(id)}
         />

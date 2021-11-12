@@ -1,19 +1,30 @@
 import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
+import Metadata from '../types/Metadata'
+import MapMetadataSummary from './MapMetadataSummary'
 
 interface SidebarProps {
+  mapMetadata?: Metadata
   mapState: MapState
   onHeightmapIDChange: (id: string) => void
 }
 
 export default function Sidebar({
+  mapMetadata,
   mapState,
   onHeightmapIDChange,
 }: SidebarProps) {
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        padding: '0.5em',
+        boxSizing: 'border-box',
+      }}
+    >
       <button
-        style={{ margin: '0.5em', fontSize: '1em' }}
+        style={{ fontSize: '1em' }}
         onClick={async () => {
           const { width, height, left, top } = mapState
           const { x: right, y: bottom } = new MapPixel(
@@ -37,6 +48,7 @@ export default function Sidebar({
       >
         Generate heightmap
       </button>
+      <MapMetadataSummary mapMetadata={mapMetadata} />
     </div>
   )
 }
