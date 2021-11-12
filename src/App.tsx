@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import BaseLayer from './component/BaseLayer'
 import Heightmap from './component/Heightmap'
 import MapControls from './component/MapControls'

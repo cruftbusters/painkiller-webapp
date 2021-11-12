@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import useMapMetadata from '../hook/useMapMetadata'
 import Epsg3857Coordinate from '../types/Epsg3857Coordinate'
 import MapState from '../types/MapState'
-import Metadata from '../types/Metadata'
 
 interface HeightmapProps {
   id?: string
@@ -9,36 +9,17 @@ interface HeightmapProps {
 }
 
 export default function Heightmap({ id, mapState }: HeightmapProps) {
-  const [heightmap, setHeightmap] = useState<Metadata>()
+  const mapMetadata = useMapMetadata(id)
   const [mapBounds, setMapBounds] = useState({
     left: 0,
     top: 0,
     width: 0,
     height: 0,
   })
-  const intervalRef = useRef<NodeJS.Timeout>()
 
   useEffect(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    if (!id) {
-      setHeightmap(undefined)
-      return
-    }
-    intervalRef.current = setInterval(async () => {
-      const response = await fetch(
-        `https://gallery.painkillergis.com/v1/maps/${id}`,
-      )
-      const heightmap = await response.json()
-      setHeightmap(heightmap)
-      if (heightmap.imageURL) {
-        clearInterval(intervalRef.current!)
-      }
-    }, 2500)
-  }, [id])
-
-  useEffect(() => {
-    if (!heightmap) return
-    const { left, top, right, bottom } = heightmap.bounds
+    if (!mapMetadata) return
+    const { left, top, right, bottom } = mapMetadata.bounds
     setMapBounds(
       worldBoundsToMapBounds(
         new Epsg3857Coordinate(left, top),
@@ -46,12 +27,12 @@ export default function Heightmap({ id, mapState }: HeightmapProps) {
         mapState,
       ),
     )
-  }, [mapState, heightmap?.bounds])
+  }, [mapState, mapMetadata])
 
   return (
     <div
       style={{
-        display: heightmap?.imageURL ? 'block' : 'none',
+        display: mapMetadata?.imageURL ? 'block' : 'none',
         width: '100%',
         height: '100%',
         position: 'absolute',
@@ -67,7 +48,7 @@ export default function Heightmap({ id, mapState }: HeightmapProps) {
           ...mapBounds,
         }}
         alt=""
-        src={heightmap?.imageURL}
+        src={mapMetadata?.imageURL}
       />
     </div>
   )
