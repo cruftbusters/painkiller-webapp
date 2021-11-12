@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
-import useMapMetadata from '../hook/useMapMetadata'
 import Epsg3857Coordinate from '../types/Epsg3857Coordinate'
 import MapState from '../types/MapState'
+import Metadata from '../types/Metadata'
 
 interface HeightmapProps {
-  id?: string
+  mapMetadata?: Metadata
   mapState: MapState
 }
 
-export default function Heightmap({ id, mapState }: HeightmapProps) {
-  const mapMetadata = useMapMetadata(id)
+export default function Heightmap({
+  mapMetadata,
+  mapState,
+}: HeightmapProps) {
   const [mapBounds, setMapBounds] = useState({
     left: 0,
     top: 0,
