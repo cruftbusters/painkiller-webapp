@@ -21,9 +21,11 @@ export default function MapMetadataSummary({
       <p>
         Bounds: {left} {top} {right} {bottom} (EPSG:3857)
       </p>
-      <a style={{ display: imageURL ? 'block' : 'none' }} href={imageURL}>
-        Download heightmap
-      </a>
+      {imageURL ? (
+        <a href={imageURL}>Download heightmap</a>
+      ) : (
+        'Generating heightmap...'
+      )}
     </>
   )
 }
