@@ -23,7 +23,7 @@ function App() {
   return (
     <div style={{ height: '100%', position: 'relative' }}>
       <BaseLayer mapState={mapState} />
-      <Heightmap id={heightmapID} />
+      <Heightmap id={heightmapID} mapState={mapState} />
       <MapControls
         pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
         zoom={(dz) => setMapState((mapState) => mapState.zoom(dz))}
