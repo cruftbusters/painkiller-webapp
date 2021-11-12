@@ -11,7 +11,7 @@ export default function Sidebar({
   onHeightmapIDChange,
 }: SidebarProps) {
   return (
-    <div style={{ position: 'absolute' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       <button
         style={{ margin: '0.5em', fontSize: '1em' }}
         onClick={async () => {

@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import BaseLayer from './component/BaseLayer'
 import Heightmap from './component/Heightmap'
+import HorizontalDrag from './component/HorizontalDrag'
 import MapControls from './component/MapControls'
 import Sidebar from './component/Sidebar'
 import useMapMetadata from './hook/useMapMetadata'
@@ -13,6 +14,7 @@ import MapState from './types/MapState'
 function App() {
   const [mapID, setMapID] = useState<string>()
   const mapMetadata = useMapMetadata(mapID)
+  const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
   const [mapState, setMapState] = useState(
     new MapState({
       width: window.innerWidth,
@@ -22,18 +24,53 @@ function App() {
       top: (27.5 / 90) * maxMercatorLatitude,
     }),
   )
+  const [dividerOffset, setDividerOffset] = useState(0)
+  useEffect(() => {
+    const { clientWidth, clientHeight } = mapContainerRef.current
+    setMapState(
+      (mapState) =>
+        new MapState({
+          ...mapState,
+          width: clientWidth,
+          height: clientHeight,
+        }),
+    )
+  }, [mapContainerRef, dividerOffset])
   return (
-    <div style={{ height: '100%', position: 'relative' }}>
-      <BaseLayer mapState={mapState} />
-      <Heightmap mapMetadata={mapMetadata} mapState={mapState} />
-      <MapControls
-        pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
-        zoom={(dz) => setMapState((mapState) => mapState.zoom(dz))}
-      />
-      <Sidebar
-        mapState={mapState}
-        onHeightmapIDChange={(id) => setMapID(id)}
-      />
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+      }}
+    >
+      <div style={{ flex: `0 0 calc(20% + ${dividerOffset}px)` }}>
+        <Sidebar
+          mapState={mapState}
+          onHeightmapIDChange={(id) => setMapID(id)}
+        />
+      </div>
+      <div
+        style={{
+          flex: '0 0 2px',
+          backgroundColor: 'steelblue',
+        }}
+      >
+        <HorizontalDrag
+          onDrag={(dx, _) => setDividerOffset((v) => v + dx)}
+        />
+      </div>
+      <div
+        ref={mapContainerRef}
+        style={{ flex: '1 1 auto', position: 'relative' }}
+      >
+        <BaseLayer mapState={mapState} />
+        <Heightmap mapMetadata={mapMetadata} mapState={mapState} />
+        <MapControls
+          pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
+          zoom={(dz) => setMapState((mapState) => mapState.zoom(dz))}
+        />
+      </div>
     </div>
   )
 }
