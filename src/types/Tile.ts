@@ -1,5 +1,6 @@
 import Epsg3857Coordinate, {
   maxMercatorLatitude,
+  maxMercatorLongitude,
 } from './Epsg3857Coordinate'
 
 export default class Tile {
@@ -14,7 +15,7 @@ export default class Tile {
   toEpsg3857Coordinate(): Epsg3857Coordinate {
     const n = Math.pow(2, this.z)
     return new Epsg3857Coordinate(
-      (this.x / n) * 360 - 180,
+      (this.x / n) * maxMercatorLongitude * 2 - maxMercatorLongitude,
       maxMercatorLatitude - (this.y / n) * maxMercatorLatitude * 2,
     )
   }

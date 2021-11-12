@@ -1,5 +1,6 @@
 import Epsg3857Coordinate, {
   maxMercatorLatitude,
+  maxMercatorLongitude,
 } from './Epsg3857Coordinate'
 import Tile from './Tile'
 
@@ -7,13 +8,13 @@ describe('tile', () => {
   describe('to epsg 3857 coordinate', () => {
     it('translates top left', () => {
       expect(new Tile(0, 0, 0).toEpsg3857Coordinate()).toStrictEqual(
-        new Epsg3857Coordinate(-180, maxMercatorLatitude),
+        new Epsg3857Coordinate(-maxMercatorLongitude, maxMercatorLatitude),
       )
     })
 
     it('translates bottom right', () => {
       expect(new Tile(1, 1, 0).toEpsg3857Coordinate()).toStrictEqual(
-        new Epsg3857Coordinate(180, -maxMercatorLatitude),
+        new Epsg3857Coordinate(maxMercatorLongitude, -maxMercatorLatitude),
       )
     })
 
@@ -34,7 +35,10 @@ describe('tile', () => {
 
     it('translates midpoint between top left and origin', () => {
       expect(new Tile(1, 1, 2).toEpsg3857Coordinate()).toStrictEqual(
-        new Epsg3857Coordinate(-180 / 2, maxMercatorLatitude / 2),
+        new Epsg3857Coordinate(
+          -maxMercatorLongitude / 2,
+          maxMercatorLatitude / 2,
+        ),
       )
     })
   })

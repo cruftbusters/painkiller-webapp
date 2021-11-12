@@ -1,4 +1,7 @@
-import { maxMercatorLatitude } from './Epsg3857Coordinate'
+import {
+  maxMercatorLatitude,
+  maxMercatorLongitude,
+} from './Epsg3857Coordinate'
 
 export default class MapState {
   width: number
@@ -11,7 +14,7 @@ export default class MapState {
     width = window.innerWidth,
     height = window.innerHeight,
     scale = 0,
-    left = -180,
+    left = -maxMercatorLongitude,
     top = maxMercatorLatitude,
     tileSize = 256,
   }: {
@@ -33,8 +36,8 @@ export default class MapState {
     const scaledTileSize = this.tileSize * Math.pow(2, this.scale)
     return new MapState({
       ...this,
-      left: this.left - (dx * 360) / scaledTileSize,
-      top: this.top + (dy * 180) / scaledTileSize,
+      left: this.left - (dx * maxMercatorLongitude * 2) / scaledTileSize,
+      top: this.top + (dy * maxMercatorLatitude * 2) / scaledTileSize,
     })
   }
   zoom(dz: number): MapState {

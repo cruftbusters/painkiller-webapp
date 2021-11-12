@@ -1,5 +1,7 @@
-import Epsg3857Coordinate from './Epsg3857Coordinate'
-import { maxMercatorLatitude } from './Epsg3857Coordinate'
+import Epsg3857Coordinate, {
+  maxMercatorLatitude,
+  maxMercatorLongitude,
+} from './Epsg3857Coordinate'
 import MapState from './MapState'
 
 export default class MapPixel {
@@ -17,7 +19,7 @@ export default class MapPixel {
   }: MapState): Epsg3857Coordinate {
     const scaledTileSize = tileSize * Math.pow(2, scale)
     return new Epsg3857Coordinate(
-      (this.x / scaledTileSize) * 360 + left,
+      (this.x / scaledTileSize) * 2 * maxMercatorLongitude + left,
       top - (this.y / scaledTileSize) * 2 * maxMercatorLatitude,
     )
   }

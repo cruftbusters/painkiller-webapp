@@ -1,5 +1,6 @@
 import Epsg3857Coordinate, {
   maxMercatorLatitude,
+  maxMercatorLongitude,
 } from './Epsg3857Coordinate'
 import MapState from './MapState'
 import MapPixel from './MapPixel'
@@ -11,7 +12,9 @@ describe('map pixel', () => {
         new MapPixel(0, 0).toEpsg3857Coordinate(
           new MapState({ width: 2, height: 2, scale: 0 }),
         ),
-      ).toStrictEqual(new Epsg3857Coordinate(-180, maxMercatorLatitude))
+      ).toStrictEqual(
+        new Epsg3857Coordinate(-maxMercatorLongitude, maxMercatorLatitude),
+      )
     })
 
     it('translates bottom right', () => {
@@ -19,7 +22,9 @@ describe('map pixel', () => {
         new MapPixel(256, 256).toEpsg3857Coordinate(
           new MapState({ width: 256, height: 256, scale: 0 }),
         ),
-      ).toStrictEqual(new Epsg3857Coordinate(180, -maxMercatorLatitude))
+      ).toStrictEqual(
+        new Epsg3857Coordinate(maxMercatorLongitude, -maxMercatorLatitude),
+      )
     })
 
     it('translates center', () => {
@@ -35,13 +40,17 @@ describe('map pixel', () => {
         new MapPixel(0, 0).toEpsg3857Coordinate(
           new MapState({ width: 2, height: 4, scale: 0 }),
         ),
-      ).toStrictEqual(new Epsg3857Coordinate(-180, maxMercatorLatitude))
+      ).toStrictEqual(
+        new Epsg3857Coordinate(-maxMercatorLongitude, maxMercatorLatitude),
+      )
 
       expect(
         new MapPixel(0, 0).toEpsg3857Coordinate(
           new MapState({ width: 4, height: 2, scale: 0 }),
         ),
-      ).toStrictEqual(new Epsg3857Coordinate(-180, maxMercatorLatitude))
+      ).toStrictEqual(
+        new Epsg3857Coordinate(-maxMercatorLongitude, maxMercatorLatitude),
+      )
     })
 
     it('scale', () => {
@@ -49,7 +58,9 @@ describe('map pixel', () => {
         new MapPixel(512, 512).toEpsg3857Coordinate(
           new MapState({ width: 256, height: 256, scale: 1 }),
         ),
-      ).toStrictEqual(new Epsg3857Coordinate(180, -maxMercatorLatitude))
+      ).toStrictEqual(
+        new Epsg3857Coordinate(maxMercatorLongitude, -maxMercatorLatitude),
+      )
     })
 
     it('offset', () => {
@@ -63,7 +74,9 @@ describe('map pixel', () => {
             top: 0,
           }),
         ),
-      ).toStrictEqual(new Epsg3857Coordinate(180, -maxMercatorLatitude))
+      ).toStrictEqual(
+        new Epsg3857Coordinate(maxMercatorLongitude, -maxMercatorLatitude),
+      )
     })
   })
 })

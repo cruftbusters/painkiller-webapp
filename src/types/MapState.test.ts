@@ -1,3 +1,7 @@
+import {
+  maxMercatorLatitude,
+  maxMercatorLongitude,
+} from './Epsg3857Coordinate'
 import MapState from './MapState'
 
 describe('map state', () => {
@@ -16,8 +20,8 @@ describe('map state', () => {
           width: 256,
           height: 256,
           scale: 0,
-          left: -360,
-          top: 180,
+          left: -2 * maxMercatorLongitude,
+          top: 2 * maxMercatorLatitude,
         }),
       )
     })
@@ -35,8 +39,8 @@ describe('map state', () => {
           width: 512,
           height: 256,
           scale: 0,
-          left: -360,
-          top: 180,
+          left: -2 * maxMercatorLongitude,
+          top: 2 * maxMercatorLatitude,
         }),
       )
     })
@@ -54,8 +58,8 @@ describe('map state', () => {
           width: 256,
           height: 512,
           scale: 0,
-          left: -360,
-          top: 180,
+          left: -2 * maxMercatorLongitude,
+          top: 2 * maxMercatorLatitude,
         }),
       )
     })
@@ -73,8 +77,8 @@ describe('map state', () => {
           width: 256,
           height: 256,
           scale: 1,
-          left: -180,
-          top: 90,
+          left: -maxMercatorLongitude,
+          top: maxMercatorLatitude,
         }),
       )
     })
