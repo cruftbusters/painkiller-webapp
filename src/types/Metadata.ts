@@ -10,5 +10,5 @@ export default interface Metadata {
     right: number
     bottom: number
   }
-  imageURL: string
+  heightmapURL: string
 }

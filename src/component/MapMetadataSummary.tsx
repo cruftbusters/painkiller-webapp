@@ -11,7 +11,7 @@ export default function MapMetadataSummary({
   const {
     size: { width, height },
     bounds: { left, top, right, bottom },
-    imageURL,
+    heightmapURL,
   } = mapMetadata
   return (
     <>
@@ -21,8 +21,8 @@ export default function MapMetadataSummary({
       <p>
         Bounds: {left} {top} {right} {bottom} (EPSG:3857)
       </p>
-      {imageURL ? (
-        <a href={imageURL}>Download heightmap</a>
+      {heightmapURL ? (
+        <a href={heightmapURL}>Download heightmap</a>
       ) : (
         'Generating heightmap...'
       )}

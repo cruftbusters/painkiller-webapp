@@ -34,7 +34,7 @@ export default function Heightmap({
   return (
     <div
       style={{
-        display: mapMetadata?.imageURL ? 'block' : 'none',
+        display: mapMetadata?.heightmapURL ? 'block' : 'none',
         width: '100%',
         height: '100%',
         position: 'absolute',
@@ -50,7 +50,7 @@ export default function Heightmap({
           ...mapBounds,
         }}
         alt=""
-        src={mapMetadata?.imageURL}
+        src={mapMetadata?.heightmapURL}
       />
     </div>
   )
