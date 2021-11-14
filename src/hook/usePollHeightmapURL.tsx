@@ -1,27 +1,27 @@
 import { useEffect, useRef } from 'react'
-import Metadata from '../types/Metadata'
+import Layout from '../types/Layout'
 
 export default function usePollHeightmapURL(
-  mapMetadata: Metadata | undefined,
-  setMapMetadata: (mapMetadata: Metadata) => void,
+  layout: Layout | undefined,
+  setLayout: (layout: Layout) => void,
 ) {
   const intervalRef = useRef<NodeJS.Timeout>()
 
   useEffect(() => {
     if (intervalRef.current) clearInterval(intervalRef.current)
-    if (!mapMetadata || mapMetadata.heightmapURL) return
+    if (!layout || layout.heightmapURL) return
 
     const poll = async () => {
       const response = await fetch(
-        `https://gallery.painkillergis.com/v1/maps/${mapMetadata.id}`,
+        `https://gallery.painkillergis.com/v1/layouts/${layout.id}`,
       )
-      const newMapMetadata = await response.json()
-      if (newMapMetadata.heightmapURL) {
-        setMapMetadata(newMapMetadata)
+      const newLayout = await response.json()
+      if (newLayout.heightmapURL) {
+        setLayout(newLayout)
         clearInterval(intervalRef.current!)
       }
     }
     intervalRef.current = setInterval(poll, 2500)
     poll()
-  }, [mapMetadata, setMapMetadata])
+  }, [layout, setLayout])
 }

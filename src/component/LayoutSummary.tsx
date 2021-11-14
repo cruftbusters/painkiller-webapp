@@ -1,18 +1,16 @@
-import Metadata from '../types/Metadata'
+import Layout from '../types/Layout'
 
-interface MapMetadataSummaryProps {
-  mapMetadata?: Metadata
+interface LayoutSummaryProps {
+  layout?: Layout
 }
 
-export default function MapMetadataSummary({
-  mapMetadata,
-}: MapMetadataSummaryProps) {
-  if (!mapMetadata) return null
+export default function LayoutSummary({ layout }: LayoutSummaryProps) {
+  if (!layout) return null
   const {
     size: { width, height },
     bounds: { left, top, right, bottom },
     heightmapURL,
-  } = mapMetadata
+  } = layout
   return (
     <>
       <p>

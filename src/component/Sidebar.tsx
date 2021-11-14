@@ -1,16 +1,16 @@
 import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
-import Metadata from '../types/Metadata'
-import MapMetadataSummary from './MapMetadataSummary'
+import Layout from '../types/Layout'
+import LayoutSummary from './LayoutSummary'
 
 interface SidebarProps {
-  mapMetadata?: Metadata
+  layout?: Layout
   mapState: MapState
-  onCreateMap: (mapMetadata: Metadata) => void
+  onCreateMap: (layout: Layout) => void
 }
 
 export default function Sidebar({
-  mapMetadata,
+  layout,
   mapState,
   onCreateMap,
 }: SidebarProps) {
@@ -32,7 +32,7 @@ export default function Sidebar({
             height,
           ).toEpsg3857Coordinate(mapState)
           const response = await fetch(
-            'https://gallery.painkillergis.com/v1/maps',
+            'https://gallery.painkillergis.com/v1/layouts',
             {
               method: 'POST',
               body: JSON.stringify({
@@ -47,7 +47,7 @@ export default function Sidebar({
       >
         Generate heightmap
       </button>
-      <MapMetadataSummary mapMetadata={mapMetadata} />
+      <LayoutSummary layout={layout} />
     </div>
   )
 }

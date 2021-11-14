@@ -10,11 +10,11 @@ import {
   maxMercatorLongitude,
 } from './types/Epsg3857Coordinate'
 import MapState from './types/MapState'
-import Metadata from './types/Metadata'
+import Layout from './types/Layout'
 
 function App() {
-  const [mapMetadata, setMapMetadata] = useState<Metadata>()
-  usePollHeightmapURL(mapMetadata, setMapMetadata)
+  const [layout, setLayout] = useState<Layout>()
+  usePollHeightmapURL(layout, setLayout)
 
   const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
   const [mapState, setMapState] = useState(
@@ -48,9 +48,9 @@ function App() {
     >
       <div style={{ flex: `0 0 calc(20% + ${dividerOffset}px)` }}>
         <Sidebar
-          mapMetadata={mapMetadata}
+          layout={layout}
           mapState={mapState}
-          onCreateMap={setMapMetadata}
+          onCreateMap={setLayout}
         />
       </div>
       <div
@@ -68,7 +68,7 @@ function App() {
         style={{ flex: '1 1 auto', position: 'relative' }}
       >
         <BaseLayer mapState={mapState} />
-        <Heightmap mapMetadata={mapMetadata} mapState={mapState} />
+        <Heightmap layout={layout} mapState={mapState} />
         <MapControls
           pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
           zoom={(dz) => setMapState((mapState) => mapState.zoom(dz))}

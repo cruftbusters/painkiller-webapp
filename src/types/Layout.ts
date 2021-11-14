@@ -1,4 +1,4 @@
-export default interface Metadata {
+export default interface Layout {
   id: string
   size: {
     width: string

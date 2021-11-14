@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react'
 import Epsg3857Coordinate from '../types/Epsg3857Coordinate'
 import MapState from '../types/MapState'
-import Metadata from '../types/Metadata'
+import Layout from '../types/Layout'
 
 interface HeightmapProps {
-  mapMetadata?: Metadata
+  layout?: Layout
   mapState: MapState
 }
 
-export default function Heightmap({
-  mapMetadata,
-  mapState,
-}: HeightmapProps) {
+export default function Heightmap({ layout, mapState }: HeightmapProps) {
   const [mapBounds, setMapBounds] = useState({
     left: 0,
     top: 0,
@@ -20,8 +17,8 @@ export default function Heightmap({
   })
 
   useEffect(() => {
-    if (!mapMetadata) return
-    const { left, top, right, bottom } = mapMetadata.bounds
+    if (!layout) return
+    const { left, top, right, bottom } = layout.bounds
     setMapBounds(
       worldBoundsToMapBounds(
         new Epsg3857Coordinate(left, top),
@@ -29,12 +26,12 @@ export default function Heightmap({
         mapState,
       ),
     )
-  }, [mapState, mapMetadata])
+  }, [mapState, layout])
 
   return (
     <div
       style={{
-        display: mapMetadata?.heightmapURL ? 'block' : 'none',
+        display: layout?.heightmapURL ? 'block' : 'none',
         width: '100%',
         height: '100%',
         position: 'absolute',
@@ -50,7 +47,7 @@ export default function Heightmap({
           ...mapBounds,
         }}
         alt=""
-        src={mapMetadata?.heightmapURL}
+        src={layout?.heightmapURL}
       />
     </div>
   )
