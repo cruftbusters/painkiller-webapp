@@ -32,7 +32,7 @@ export default function Sidebar({
             height,
           ).toEpsg3857Coordinate(mapState)
           const response = await fetch(
-            'https://gallery.painkillergis.com/v1/layouts',
+            'https://layouts.painkillergis.com/v1/layouts',
             {
               method: 'POST',
               body: JSON.stringify({

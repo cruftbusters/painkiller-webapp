@@ -13,7 +13,7 @@ export default function usePollHeightmapURL(
 
     const poll = async () => {
       const response = await fetch(
-        `https://gallery.painkillergis.com/v1/layouts/${layout.id}`,
+        `https://layouts.painkillergis.com/v1/layouts/${layout.id}`,
       )
       const newLayout = await response.json()
       if (newLayout.heightmapURL) {
