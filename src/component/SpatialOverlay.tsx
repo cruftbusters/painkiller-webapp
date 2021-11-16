@@ -3,12 +3,17 @@ import Epsg3857Coordinate from '../types/Epsg3857Coordinate'
 import MapState from '../types/MapState'
 import Layout from '../types/Layout'
 
-interface HeightmapProps {
+interface SpatialOverlayProps {
   layout?: Layout
+  getURL: (layout: Layout | undefined) => string | undefined
   mapState: MapState
 }
 
-export default function Heightmap({ layout, mapState }: HeightmapProps) {
+export default function SpatialOverlay({
+  layout,
+  getURL,
+  mapState,
+}: SpatialOverlayProps) {
   const [mapBounds, setMapBounds] = useState({
     left: 0,
     top: 0,
@@ -31,7 +36,7 @@ export default function Heightmap({ layout, mapState }: HeightmapProps) {
   return (
     <div
       style={{
-        display: layout?.heightmapURL ? 'block' : 'none',
+        display: getURL(layout) ? 'block' : 'none',
         width: '100%',
         height: '100%',
         position: 'absolute',
@@ -47,7 +52,7 @@ export default function Heightmap({ layout, mapState }: HeightmapProps) {
           ...mapBounds,
         }}
         alt=""
-        src={layout?.heightmapURL}
+        src={getURL(layout)}
       />
     </div>
   )

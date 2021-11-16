@@ -1,6 +1,6 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import BaseLayer from './component/BaseLayer'
-import Heightmap from './component/Heightmap'
+import SpatialOverlay from './component/SpatialOverlay'
 import HorizontalDrag from './component/HorizontalDrag'
 import MapControls from './component/MapControls'
 import Sidebar from './component/Sidebar'
@@ -68,7 +68,11 @@ function App() {
         style={{ flex: '1 1 auto', position: 'relative' }}
       >
         <BaseLayer mapState={mapState} />
-        <Heightmap layout={layout} mapState={mapState} />
+        <SpatialOverlay
+          layout={layout}
+          getURL={(layout) => layout?.heightmapURL}
+          mapState={mapState}
+        />
         <MapControls
           pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
           zoom={(dz) => setMapState((mapState) => mapState.zoom(dz))}
