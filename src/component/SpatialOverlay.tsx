@@ -5,13 +5,13 @@ import Layout from '../types/Layout'
 
 interface SpatialOverlayProps {
   layout?: Layout
-  getURL: (layout: Layout | undefined) => string | undefined
+  url: string | undefined
   mapState: MapState
 }
 
 export default function SpatialOverlay({
   layout,
-  getURL,
+  url,
   mapState,
 }: SpatialOverlayProps) {
   const [mapBounds, setMapBounds] = useState({
@@ -36,11 +36,10 @@ export default function SpatialOverlay({
   return (
     <div
       style={{
-        display: getURL(layout) ? 'block' : 'none',
+        display: url ? 'block' : 'none',
         width: '100%',
         height: '100%',
         position: 'absolute',
-        opacity: 0.5,
         backgroundColor: 'black',
         overflow: 'hidden',
       }}
@@ -52,7 +51,7 @@ export default function SpatialOverlay({
           ...mapBounds,
         }}
         alt=""
-        src={getURL(layout)}
+        src={url}
       />
     </div>
   )

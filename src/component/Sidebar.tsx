@@ -47,7 +47,7 @@ export default function Sidebar({
           onCreateMap(await response.json())
         }}
       >
-        Generate heightmap
+        Generate layers
       </button>
       {highScale ? (
         <p>Zoom in further to enable layer rendering</p>

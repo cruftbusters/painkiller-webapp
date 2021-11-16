@@ -4,7 +4,7 @@ import SpatialOverlay from './component/SpatialOverlay'
 import HorizontalDrag from './component/HorizontalDrag'
 import MapControls from './component/MapControls'
 import Sidebar from './component/Sidebar'
-import usePollHeightmapURL from './hook/usePollHeightmapURL'
+import usePollLayerURLs from './hook/usePollLayerURLs'
 import {
   maxMercatorLatitude,
   maxMercatorLongitude,
@@ -14,7 +14,7 @@ import Layout from './types/Layout'
 
 function App() {
   const [layout, setLayout] = useState<Layout>()
-  usePollHeightmapURL(layout, setLayout)
+  usePollLayerURLs(layout, setLayout)
 
   const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
   const [mapState, setMapState] = useState(
@@ -70,7 +70,7 @@ function App() {
         <BaseLayer mapState={mapState} />
         <SpatialOverlay
           layout={layout}
-          getURL={(layout) => layout?.heightmapURL}
+          url={layout?.hillshadeURL || layout?.heightmapURL}
           mapState={mapState}
         />
         <MapControls
