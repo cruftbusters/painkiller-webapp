@@ -14,6 +14,7 @@ export default function Sidebar({
   mapState,
   onCreateMap,
 }: SidebarProps) {
+  const highScale = mapState.scale < 7
   return (
     <div
       style={{
@@ -25,6 +26,7 @@ export default function Sidebar({
     >
       <button
         style={{ fontSize: '1em' }}
+        disabled={highScale}
         onClick={async () => {
           const { width, height, left, top } = mapState
           const { x: right, y: bottom } = new MapPixel(
@@ -47,6 +49,9 @@ export default function Sidebar({
       >
         Generate heightmap
       </button>
+      {highScale ? (
+        <p>Zoom in further to enable layer rendering</p>
+      ) : undefined}
       <LayoutSummary layout={layout} />
     </div>
   )
