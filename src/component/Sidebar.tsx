@@ -1,7 +1,7 @@
-import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
 import Layout from '../types/Layout'
 import LayoutSummary from './LayoutSummary'
+import GenerateButton from './GenerateButton'
 
 interface SidebarProps {
   layout?: Layout
@@ -14,7 +14,6 @@ export default function Sidebar({
   mapState,
   onCreateMap,
 }: SidebarProps) {
-  const highScale = mapState.scale < 7
   return (
     <div
       style={{
@@ -24,34 +23,7 @@ export default function Sidebar({
         boxSizing: 'border-box',
       }}
     >
-      <button
-        style={{ fontSize: '1em' }}
-        disabled={highScale}
-        onClick={async () => {
-          const { width, height, left, top } = mapState
-          const { x: right, y: bottom } = new MapPixel(
-            width,
-            height,
-          ).toEpsg3857Coordinate(mapState)
-          const response = await fetch(
-            'https://layouts.painkillergis.com/v1/layouts',
-            {
-              method: 'POST',
-              body: JSON.stringify({
-                size: { width, height },
-                bounds: { left, top, right, bottom },
-              }),
-            },
-          )
-
-          onCreateMap(await response.json())
-        }}
-      >
-        Generate layers
-      </button>
-      {highScale ? (
-        <p>Zoom in further to enable layer rendering</p>
-      ) : undefined}
+      <GenerateButton mapState={mapState} onCreateMap={onCreateMap} />
       <LayoutSummary layout={layout} />
     </div>
   )
