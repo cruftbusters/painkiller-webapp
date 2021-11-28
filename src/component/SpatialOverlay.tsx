@@ -3,6 +3,7 @@ import Epsg3857Coordinate from '../types/Epsg3857Coordinate'
 import MapState from '../types/MapState'
 import Layout from '../types/Layout'
 import useMapState from '../hook/useMapState'
+import useLayout from '../hook/useLayout'
 
 interface SpatialOverlayProps {
   layout?: Layout
@@ -11,11 +12,11 @@ interface SpatialOverlayProps {
 }
 
 export default function SpatialOverlay({
-  layout,
   url,
   overlayOpacity,
 }: SpatialOverlayProps) {
   const { mapState } = useMapState()
+  const { layout } = useLayout()
 
   const [mapBounds, setMapBounds] = useState({
     left: 0,

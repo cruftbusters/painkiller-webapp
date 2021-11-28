@@ -1,9 +1,4 @@
-import React, {
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import BaseLayer from './component/BaseLayer'
 import SpatialOverlay from './component/SpatialOverlay'
 import HorizontalDrag from './component/HorizontalDrag'
@@ -45,7 +40,6 @@ export default function App() {
     >
       <div style={{ flex: `0 0 calc(20% + ${dividerOffset}px)` }}>
         <Sidebar
-          layout={layout}
           heightmapOpacity={heightmapOpacity}
           hillshadeOpacity={hillshadeOpacity}
           setHeightmapOpacity={setHeightmapOpacity}
@@ -68,12 +62,10 @@ export default function App() {
       >
         <BaseLayer />
         <SpatialOverlay
-          layout={layout}
           url={layout?.heightmapURL}
           overlayOpacity={heightmapOpacity}
         />
         <SpatialOverlay
-          layout={layout}
           url={layout?.hillshadeURL}
           overlayOpacity={hillshadeOpacity}
         />

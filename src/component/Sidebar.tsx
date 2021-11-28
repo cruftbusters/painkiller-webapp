@@ -1,10 +1,9 @@
-import Layout from '../types/Layout'
 import GenerateButton from './GenerateButton'
 import OverlayOpacity from './OverlayOpacity'
 import { ReactNode } from 'react'
+import useLayout from '../hook/useLayout'
 
 interface SidebarProps {
-  layout?: Layout
   heightmapOpacity: string
   hillshadeOpacity: string
   setHeightmapOpacity: (overlayOpacity: string) => void
@@ -12,12 +11,12 @@ interface SidebarProps {
 }
 
 export default function Sidebar({
-  layout,
   heightmapOpacity,
   hillshadeOpacity,
   setHeightmapOpacity,
   setHillshadeOpacity,
 }: SidebarProps) {
+  const { layout } = useLayout()
   return (
     <div
       style={{
