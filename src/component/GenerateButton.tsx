@@ -1,18 +1,15 @@
-import MapState from '../types/MapState'
 import Layout from '../types/Layout'
 import { useEffect } from 'react'
 import useLayout, { errIsTooHighScale } from '../hook/useLayout'
 
 interface GenerateButtonProps {
-  mapState: MapState
   onCreateMap: (layout: Layout) => void
 }
 
 export default function GenerateButton({
-  mapState,
   onCreateMap,
 }: GenerateButtonProps) {
-  const { createLayout, error, layout } = useLayout({ mapState })
+  const { createLayout, error, layout } = useLayout()
   useEffect(() => {
     if (layout !== undefined) onCreateMap(layout)
   }, [onCreateMap, layout])

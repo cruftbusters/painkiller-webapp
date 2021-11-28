@@ -1,30 +1,51 @@
 import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
 import Layout from '../types/Layout'
-import { useState } from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 
-interface useLayoutProps {
+const layoutContext = createContext<LayoutContextValue>({
+  createLayout: async () => {},
+  error: 'No layout context provider',
+})
+
+interface LayoutContextProviderProps {
+  children: ReactNode
   mapState: MapState
 }
 
-export default function useLayout({ mapState }: useLayoutProps) {
+interface LayoutContextValue {
+  createLayout: () => Promise<void>
+  error: string
+  layout?: Layout
+}
+
+export function LayoutContextProvider({
+  children,
+  mapState,
+}: LayoutContextProviderProps) {
   const [layout, setLayout] = useState<Layout>()
   const isTooHighScale = mapState.scale < 7
   const [error, setError] = useState('')
 
-  return {
-    createLayout: async () => {
-      setError('')
-      const [layout, error] = await createLayout(mapState)
-      setLayout(layout)
-      setError(error)
-    },
-    error: isTooHighScale ? errIsTooHighScale : error,
-    layout,
-  }
+  return (
+    <layoutContext.Provider
+      children={children}
+      value={{
+        createLayout: async () => {
+          setError('')
+          const [layout, error] = await createLayout(mapState)
+          setLayout(layout)
+          setError(error)
+        },
+        error: isTooHighScale ? errIsTooHighScale : error,
+        layout,
+      }}
+    />
+  )
 }
 
-export const errIsTooHighScale = 'Zoom in further to enable layer rendering'
+export const errIsTooHighScale =
+  'Zoom in further to enable layer rendering'
 
 async function createLayout(mapState: MapState) {
   const { width, height, left, top } = mapState
@@ -52,4 +73,8 @@ async function createLayout(mapState: MapState) {
   } else {
     return [await response.json(), '']
   }
+}
+
+export default function useLayout() {
+  return useContext<LayoutContextValue>(layoutContext)
 }

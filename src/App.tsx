@@ -11,6 +11,7 @@ import {
 } from './types/Epsg3857Coordinate'
 import MapState from './types/MapState'
 import Layout from './types/Layout'
+import { LayoutContextProvider } from './hook/useLayout'
 
 function App() {
   const [layout, setLayout] = useState<Layout>()
@@ -41,59 +42,62 @@ function App() {
     )
   }, [mapContainerRef, dividerOffset])
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-      }}
-    >
-      <div style={{ flex: `0 0 calc(20% + ${dividerOffset}px)` }}>
-        <Sidebar
-          layout={layout}
-          mapState={mapState}
-          onCreateMap={setLayout}
-          heightmapOpacity={heightmapOpacity}
-          hillshadeOpacity={hillshadeOpacity}
-          setHeightmapOpacity={setHeightmapOpacity}
-          setHillshadeOpacity={setHillshadeOpacity}
-        />
-      </div>
+    <LayoutContextProvider mapState={mapState}>
       <div
         style={{
-          flex: '0 0 2px',
-          backgroundColor: 'steelblue',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
         }}
       >
-        <HorizontalDrag
-          onDrag={(dx, _) => setDividerOffset((v) => v + dx)}
-        />
+        <div style={{ flex: `0 0 calc(20% + ${dividerOffset}px)` }}>
+          <Sidebar
+            layout={layout}
+            onCreateMap={setLayout}
+            heightmapOpacity={heightmapOpacity}
+            hillshadeOpacity={hillshadeOpacity}
+            setHeightmapOpacity={setHeightmapOpacity}
+            setHillshadeOpacity={setHillshadeOpacity}
+          />
+        </div>
+        <div
+          style={{
+            flex: '0 0 2px',
+            backgroundColor: 'steelblue',
+          }}
+        >
+          <HorizontalDrag
+            onDrag={(dx, _) => setDividerOffset((v) => v + dx)}
+          />
+        </div>
+        <div
+          ref={mapContainerRef}
+          style={{ flex: '1 1 auto', position: 'relative' }}
+        >
+          <BaseLayer mapState={mapState} />
+          <SpatialOverlay
+            layout={layout}
+            url={layout?.heightmapURL}
+            mapState={mapState}
+            overlayOpacity={heightmapOpacity}
+          />
+          <SpatialOverlay
+            layout={layout}
+            url={layout?.hillshadeURL}
+            mapState={mapState}
+            overlayOpacity={hillshadeOpacity}
+          />
+          <MapControls
+            pan={(dx, dy) =>
+              setMapState((mapState) => mapState.pan(dx, dy))
+            }
+            zoom={(dz, mouseX, mouseY) =>
+              setMapState((mapState) => mapState.zoom(dz, mouseX, mouseY))
+            }
+          />
+        </div>
       </div>
-      <div
-        ref={mapContainerRef}
-        style={{ flex: '1 1 auto', position: 'relative' }}
-      >
-        <BaseLayer mapState={mapState} />
-        <SpatialOverlay
-          layout={layout}
-          url={layout?.heightmapURL}
-          mapState={mapState}
-          overlayOpacity={heightmapOpacity}
-        />
-        <SpatialOverlay
-          layout={layout}
-          url={layout?.hillshadeURL}
-          mapState={mapState}
-          overlayOpacity={hillshadeOpacity}
-        />
-        <MapControls
-          pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
-          zoom={(dz, mouseX, mouseY) =>
-            setMapState((mapState) => mapState.zoom(dz, mouseX, mouseY))
-          }
-        />
-      </div>
-    </div>
+    </LayoutContextProvider>
   )
 }
 

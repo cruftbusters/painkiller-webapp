@@ -1,4 +1,3 @@
-import MapState from '../types/MapState'
 import Layout from '../types/Layout'
 import GenerateButton from './GenerateButton'
 import OverlayOpacity from './OverlayOpacity'
@@ -6,7 +5,6 @@ import { ReactNode } from 'react'
 
 interface SidebarProps {
   layout?: Layout
-  mapState: MapState
   onCreateMap: (layout: Layout) => void
   heightmapOpacity: string
   hillshadeOpacity: string
@@ -16,7 +14,6 @@ interface SidebarProps {
 
 export default function Sidebar({
   layout,
-  mapState,
   onCreateMap,
   heightmapOpacity,
   hillshadeOpacity,
@@ -32,7 +29,7 @@ export default function Sidebar({
         boxSizing: 'border-box',
       }}
     >
-      <GenerateButton mapState={mapState} onCreateMap={onCreateMap} />
+      <GenerateButton onCreateMap={onCreateMap} />
       {layout ? (
         <Section>
           <Header>Summary</Header>
