@@ -7,12 +7,14 @@ interface SpatialOverlayProps {
   layout?: Layout
   url: string | undefined
   mapState: MapState
+  overlayOpacity: string
 }
 
 export default function SpatialOverlay({
   layout,
   url,
   mapState,
+  overlayOpacity,
 }: SpatialOverlayProps) {
   const [mapBounds, setMapBounds] = useState({
     left: 0,
@@ -42,6 +44,7 @@ export default function SpatialOverlay({
         position: 'absolute',
         backgroundColor: 'black',
         overflow: 'hidden',
+        opacity: overlayOpacity,
       }}
     >
       <img

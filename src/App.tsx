@@ -14,6 +14,7 @@ import Layout from './types/Layout'
 
 function App() {
   const [layout, setLayout] = useState<Layout>()
+  const [overlayOpacity, setOverlayOpacity] = useState('1.0')
   usePollLayerURLs(layout, setLayout)
 
   const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
@@ -51,6 +52,8 @@ function App() {
           layout={layout}
           mapState={mapState}
           onCreateMap={setLayout}
+          overlayOpacity={overlayOpacity}
+          setOverlayOpacity={setOverlayOpacity}
         />
       </div>
       <div
@@ -72,6 +75,7 @@ function App() {
           layout={layout}
           url={layout?.hillshadeURL || layout?.heightmapURL}
           mapState={mapState}
+          overlayOpacity={overlayOpacity}
         />
         <MapControls
           pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}

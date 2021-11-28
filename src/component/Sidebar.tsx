@@ -2,17 +2,22 @@ import MapState from '../types/MapState'
 import Layout from '../types/Layout'
 import LayoutSummary from './LayoutSummary'
 import GenerateButton from './GenerateButton'
+import OverlayOpacity from './OverlayOpacity'
 
 interface SidebarProps {
   layout?: Layout
   mapState: MapState
   onCreateMap: (layout: Layout) => void
+  setOverlayOpacity: (overlayOpacity: string) => void
+  overlayOpacity: string
 }
 
 export default function Sidebar({
   layout,
   mapState,
   onCreateMap,
+  setOverlayOpacity,
+  overlayOpacity,
 }: SidebarProps) {
   return (
     <div
@@ -25,6 +30,11 @@ export default function Sidebar({
     >
       <GenerateButton mapState={mapState} onCreateMap={onCreateMap} />
       <LayoutSummary layout={layout} />
+      <OverlayOpacity
+        layout={layout}
+        overlayOpacity={overlayOpacity}
+        setOverlayOpacity={setOverlayOpacity}
+      />
     </div>
   )
 }
