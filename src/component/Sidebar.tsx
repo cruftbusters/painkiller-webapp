@@ -1,6 +1,5 @@
 import MapState from '../types/MapState'
 import Layout from '../types/Layout'
-import LayoutSummary from './LayoutSummary'
 import GenerateButton from './GenerateButton'
 import OverlayOpacity from './OverlayOpacity'
 import { ReactNode } from 'react'
@@ -34,7 +33,18 @@ export default function Sidebar({
       }}
     >
       <GenerateButton mapState={mapState} onCreateMap={onCreateMap} />
-      <LayoutSummary layout={layout} />
+      {layout ? (
+        <Section>
+          <Header>Summary</Header>
+          <p>
+            Size: {layout.size.width}x{layout.size.height}
+          </p>
+          <p>
+            Bounds: {layout.bounds.left} {layout.bounds.top}{' '}
+            {layout.bounds.right} {layout.bounds.bottom} (EPSG:3857)
+          </p>
+        </Section>
+      ) : undefined}
       {layout ? (
         <Section>
           <Header>Heightmap</Header>
