@@ -1,6 +1,6 @@
 import useLayout, { errIsTooHighScale } from '../hook/useLayout'
 
-export default function GenerateButton() {
+export default function CreateLayoutButton() {
   const { createLayout, error } = useLayout()
   return (
     <>

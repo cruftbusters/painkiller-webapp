@@ -1,4 +1,4 @@
-import GenerateButton from './GenerateButton'
+import CreateLayoutButton from './CreateLayoutButton'
 import OverlayOpacity from './OverlayOpacity'
 import { ReactNode } from 'react'
 import useLayout from '../hook/useLayout'
@@ -26,7 +26,7 @@ export default function Sidebar({
         boxSizing: 'border-box',
       }}
     >
-      <GenerateButton />
+      <CreateLayoutButton />
       {layout ? (
         <Section>
           <Header>Summary</Header>
