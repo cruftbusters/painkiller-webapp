@@ -77,12 +77,7 @@ export default function App() {
           url={layout?.hillshadeURL}
           overlayOpacity={hillshadeOpacity}
         />
-        <MapControls
-          pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
-          zoom={(dz, mouseX, mouseY) =>
-            setMapState((mapState) => mapState.zoom(dz, mouseX, mouseY))
-          }
-        />
+        <MapControls />
       </div>
     </div>
   )

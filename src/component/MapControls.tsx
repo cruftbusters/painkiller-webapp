@@ -1,13 +1,12 @@
 import { MutableRefObject, useRef } from 'react'
+import useMapState from '../hook/useMapState'
 
-interface MapControlsProps {
-  pan: (dx: number, dy: number) => void
-  zoom: (dz: number, mouseX: number, mouseY: number) => void
-}
-
-function MapControls({ pan, zoom }: MapControlsProps) {
+function MapControls() {
   const dragStateRef = useRef({ dragging: false, lastX: 0, lastY: 0 })
   const mapControlsRef = useRef() as MutableRefObject<HTMLDivElement>
+
+  const { setMapState } = useMapState()
+
   return (
     <div
       ref={mapControlsRef}
@@ -15,7 +14,9 @@ function MapControls({ pan, zoom }: MapControlsProps) {
       onWheel={(e) => {
         const { left, top } =
           mapControlsRef.current.getBoundingClientRect()
-        zoom(e.deltaY, e.pageX - left, e.pageY - top)
+        setMapState((mapState) =>
+          mapState.zoom(e.deltaY, e.pageX - left, e.pageY - top),
+        )
       }}
       onMouseDown={(e) =>
         (dragStateRef.current = {
@@ -31,7 +32,7 @@ function MapControls({ pan, zoom }: MapControlsProps) {
         const dx = e.pageX - dragStateRef.current.lastX
         const dy = e.pageY - dragStateRef.current.lastY
 
-        pan(dx, dy)
+        setMapState((mapState) => mapState.pan(dx, dy))
 
         dragStateRef.current.lastX = e.pageX
         dragStateRef.current.lastY = e.pageY
