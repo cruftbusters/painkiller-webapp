@@ -3,21 +3,26 @@ import Layout from '../types/Layout'
 import LayoutSummary from './LayoutSummary'
 import GenerateButton from './GenerateButton'
 import OverlayOpacity from './OverlayOpacity'
+import { ReactNode } from 'react'
 
 interface SidebarProps {
   layout?: Layout
   mapState: MapState
   onCreateMap: (layout: Layout) => void
-  setOverlayOpacity: (overlayOpacity: string) => void
-  overlayOpacity: string
+  heightmapOpacity: string
+  hillshadeOpacity: string
+  setHeightmapOpacity: (overlayOpacity: string) => void
+  setHillshadeOpacity: (overlayOpacity: string) => void
 }
 
 export default function Sidebar({
   layout,
   mapState,
   onCreateMap,
-  setOverlayOpacity,
-  overlayOpacity,
+  heightmapOpacity,
+  hillshadeOpacity,
+  setHeightmapOpacity,
+  setHillshadeOpacity,
 }: SidebarProps) {
   return (
     <div
@@ -30,11 +35,54 @@ export default function Sidebar({
     >
       <GenerateButton mapState={mapState} onCreateMap={onCreateMap} />
       <LayoutSummary layout={layout} />
-      <OverlayOpacity
-        layout={layout}
-        overlayOpacity={overlayOpacity}
-        setOverlayOpacity={setOverlayOpacity}
-      />
+      {layout?.heightmapURL ? (
+        <Section>
+          <Header>Heightmap</Header>
+          <OverlayOpacity
+            layout={layout}
+            overlayOpacity={heightmapOpacity}
+            setOverlayOpacity={setHeightmapOpacity}
+          />
+        </Section>
+      ) : undefined}
+      {layout?.hillshadeURL ? (
+        <Section>
+          <Header>Hillshade</Header>
+          <OverlayOpacity
+            layout={layout}
+            overlayOpacity={hillshadeOpacity}
+            setOverlayOpacity={setHillshadeOpacity}
+          />
+        </Section>
+      ) : undefined}
+    </div>
+  )
+}
+
+function Section({ children }: { children: ReactNode }) {
+  return (
+    <div
+      style={{
+        margin: '0 -0.5em',
+        padding: '0 0.5em',
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
+function Header({ children }: { children: ReactNode }) {
+  return (
+    <div
+      style={{
+        margin: '0 -0.5em',
+        padding: '0.5em',
+        backgroundColor: '#DDD',
+        fontSize: '1.125em',
+      }}
+    >
+      {children}
     </div>
   )
 }

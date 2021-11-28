@@ -14,7 +14,8 @@ import Layout from './types/Layout'
 
 function App() {
   const [layout, setLayout] = useState<Layout>()
-  const [overlayOpacity, setOverlayOpacity] = useState('1.0')
+  const [heightmapOpacity, setHeightmapOpacity] = useState('0.0')
+  const [hillshadeOpacity, setHillshadeOpacity] = useState('1.0')
   usePollLayerURLs(layout, setLayout)
 
   const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
@@ -52,8 +53,10 @@ function App() {
           layout={layout}
           mapState={mapState}
           onCreateMap={setLayout}
-          overlayOpacity={overlayOpacity}
-          setOverlayOpacity={setOverlayOpacity}
+          heightmapOpacity={heightmapOpacity}
+          hillshadeOpacity={hillshadeOpacity}
+          setHeightmapOpacity={setHeightmapOpacity}
+          setHillshadeOpacity={setHillshadeOpacity}
         />
       </div>
       <div
@@ -73,13 +76,21 @@ function App() {
         <BaseLayer mapState={mapState} />
         <SpatialOverlay
           layout={layout}
-          url={layout?.hillshadeURL || layout?.heightmapURL}
+          url={layout?.heightmapURL}
           mapState={mapState}
-          overlayOpacity={overlayOpacity}
+          overlayOpacity={heightmapOpacity}
+        />
+        <SpatialOverlay
+          layout={layout}
+          url={layout?.hillshadeURL}
+          mapState={mapState}
+          overlayOpacity={hillshadeOpacity}
         />
         <MapControls
           pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
-          zoom={(dz, mouseX, mouseY) => setMapState((mapState) => mapState.zoom(dz, mouseX, mouseY))}
+          zoom={(dz, mouseX, mouseY) =>
+            setMapState((mapState) => mapState.zoom(dz, mouseX, mouseY))
+          }
         />
       </div>
     </div>
