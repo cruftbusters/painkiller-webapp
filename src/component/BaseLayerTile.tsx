@@ -5,21 +5,21 @@ import {
   useMemo,
   useRef,
 } from 'react'
-import MapState from '../types/MapState'
+import useMapState from '../hook/useMapState'
 import Tile from '../types/Tile'
 
 interface BaseLayerTileProps {
-  mapState: MapState
   style: CSSProperties
   tile: Tile
 }
 
 export default function BaseLayerTile({
-  mapState,
   style,
   tile,
 }: BaseLayerTileProps) {
   const canvasRef = useRef() as MutableRefObject<HTMLCanvasElement>
+
+  const { mapState } = useMapState()
 
   const tileURL = useMemo(
     () =>

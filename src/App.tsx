@@ -9,38 +9,14 @@ import SpatialOverlay from './component/SpatialOverlay'
 import HorizontalDrag from './component/HorizontalDrag'
 import MapControls from './component/MapControls'
 import Sidebar from './component/Sidebar'
-import {
-  maxMercatorLatitude,
-  maxMercatorLongitude,
-} from './types/Epsg3857Coordinate'
 import MapState from './types/MapState'
-import useLayout, { LayoutContextProvider } from './hook/useLayout'
+import useLayout from './hook/useLayout'
+import useMapState from './hook/useMapState'
 
 export default function App() {
-  const [mapState, setMapState] = useState(
-    new MapState({
-      width: window.innerWidth,
-      height: window.innerHeight,
-      scale: 5,
-      left: (-130 / 180) * maxMercatorLongitude,
-      top: (27.5 / 90) * maxMercatorLatitude,
-    }),
-  )
-
-  return (
-    <LayoutContextProvider mapState={mapState}>
-      <AppContained mapState={mapState} setMapState={setMapState} />
-    </LayoutContextProvider>
-  )
-}
-
-interface AppContainedProps {
-  mapState: MapState
-  setMapState: React.Dispatch<React.SetStateAction<MapState>>
-}
-
-function AppContained({ mapState, setMapState }: AppContainedProps) {
   const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
+
+  const { setMapState } = useMapState()
 
   const { layout } = useLayout()
   const [heightmapOpacity, setHeightmapOpacity] = useState('0.0')
@@ -90,17 +66,15 @@ function AppContained({ mapState, setMapState }: AppContainedProps) {
         ref={mapContainerRef}
         style={{ flex: '1 1 auto', position: 'relative' }}
       >
-        <BaseLayer mapState={mapState} />
+        <BaseLayer />
         <SpatialOverlay
           layout={layout}
           url={layout?.heightmapURL}
-          mapState={mapState}
           overlayOpacity={heightmapOpacity}
         />
         <SpatialOverlay
           layout={layout}
           url={layout?.hillshadeURL}
-          mapState={mapState}
           overlayOpacity={hillshadeOpacity}
         />
         <MapControls

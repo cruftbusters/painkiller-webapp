@@ -3,27 +3,27 @@ import MapState from '../types/MapState'
 import Layout from '../types/Layout'
 import { createContext, ReactNode, useContext, useState } from 'react'
 import usePollLayerURLs from './usePollLayerURLs'
+import useMapState from './useMapState'
 
-const layoutContext = createContext<LayoutContextValue>({
+interface LayoutContext {
+  createLayout: () => Promise<void>
+  error: string
+  layout?: Layout
+}
+
+const layoutContext = createContext<LayoutContext>({
   createLayout: async () => {},
   error: 'No layout context provider',
 })
 
 interface LayoutContextProviderProps {
   children: ReactNode
-  mapState: MapState
-}
-
-interface LayoutContextValue {
-  createLayout: () => Promise<void>
-  error: string
-  layout?: Layout
 }
 
 export function LayoutContextProvider({
   children,
-  mapState,
 }: LayoutContextProviderProps) {
+  const { mapState } = useMapState()
   const [layout, setLayout] = useState<Layout>()
   const isTooHighScale = mapState.scale < 7
   const [error, setError] = useState('')
@@ -78,5 +78,5 @@ async function createLayout(mapState: MapState) {
 }
 
 export default function useLayout() {
-  return useContext<LayoutContextValue>(layoutContext)
+  return useContext<LayoutContext>(layoutContext)
 }

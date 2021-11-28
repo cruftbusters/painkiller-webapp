@@ -1,13 +1,11 @@
+import useMapState from '../hook/useMapState'
 import MapPixel from '../types/MapPixel'
-import MapState from '../types/MapState'
 import Tile from '../types/Tile'
 import BaseLayerTile from './BaseLayerTile'
 
-interface BaseLayerProps {
-  mapState: MapState
-}
+export default function BaseLayer() {
+  const { mapState } = useMapState()
 
-export default function BaseLayer({ mapState }: BaseLayerProps) {
   const z = Math.floor(mapState.scale)
   const [left, top] = new MapPixel(0, 0)
     .toEpsg3857Coordinate(mapState)
@@ -41,7 +39,6 @@ export default function BaseLayer({ mapState }: BaseLayerProps) {
         .map((tile) => (
           <BaseLayerTile
             key={tile.string()}
-            mapState={mapState}
             tile={tile}
             style={{
               position: 'absolute',

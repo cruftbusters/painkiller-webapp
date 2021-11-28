@@ -2,20 +2,21 @@ import { useEffect, useState } from 'react'
 import Epsg3857Coordinate from '../types/Epsg3857Coordinate'
 import MapState from '../types/MapState'
 import Layout from '../types/Layout'
+import useMapState from '../hook/useMapState'
 
 interface SpatialOverlayProps {
   layout?: Layout
   url: string | undefined
-  mapState: MapState
   overlayOpacity: string
 }
 
 export default function SpatialOverlay({
   layout,
   url,
-  mapState,
   overlayOpacity,
 }: SpatialOverlayProps) {
+  const { mapState } = useMapState()
+
   const [mapBounds, setMapBounds] = useState({
     left: 0,
     top: 0,
