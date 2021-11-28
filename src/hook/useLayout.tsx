@@ -2,6 +2,7 @@ import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
 import Layout from '../types/Layout'
 import { createContext, ReactNode, useContext, useState } from 'react'
+import usePollLayerURLs from './usePollLayerURLs'
 
 const layoutContext = createContext<LayoutContextValue>({
   createLayout: async () => {},
@@ -26,6 +27,7 @@ export function LayoutContextProvider({
   const [layout, setLayout] = useState<Layout>()
   const isTooHighScale = mapState.scale < 7
   const [error, setError] = useState('')
+  usePollLayerURLs(layout, setLayout)
 
   return (
     <layoutContext.Provider

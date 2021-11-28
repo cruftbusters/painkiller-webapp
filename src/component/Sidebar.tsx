@@ -5,7 +5,6 @@ import { ReactNode } from 'react'
 
 interface SidebarProps {
   layout?: Layout
-  onCreateMap: (layout: Layout) => void
   heightmapOpacity: string
   hillshadeOpacity: string
   setHeightmapOpacity: (overlayOpacity: string) => void
@@ -14,7 +13,6 @@ interface SidebarProps {
 
 export default function Sidebar({
   layout,
-  onCreateMap,
   heightmapOpacity,
   hillshadeOpacity,
   setHeightmapOpacity,
@@ -29,7 +27,7 @@ export default function Sidebar({
         boxSizing: 'border-box',
       }}
     >
-      <GenerateButton onCreateMap={onCreateMap} />
+      <GenerateButton />
       {layout ? (
         <Section>
           <Header>Summary</Header>
