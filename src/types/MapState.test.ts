@@ -86,15 +86,25 @@ describe('map state', () => {
   describe('zoom', () => {
     it('zoom impacts scale linearly', () => {
       expect(
-        new MapState({ width: 256, height: 256 }).zoom(-114),
-      ).toStrictEqual(
-        new MapState({ width: 256, height: 256, scale: 0.125 }),
-      )
+        new MapState({ width: 256, height: 256 }).zoom(-114).scale,
+      ).toStrictEqual(0.125)
 
       expect(
-        new MapState({ width: 256, height: 256, scale: 1 }).zoom(-114),
+        new MapState({ width: 256, height: 256, scale: 1 }).zoom(-114)
+          .scale,
+      ).toStrictEqual(1.125)
+    })
+    it('zooms to center', () => {
+      expect(
+        new MapState({ width: 256, height: 256 }).zoom(-114 * 8),
       ).toStrictEqual(
-        new MapState({ width: 256, height: 256, scale: 1.125 }),
+        new MapState({
+          width: 256,
+          height: 256,
+          scale: 1,
+          left: -maxMercatorLongitude / 2,
+          top: maxMercatorLatitude / 2,
+        }),
       )
     })
   })

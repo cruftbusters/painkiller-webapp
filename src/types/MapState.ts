@@ -41,9 +41,22 @@ export default class MapState {
     })
   }
   zoom(dz: number): MapState {
+    const lastScale = this.scale
+
+    const nextScale = lastScale - dz / 114 / 8
+
+    const dInverseScaledTileSize =
+      (Math.pow(2, -lastScale) - Math.pow(2, -nextScale)) / this.tileSize
+
     return new MapState({
       ...this,
-      scale: this.scale - dz / 114 / 8,
+      scale: nextScale,
+      left:
+        this.left +
+        this.width * maxMercatorLongitude * dInverseScaledTileSize,
+      top:
+        this.top +
+        this.height * -maxMercatorLatitude * dInverseScaledTileSize,
     })
   }
 }
