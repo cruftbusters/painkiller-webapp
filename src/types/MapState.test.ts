@@ -86,17 +86,20 @@ describe('map state', () => {
   describe('zoom', () => {
     it('zoom impacts scale linearly', () => {
       expect(
-        new MapState({ width: 256, height: 256 }).zoom(-114).scale,
+        new MapState({ width: 256, height: 256 }).zoom(-114, 0, 0).scale,
       ).toStrictEqual(0.125)
 
       expect(
-        new MapState({ width: 256, height: 256, scale: 1 }).zoom(-114)
-          .scale,
+        new MapState({ width: 256, height: 256, scale: 1 }).zoom(
+          -114,
+          0,
+          0,
+        ).scale,
       ).toStrictEqual(1.125)
     })
     it('zooms to center', () => {
       expect(
-        new MapState({ width: 256, height: 256 }).zoom(-114 * 8),
+        new MapState({ width: 256, height: 256 }).zoom(-114 * 8, 128, 128),
       ).toStrictEqual(
         new MapState({
           width: 256,
@@ -104,6 +107,19 @@ describe('map state', () => {
           scale: 1,
           left: -maxMercatorLongitude / 2,
           top: maxMercatorLatitude / 2,
+        }),
+      )
+    })
+    it('zooms to bottom right', () => {
+      expect(
+        new MapState({ width: 256, height: 256 }).zoom(-114 * 8, 256, 256),
+      ).toStrictEqual(
+        new MapState({
+          width: 256,
+          height: 256,
+          scale: 1,
+          left: 0,
+          top: 0,
         }),
       )
     })

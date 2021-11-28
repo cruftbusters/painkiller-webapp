@@ -79,7 +79,7 @@ function App() {
         />
         <MapControls
           pan={(dx, dy) => setMapState((mapState) => mapState.pan(dx, dy))}
-          zoom={(dz) => setMapState((mapState) => mapState.zoom(dz))}
+          zoom={(dz, mouseX, mouseY) => setMapState((mapState) => mapState.zoom(dz, mouseX, mouseY))}
         />
       </div>
     </div>

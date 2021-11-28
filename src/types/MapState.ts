@@ -40,11 +40,9 @@ export default class MapState {
       top: this.top + (dy * maxMercatorLatitude * 2) / scaledTileSize,
     })
   }
-  zoom(dz: number): MapState {
+  zoom(dz: number, mouseX: number, mouseY: number): MapState {
     const lastScale = this.scale
-
     const nextScale = lastScale - dz / 114 / 8
-
     const dInverseScaledTileSize =
       (Math.pow(2, -lastScale) - Math.pow(2, -nextScale)) / this.tileSize
 
@@ -53,10 +51,18 @@ export default class MapState {
       scale: nextScale,
       left:
         this.left +
-        this.width * maxMercatorLongitude * dInverseScaledTileSize,
+        2 *
+          this.width *
+          maxMercatorLongitude *
+          dInverseScaledTileSize *
+          (mouseX / this.width),
       top:
         this.top +
-        this.height * -maxMercatorLatitude * dInverseScaledTileSize,
+        2 *
+          this.height *
+          -maxMercatorLatitude *
+          dInverseScaledTileSize *
+          (mouseY / this.height),
     })
   }
 }
