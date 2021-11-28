@@ -9,8 +9,6 @@ export default function LayoutSummary({ layout }: LayoutSummaryProps) {
   const {
     size: { width, height },
     bounds: { left, top, right, bottom },
-    heightmapURL,
-    hillshadeURL,
   } = layout
   return (
     <>
@@ -19,22 +17,6 @@ export default function LayoutSummary({ layout }: LayoutSummaryProps) {
       </p>
       <p>
         Bounds: {left} {top} {right} {bottom} (EPSG:3857)
-      </p>
-      <p>
-        {heightmapURL ? (
-          <a href={heightmapURL}>Download heightmap</a>
-        ) : (
-          'Generating heightmap...'
-        )}
-      </p>
-      <p>
-        {hillshadeURL ? (
-          <a href={hillshadeURL}>Download hillshade</a>
-        ) : heightmapURL ? (
-          'Generating hillshade...'
-        ) : (
-          ''
-        )}
       </p>
     </>
   )

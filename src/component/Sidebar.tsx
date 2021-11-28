@@ -35,24 +35,42 @@ export default function Sidebar({
     >
       <GenerateButton mapState={mapState} onCreateMap={onCreateMap} />
       <LayoutSummary layout={layout} />
-      {layout?.heightmapURL ? (
+      {layout ? (
         <Section>
           <Header>Heightmap</Header>
-          <OverlayOpacity
-            layout={layout}
-            overlayOpacity={heightmapOpacity}
-            setOverlayOpacity={setHeightmapOpacity}
-          />
+          {layout.heightmapURL ? (
+            <>
+              <p>
+                <a href={layout.heightmapURL}>Download heightmap</a>
+              </p>
+              <OverlayOpacity
+                layout={layout}
+                overlayOpacity={heightmapOpacity}
+                setOverlayOpacity={setHeightmapOpacity}
+              />
+            </>
+          ) : (
+            <p>Generating heightmap...</p>
+          )}
         </Section>
       ) : undefined}
-      {layout?.hillshadeURL ? (
+      {layout?.heightmapURL ? (
         <Section>
           <Header>Hillshade</Header>
-          <OverlayOpacity
-            layout={layout}
-            overlayOpacity={hillshadeOpacity}
-            setOverlayOpacity={setHillshadeOpacity}
-          />
+          {layout.hillshadeURL ? (
+            <>
+              <p>
+                <a href={layout.hillshadeURL}>Download hillshade</a>
+              </p>
+              <OverlayOpacity
+                layout={layout}
+                overlayOpacity={hillshadeOpacity}
+                setOverlayOpacity={setHillshadeOpacity}
+              />
+            </>
+          ) : (
+            <p>Generating hillshade...</p>
+          )}
         </Section>
       ) : undefined}
     </div>
