@@ -1,7 +1,6 @@
-import CreateLayoutButton from './CreateLayoutButton'
 import OverlayOpacity from './OverlayOpacity'
-import { ReactNode } from 'react'
-import useLayout from '../hook/useLayout'
+import { CSSProperties, ReactNode } from 'react'
+import useLayout, { errIsTooHighScale } from '../hook/useLayout'
 
 interface SidebarProps {
   heightmapOpacity: string
@@ -16,17 +15,36 @@ export default function Sidebar({
   setHeightmapOpacity,
   setHillshadeOpacity,
 }: SidebarProps) {
-  const { layout } = useLayout()
+  const { layout, error, createLayout } = useLayout()
+  const isTooHighScale = error === errIsTooHighScale
   return (
     <div
       style={{
         width: '100%',
         height: '100%',
-        padding: '0.5em',
+        padding: '0 0.5em',
         boxSizing: 'border-box',
       }}
     >
-      <CreateLayoutButton />
+      <Section>
+        <Header style={{ padding: 0 }}>
+          <button
+            style={{
+              width: '100%',
+              padding: '0.5em',
+              border: 'none',
+              fontSize: '1.25em',
+              backgroundColor: isTooHighScale ? '#DDD' : '#AFA',
+              cursor: isTooHighScale ? 'not-allowed' : 'pointer',
+            }}
+            disabled={isTooHighScale}
+            onClick={createLayout}
+          >
+            Generate layers
+          </button>
+        </Header>
+        {error ? <p>{error}</p> : undefined}
+      </Section>
       {layout ? (
         <Section>
           <Header>Summary</Header>
@@ -94,7 +112,13 @@ function Section({ children }: { children: ReactNode }) {
   )
 }
 
-function Header({ children }: { children: ReactNode }) {
+function Header({
+  children,
+  style,
+}: {
+  children: ReactNode
+  style?: CSSProperties
+}) {
   return (
     <div
       style={{
@@ -102,6 +126,7 @@ function Header({ children }: { children: ReactNode }) {
         padding: '0.5em',
         backgroundColor: '#DDD',
         fontSize: '1.125em',
+        ...style,
       }}
     >
       {children}
