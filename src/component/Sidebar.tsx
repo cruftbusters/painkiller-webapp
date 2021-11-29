@@ -26,18 +26,22 @@ export default function Sidebar({
       style={{
         width: '100%',
         height: '100%',
-        padding: '0 0.5em',
+        padding: '0 0.5rem',
         boxSizing: 'border-box',
+        overflowY: 'auto',
       }}
     >
       <Section>
-        <Header style={{ padding: 0 }}>
+        <Header>
           <button
             style={{
+              display: 'block',
               width: '100%',
-              padding: '0.5em',
-              border: 'none',
-              fontSize: '1.25em',
+              padding: '0.5rem',
+              margin: '-0.5rem',
+              border: 0,
+              boxSizing: 'content-box',
+              fontSize: 'inherit',
               backgroundColor: isDisabled ? '#DDD' : '#AFA',
               cursor: isDisabled ? 'not-allowed' : 'pointer',
             }}
@@ -126,8 +130,8 @@ function Section({ children }: { children: ReactNode }) {
   return (
     <div
       style={{
-        margin: '0 -0.5em',
-        padding: '0 0.5em',
+        margin: '0 -0.5rem',
+        padding: '0 0.5rem',
       }}
     >
       {children}
@@ -145,10 +149,10 @@ function Header({
   return (
     <div
       style={{
-        margin: '0 -0.5em',
-        padding: '0.5em',
+        margin: '0 -0.5rem',
+        padding: '0.5rem',
         backgroundColor: '#DDD',
-        fontSize: '1.125em',
+        fontSize: '1.125rem',
         ...style,
       }}
     >
