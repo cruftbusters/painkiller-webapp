@@ -1,5 +1,6 @@
 export default interface Layout {
   id: string
+  scale: number
   size: {
     width: string
     height: string

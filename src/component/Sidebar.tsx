@@ -1,6 +1,9 @@
 import OverlayOpacity from './OverlayOpacity'
 import { CSSProperties, ReactNode } from 'react'
-import useLayout, { errIsTooHighScale } from '../hook/useLayout'
+import useLayout, {
+  errIsTooHighScale,
+  errScaleIsNotNumber,
+} from '../hook/useLayout'
 
 interface SidebarProps {
   heightmapOpacity: string
@@ -15,8 +18,9 @@ export default function Sidebar({
   setHeightmapOpacity,
   setHillshadeOpacity,
 }: SidebarProps) {
-  const { layout, error, createLayout } = useLayout()
-  const isTooHighScale = error === errIsTooHighScale
+  const { layout, error, createLayout, setScale, scale } = useLayout()
+  const isDisabled =
+    error === errIsTooHighScale || error === errScaleIsNotNumber
   return (
     <div
       style={{
@@ -34,10 +38,10 @@ export default function Sidebar({
               padding: '0.5em',
               border: 'none',
               fontSize: '1.25em',
-              backgroundColor: isTooHighScale ? '#DDD' : '#AFA',
-              cursor: isTooHighScale ? 'not-allowed' : 'pointer',
+              backgroundColor: isDisabled ? '#DDD' : '#AFA',
+              cursor: isDisabled ? 'not-allowed' : 'pointer',
             }}
-            disabled={isTooHighScale}
+            disabled={isDisabled}
             onClick={createLayout}
           >
             Generate layers
@@ -55,6 +59,7 @@ export default function Sidebar({
             Bounds: {layout.bounds.left} {layout.bounds.top}{' '}
             {layout.bounds.right} {layout.bounds.bottom} (EPSG:3857)
           </p>
+          <p>Scale: {layout.scale}</p>
         </Section>
       ) : undefined}
       {layout ? (
@@ -76,25 +81,41 @@ export default function Sidebar({
           )}
         </Section>
       ) : undefined}
-      {layout?.heightmapURL ? (
-        <Section>
-          <Header>Hillshade</Header>
-          {layout.hillshadeURL ? (
-            <>
-              <p>
-                <a href={layout.hillshadeURL}>Download hillshade</a>
-              </p>
-              <OverlayOpacity
-                layout={layout}
-                overlayOpacity={hillshadeOpacity}
-                setOverlayOpacity={setHillshadeOpacity}
-              />
-            </>
-          ) : (
-            <p>Generating hillshade...</p>
-          )}
-        </Section>
-      ) : undefined}
+      <Section>
+        <Header>Hillshade</Header>
+        <p>
+          Scale:{' '}
+          <input
+            type="text"
+            value={scale}
+            onChange={(e) => setScale(e.target.value)}
+            style={{ float: 'right' }}
+          />
+          <input
+            type="range"
+            min="0.0"
+            max="2.0"
+            step="0.1"
+            value={scale}
+            onChange={(e) => setScale(e.target.value)}
+            style={{ width: '100%' }}
+          />
+        </p>
+        {layout?.hillshadeURL ? (
+          <>
+            <p>
+              <a href={layout.hillshadeURL}>Download hillshade</a>
+            </p>
+            <OverlayOpacity
+              layout={layout}
+              overlayOpacity={hillshadeOpacity}
+              setOverlayOpacity={setHillshadeOpacity}
+            />
+          </>
+        ) : layout?.heightmapURL ? (
+          <p>Generating hillshade...</p>
+        ) : undefined}
+      </Section>
     </div>
   )
 }

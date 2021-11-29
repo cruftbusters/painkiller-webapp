@@ -1,7 +1,15 @@
 import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
 import Layout from '../types/Layout'
-import { createContext, ReactNode, useContext, useState } from 'react'
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import usePollLayerURLs from './usePollLayerURLs'
 import useMapState from './useMapState'
 
@@ -9,11 +17,15 @@ interface LayoutContext {
   createLayout: () => Promise<void>
   error: string
   layout?: Layout
+  scale: string
+  setScale: Dispatch<SetStateAction<string>>
 }
 
 const layoutContext = createContext<LayoutContext>({
   createLayout: async () => {},
   error: 'No layout context provider',
+  scale: '1.0',
+  setScale: () => {},
 })
 
 interface LayoutContextProviderProps {
@@ -29,18 +41,37 @@ export function LayoutContextProvider({
   const [error, setError] = useState('')
   usePollLayerURLs(layout, setLayout)
 
+  const [scale, setScale] = useState<string>('1')
+  const [scaleAsNumber, setScaleAsNumber] = useState(1)
+  useEffect(() => {
+    if (scale.match(/^-?[0-9]*(\.[0-9]*)?$/)) {
+      setScaleAsNumber(parseFloat(scale))
+    } else {
+      setScaleAsNumber(NaN)
+    }
+  }, [scale])
+
   return (
     <layoutContext.Provider
       children={children}
       value={{
         createLayout: async () => {
           setError('')
-          const [layout, error] = await createLayout(mapState)
+          const [layout, error] = await createLayout(
+            mapState,
+            scaleAsNumber,
+          )
           setLayout(layout)
           setError(error)
         },
-        error: isTooHighScale ? errIsTooHighScale : error,
+        error: isTooHighScale
+          ? errIsTooHighScale
+          : isNaN(scaleAsNumber)
+          ? errScaleIsNotNumber
+          : error,
         layout,
+        scale,
+        setScale,
       }}
     />
   )
@@ -49,7 +80,10 @@ export function LayoutContextProvider({
 export const errIsTooHighScale =
   'Zoom in further to enable layer rendering'
 
-async function createLayout(mapState: MapState) {
+export const errScaleIsNotNumber =
+  'Set scale to a number to enable layer rendering'
+
+async function createLayout(mapState: MapState, scale: number) {
   const { width, height, left, top } = mapState
   const { x: right, y: bottom } = new MapPixel(
     width,
@@ -60,7 +94,7 @@ async function createLayout(mapState: MapState) {
     {
       method: 'POST',
       body: JSON.stringify({
-        scale: 1,
+        scale,
         size: { width, height },
         bounds: { left, top, right, bottom },
       }),
