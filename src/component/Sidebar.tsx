@@ -48,6 +48,24 @@ export default function Sidebar({
           </button>
         </Header>
         {error ? <p>{error}</p> : undefined}
+        <p>
+          Scale:{' '}
+          <input
+            type="text"
+            value={scale}
+            onChange={(e) => setScale(e.target.value)}
+            style={{ float: 'right' }}
+          />
+          <input
+            type="range"
+            min="0.0"
+            max="2.0"
+            step="0.1"
+            value={scale}
+            onChange={(e) => setScale(e.target.value)}
+            style={{ width: '100%' }}
+          />
+        </p>
       </Section>
       {layout ? (
         <Section>
@@ -81,41 +99,25 @@ export default function Sidebar({
           )}
         </Section>
       ) : undefined}
-      <Section>
-        <Header>Hillshade</Header>
-        <p>
-          Scale:{' '}
-          <input
-            type="text"
-            value={scale}
-            onChange={(e) => setScale(e.target.value)}
-            style={{ float: 'right' }}
-          />
-          <input
-            type="range"
-            min="0.0"
-            max="2.0"
-            step="0.1"
-            value={scale}
-            onChange={(e) => setScale(e.target.value)}
-            style={{ width: '100%' }}
-          />
-        </p>
-        {layout?.hillshadeURL ? (
-          <>
-            <p>
-              <a href={layout.hillshadeURL}>Download hillshade</a>
-            </p>
-            <OverlayOpacity
-              layout={layout}
-              overlayOpacity={hillshadeOpacity}
-              setOverlayOpacity={setHillshadeOpacity}
-            />
-          </>
-        ) : layout?.heightmapURL ? (
-          <p>Generating hillshade...</p>
-        ) : undefined}
-      </Section>
+      {layout?.heightmapURL ? (
+        <Section>
+          <Header>Hillshade</Header>
+          {layout?.hillshadeURL ? (
+            <>
+              <p>
+                <a href={layout.hillshadeURL}>Download hillshade</a>
+              </p>
+              <OverlayOpacity
+                layout={layout}
+                overlayOpacity={hillshadeOpacity}
+                setOverlayOpacity={setHillshadeOpacity}
+              />
+            </>
+          ) : layout?.heightmapURL ? (
+            <p>Generating hillshade...</p>
+          ) : undefined}
+        </Section>
+      ) : undefined}
     </div>
   )
 }
