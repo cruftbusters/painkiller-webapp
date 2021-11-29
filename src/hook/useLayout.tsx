@@ -60,6 +60,7 @@ async function createLayout(mapState: MapState) {
     {
       method: 'POST',
       body: JSON.stringify({
+        scale: 1,
         size: { width, height },
         bounds: { left, top, right, bottom },
       }),
