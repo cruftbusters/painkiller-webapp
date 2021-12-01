@@ -88,17 +88,23 @@ export default function Sidebar({
         <Section>
           <Header>Heightmap</Header>
           {layout.heightmapURL ? (
-            <>
-              <p>
-                <a href={layout.heightmapURL}>Download heightmap</a>
-              </p>
-              <OverlayOpacity
-                layout={layout}
-                overlayOpacity={heightmapOpacity}
-                setOverlayOpacity={setHeightmapOpacity}
-              />
-            </>
-          ) : (
+            <p>
+              <a href={layout.heightmapURL}>Download heightmap preview</a>
+            </p>
+          ) : undefined}
+          {layout.hiResHeightmapURL ? (
+            <p>
+              <a href={layout.hiResHeightmapURL}>Download heightmap</a>
+            </p>
+          ) : undefined}
+          {layout.heightmapURL ? (
+            <OverlayOpacity
+              layout={layout}
+              overlayOpacity={heightmapOpacity}
+              setOverlayOpacity={setHeightmapOpacity}
+            />
+          ) : undefined}
+          {layout.heightmapURL && layout.hiResHeightmapURL ? undefined : (
             <p>Generating heightmap...</p>
           )}
         </Section>

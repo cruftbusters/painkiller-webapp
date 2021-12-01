@@ -12,5 +12,6 @@ export default interface Layout {
     bottom: number
   }
   heightmapURL: string
+  hiResHeightmapURL: string
   hillshadeURL: string
 }

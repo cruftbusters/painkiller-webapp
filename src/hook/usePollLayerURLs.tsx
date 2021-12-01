@@ -12,6 +12,7 @@ export default function usePollLayerURLs(
       const newLayout = await fetchLayout(layout.id)
       if (
         layout.heightmapURL !== newLayout.heightmapURL ||
+        layout.hiResHeightmapURL !== newLayout.hiResHeightmapURL ||
         layout.hillshadeURL !== newLayout.hillshadeURL
       ) {
         setLayout(newLayout)
