@@ -75,7 +75,22 @@ export default function Sidebar({
         <Section>
           <Header>Summary</Header>
           <p>
-            Size: {layout.size.width}x{layout.size.height}
+            Image Size: {layout.size.width}x{layout.size.height}
+            <br />
+            World Size:{' '}
+            {Math.round(layout.bounds.right - layout.bounds.left)}x
+            {Math.round(layout.bounds.top - layout.bounds.bottom)}
+            <br />
+            World/Image Resolution:{' '}
+            {Math.round(
+              Math.min(
+                (layout.bounds.right - layout.bounds.left) /
+                  layout.size.width,
+
+                (layout.bounds.top - layout.bounds.bottom) /
+                  layout.size.height,
+              ),
+            )}
           </p>
           <p>
             Bounds: {layout.bounds.left} {layout.bounds.top}{' '}

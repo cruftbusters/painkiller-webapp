@@ -2,8 +2,8 @@ export default interface Layout {
   id: string
   scale: number
   size: {
-    width: string
-    height: string
+    width: number
+    height: number
   }
   bounds: {
     left: number
