@@ -7,6 +7,7 @@ import Sidebar from './component/Sidebar'
 import MapState from './types/MapState'
 import useLayout from './hook/useLayout'
 import useMapState from './hook/useMapState'
+import useWindowSize from './hook/useWindowSize'
 
 export default function App() {
   const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
@@ -17,6 +18,7 @@ export default function App() {
   const [heightmapOpacity, setHeightmapOpacity] = useState('0.0')
   const [hillshadeOpacity, setHillshadeOpacity] = useState('1.0')
 
+  const windowSize = useWindowSize()
   const [dividerOffset, setDividerOffset] = useState(0)
   useEffect(() => {
     const { clientWidth, clientHeight } = mapContainerRef.current
@@ -28,7 +30,7 @@ export default function App() {
           height: clientHeight,
         }),
     )
-  }, [setMapState, mapContainerRef, dividerOffset])
+  }, [setMapState, mapContainerRef, dividerOffset, windowSize])
 
   return (
     <div
