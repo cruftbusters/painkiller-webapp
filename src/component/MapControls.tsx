@@ -1,4 +1,9 @@
-import { MutableRefObject, useRef } from 'react'
+import {
+  MouseEventHandler,
+  MutableRefObject,
+  ReactNode,
+  useRef,
+} from 'react'
 import useMapState from '../hook/useMapState'
 
 function MapControls() {
@@ -10,7 +15,12 @@ function MapControls() {
   return (
     <div
       ref={mapControlsRef}
-      style={{ width: '100%', height: '100%', touchAction: 'none' }}
+      style={{
+        width: '100%',
+        height: '100%',
+        touchAction: 'none',
+        position: 'relative',
+      }}
       onWheel={(e) => {
         const { left, top } =
           mapControlsRef.current.getBoundingClientRect()
@@ -41,7 +51,56 @@ function MapControls() {
         dragStateRef.current.lastX = e.pageX
         dragStateRef.current.lastY = e.pageY
       }}
-    />
+    >
+      <div
+        style={{
+          width: '2rem',
+          height: '4rem',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'absolute',
+          right: 0,
+          top: 0,
+          margin: '0.25rem',
+        }}
+      >
+        <ZoomButton
+          onClick={() =>
+            setMapState((mapState) => mapState.zoomToCenter(-144 * 2))
+          }
+        >
+          +
+        </ZoomButton>
+        <ZoomButton
+          onClick={() =>
+            setMapState((mapState) => mapState.zoomToCenter(144 * 2))
+          }
+        >
+          -
+        </ZoomButton>
+      </div>
+    </div>
+  )
+}
+
+interface ZoomButtonProps {
+  onClick: MouseEventHandler
+  children: ReactNode
+}
+
+function ZoomButton({ onClick, children }: ZoomButtonProps) {
+  return (
+    <button
+      style={{
+        flex: '1',
+        borderRadius: '0.25rem',
+        margin: '1px',
+        border: '1px solid gray',
+      }}
+      onClick={onClick}
+    >
+      {children}
+    </button>
   )
 }
 
