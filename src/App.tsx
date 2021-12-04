@@ -1,14 +1,19 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import BaseLayer from './component/BaseLayer'
 import SpatialOverlay from './component/SpatialOverlay'
 import MapControls from './component/MapControls'
 import Sidebar from './component/Sidebar'
 import useLayout from './hook/useLayout'
 import StackChildren from './component/StackChildren'
-import VerticalSplit from './component/VerticalSplit'
+import VerticalSplit, { SplitMode } from './component/VerticalSplit'
 import MapContainer from './component/MapContainer'
 
 export default function App() {
+  const [splitMode] = useState(
+    window.innerWidth > window.innerHeight
+      ? SplitMode.vertical
+      : SplitMode.horizontal,
+  )
   const [vspResizeCount, setVspResizeCount] = useState(0)
   const [heightmapOpacity, setHeightmapOpacity] = useState('0.0')
   const [hillshadeOpacity, setHillshadeOpacity] = useState('1.0')
@@ -16,9 +21,11 @@ export default function App() {
 
   return (
     <VerticalSplit
-      onResize={() =>
-        setVspResizeCount((vspResizeCount) => vspResizeCount + 1)
-      }
+      splitMode={splitMode}
+      onResize={useCallback(
+        () => setVspResizeCount((vspResizeCount) => vspResizeCount + 1),
+        [],
+      )}
       left={
         <Sidebar
           heightmapOpacity={heightmapOpacity}

@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react'
+import { SplitMode } from './VerticalSplit'
 
 interface DragProps {
   onDrag: (dx: number, dy: number) => void
+  splitMode: SplitMode
 }
 
-export default function HorizontalDrag({ onDrag }: DragProps) {
+export default function HorizontalDrag({ onDrag, splitMode }: DragProps) {
   const dragState = useRef({ dragging: false, lastX: 0, lastY: 0 })
 
   useEffect(() => {
@@ -33,7 +35,8 @@ export default function HorizontalDrag({ onDrag }: DragProps) {
       style={{
         width: '100%',
         height: '100%',
-        cursor: 'ew-resize',
+        cursor:
+          splitMode === SplitMode.vertical ? 'ew-resize' : 'ns-resize',
       }}
       onMouseDown={({ pageX, pageY }) => {
         dragState.current = {
