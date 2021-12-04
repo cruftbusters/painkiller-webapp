@@ -10,7 +10,7 @@ function MapControls() {
   return (
     <div
       ref={mapControlsRef}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: '100%', height: '100%', touchAction: 'none' }}
       onWheel={(e) => {
         const { left, top } =
           mapControlsRef.current.getBoundingClientRect()
@@ -18,16 +18,20 @@ function MapControls() {
           mapState.zoom(e.deltaY, e.pageX - left, e.pageY - top),
         )
       }}
-      onMouseDown={(e) =>
-        (dragStateRef.current = {
+      onPointerDown={(e) => {
+        dragStateRef.current = {
           dragging: true,
           lastX: e.pageX,
           lastY: e.pageY,
-        })
-      }
-      onMouseUp={() => (dragStateRef.current.dragging = false)}
-      onMouseLeave={() => (dragStateRef.current.dragging = false)}
-      onMouseMove={(e) => {
+        }
+      }}
+      onPointerUp={() => {
+        dragStateRef.current.dragging = false
+      }}
+      onPointerLeave={(e) => {
+        dragStateRef.current.dragging = false
+      }}
+      onPointerMove={(e) => {
         if (!dragStateRef.current.dragging) return
         const dx = e.pageX - dragStateRef.current.lastX
         const dy = e.pageY - dragStateRef.current.lastY
