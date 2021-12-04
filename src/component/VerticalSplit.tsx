@@ -1,4 +1,10 @@
-import { ReactNode, useState } from 'react'
+import {
+  MutableRefObject,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import HorizontalDrag from './HorizontalDrag'
 
 interface VerticalSplitProps {
@@ -12,7 +18,14 @@ export default function VerticalSplit({
   right,
   onResize,
 }: VerticalSplitProps) {
+  const leftRef = useRef() as MutableRefObject<HTMLDivElement>
   const [dividerOffset, setDividerOffset] = useState(0)
+
+  useEffect(() => {
+    const { left, right } =
+      leftRef.current.getBoundingClientRect()
+    setDividerOffset(right - left)
+  }, [])
 
   return (
     <div
@@ -22,7 +35,12 @@ export default function VerticalSplit({
         display: 'flex',
       }}
     >
-      <div style={{ flex: `0 0 calc(20% + ${dividerOffset}px)` }}>
+      <div
+        ref={leftRef}
+        style={{
+          flex: `0 0 ${dividerOffset ? `${dividerOffset}px` : '20%'}`,
+        }}
+      >
         {left}
       </div>
       <div
