@@ -29,6 +29,11 @@ export default function VerticalSplit({
   const [dividerOffset, setDividerOffset] = useState(0)
 
   useEffect(() => {
+    onResize()
+    setDividerOffset(0)
+  }, [onResize, splitMode])
+
+  useEffect(() => {
     if (dividerOffset !== 0) return
     if (splitMode === SplitMode.vertical) {
       const { left, right } = leftRef.current.getBoundingClientRect()
@@ -38,11 +43,6 @@ export default function VerticalSplit({
       setDividerOffset(bottom - top)
     }
   }, [splitMode, dividerOffset])
-
-  useEffect(() => {
-    onResize()
-    setDividerOffset(0)
-  }, [onResize, splitMode])
 
   return (
     <div
@@ -57,6 +57,10 @@ export default function VerticalSplit({
         ref={leftRef}
         style={{
           flex: `0 0 ${dividerOffset ? `${dividerOffset}px` : '20%'}`,
+          maxHeight:
+            !dividerOffset || splitMode === SplitMode.vertical
+              ? undefined
+              : `${dividerOffset}px`,
         }}
       >
         {left}

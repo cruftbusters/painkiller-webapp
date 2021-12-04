@@ -29,6 +29,7 @@ export default function Sidebar({
         padding: '0 0.5rem',
         boxSizing: 'border-box',
         overflowY: 'auto',
+        minHeight: 0,
       }}
     >
       <Section>
