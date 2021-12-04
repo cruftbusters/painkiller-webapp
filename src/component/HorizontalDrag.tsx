@@ -30,13 +30,13 @@ export default function HorizontalDrag({ onDrag }: DragProps) {
         height: '100%',
         cursor: 'ew-resize',
       }}
-      onMouseDown={({ pageX, pageY }) =>
-        (dragState.current = {
+      onMouseDown={({ pageX, pageY }) => {
+        dragState.current = {
           dragging: true,
           lastX: pageX,
           lastY: pageY,
-        })
-      }
+        }
+      }}
       onMouseUp={() => (dragState.current.dragging = false)}
     />
   )
