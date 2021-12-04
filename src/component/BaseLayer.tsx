@@ -23,10 +23,9 @@ export default function BaseLayer() {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'relative',
         width: '100%',
         height: '100%',
-        overflow: 'hidden',
       }}
     >
       {grid(

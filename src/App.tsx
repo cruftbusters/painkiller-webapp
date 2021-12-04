@@ -8,6 +8,7 @@ import MapState from './types/MapState'
 import useLayout from './hook/useLayout'
 import useMapState from './hook/useMapState'
 import useWindowSize from './hook/useWindowSize'
+import StackChildren from './component/StackChildren'
 
 export default function App() {
   const mapContainerRef = useRef() as MutableRefObject<HTMLDivElement>
@@ -58,20 +59,19 @@ export default function App() {
           onDrag={(dx, _) => setDividerOffset((v) => v + dx)}
         />
       </div>
-      <div
-        ref={mapContainerRef}
-        style={{ flex: '1 1 auto', position: 'relative' }}
-      >
-        <BaseLayer />
-        <SpatialOverlay
-          url={layout?.heightmapURL}
-          overlayOpacity={heightmapOpacity}
-        />
-        <SpatialOverlay
-          url={layout?.hillshadeURL}
-          overlayOpacity={hillshadeOpacity}
-        />
-        <MapControls />
+      <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }}>
+        <StackChildren>
+          <BaseLayer />
+          <SpatialOverlay
+            url={layout?.heightmapURL}
+            overlayOpacity={heightmapOpacity}
+          />
+          <SpatialOverlay
+            url={layout?.hillshadeURL}
+            overlayOpacity={hillshadeOpacity}
+          />
+          <MapControls />
+        </StackChildren>
       </div>
     </div>
   )

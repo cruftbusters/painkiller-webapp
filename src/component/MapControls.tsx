@@ -10,7 +10,7 @@ function MapControls() {
   return (
     <div
       ref={mapControlsRef}
-      style={{ width: '100%', height: '100%', position: 'absolute' }}
+      style={{ width: '100%', height: '100%' }}
       onWheel={(e) => {
         const { left, top } =
           mapControlsRef.current.getBoundingClientRect()
