@@ -22,8 +22,7 @@ export default function VerticalSplit({
   const [dividerOffset, setDividerOffset] = useState(0)
 
   useEffect(() => {
-    const { left, right } =
-      leftRef.current.getBoundingClientRect()
+    const { left, right } = leftRef.current.getBoundingClientRect()
     setDividerOffset(right - left)
   }, [])
 
@@ -51,6 +50,8 @@ export default function VerticalSplit({
       >
         <HorizontalDrag
           onDrag={(dx, _) => {
+            const { left, right } = leftRef.current.getBoundingClientRect()
+            if (right - left > dividerOffset && dx < 0) return
             setDividerOffset((v) => v + dx)
             onResize()
           }}

@@ -19,8 +19,13 @@ export default function HorizontalDrag({ onDrag }: DragProps) {
         }
       }
     }
+    const onMouseUp = () => (dragState.current.dragging = false)
     window.addEventListener('mousemove', onMouseMove)
-    return () => window.removeEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('mouseup', onMouseUp)
+    }
   }, [onDrag])
 
   return (
@@ -37,7 +42,6 @@ export default function HorizontalDrag({ onDrag }: DragProps) {
           lastY: pageY,
         }
       }}
-      onMouseUp={() => (dragState.current.dragging = false)}
     />
   )
 }
