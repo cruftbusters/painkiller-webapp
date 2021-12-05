@@ -43,7 +43,6 @@ export default function SpatialOverlay({
         display: url ? 'block' : 'none',
         width: '100%',
         height: '100%',
-        backgroundColor: 'black',
         opacity: overlayOpacity,
       }}
     >

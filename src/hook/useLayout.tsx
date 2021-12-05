@@ -12,6 +12,8 @@ import {
 } from 'react'
 import usePollLayerURLs from './usePollLayerURLs'
 import useMapState from './useMapState'
+import useExtentSelection from './useExtentSelection'
+import Selection from '../types/Selection'
 
 interface LayoutContext {
   createLayout: () => Promise<void>
@@ -51,15 +53,16 @@ export function LayoutContextProvider({
     }
   }, [scale])
 
+  const { selection } = useExtentSelection()
+
   return (
     <layoutContext.Provider
       children={children}
       value={{
         createLayout: async () => {
           setError('')
-          const [layout, error] = await createLayout(
-            mapState,
-            scaleAsNumber,
+          const [layout, error] = await fetchCreateLayout(
+            createLayout(mapState, scaleAsNumber, selection),
           )
           setLayout(layout)
           setError(error)
@@ -83,21 +86,12 @@ export const errIsTooHighScale =
 export const errScaleIsNotNumber =
   'Set scale to a number to enable layer rendering'
 
-async function createLayout(mapState: MapState, scale: number) {
-  const { width, height, left, top } = mapState
-  const { x: right, y: bottom } = new MapPixel(
-    width,
-    height,
-  ).toEpsg3857Coordinate(mapState)
+async function fetchCreateLayout(layoutRequest: any) {
   const response = await fetch(
     'https://layouts.painkillergis.com/v1/layouts',
     {
       method: 'POST',
-      body: JSON.stringify({
-        scale,
-        size: { width, height },
-        bounds: { left, top, right, bottom },
-      }),
+      body: JSON.stringify(layoutRequest),
     },
   )
   if (response.status < 200 || response.status >= 300) {
@@ -109,6 +103,44 @@ async function createLayout(mapState: MapState, scale: number) {
     ]
   } else {
     return [await response.json(), '']
+  }
+}
+
+function createLayout(
+  mapState: MapState,
+  scale: number,
+  selection: Selection | undefined,
+) {
+  if (selection) {
+    const { x: left, y: top } = new MapPixel(
+      selection.left,
+      selection.top,
+    ).toEpsg3857Coordinate(mapState)
+    const { x: right, y: bottom } = new MapPixel(
+      selection.right,
+      selection.bottom,
+    ).toEpsg3857Coordinate(mapState)
+
+    const width = selection.right - selection.left
+    const height = selection.bottom - selection.top
+
+    return {
+      scale,
+      size: { width, height },
+      bounds: { left, top, right, bottom },
+    }
+  } else {
+    const { left, top, width, height } = mapState
+    const { x: right, y: bottom } = new MapPixel(
+      width,
+      height,
+    ).toEpsg3857Coordinate(mapState)
+
+    return {
+      scale,
+      size: { width, height },
+      bounds: { left, top, right, bottom },
+    }
   }
 }
 

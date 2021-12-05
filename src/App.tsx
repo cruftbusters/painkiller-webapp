@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import BaseLayer from './component/BaseLayer'
 import SpatialOverlay from './component/SpatialOverlay'
 import MapControls from './component/MapControls'
@@ -7,6 +7,9 @@ import useLayout from './hook/useLayout'
 import StackChildren from './component/StackChildren'
 import VerticalSplit, { SplitMode } from './component/VerticalSplit'
 import MapContainer from './component/MapContainer'
+import ExtentSelection from './component/ExtentSelection'
+import ExtentSelector from './component/ExtentSelector'
+import useExtentSelection from './hook/useExtentSelection'
 
 export default function App() {
   const [splitMode] = useState(
@@ -18,6 +21,11 @@ export default function App() {
   const [heightmapOpacity, setHeightmapOpacity] = useState('0.0')
   const [hillshadeOpacity, setHillshadeOpacity] = useState('1.0')
   const { layout } = useLayout()
+
+  const { setSelection } = useExtentSelection()
+  useEffect(() => {
+    setSelection(undefined)
+  }, [setSelection, layout])
 
   return (
     <VerticalSplit
@@ -46,7 +54,9 @@ export default function App() {
               url={layout?.hillshadeURL}
               overlayOpacity={hillshadeOpacity}
             />
+            <ExtentSelection />
             <MapControls />
+            <ExtentSelector />
           </StackChildren>
         </MapContainer>
       }

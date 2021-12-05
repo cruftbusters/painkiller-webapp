@@ -5,13 +5,16 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { MapStateContextProvider } from './hook/useMapState'
 import { LayoutContextProvider } from './hook/useLayout'
+import { ExtentSelectionContextProvider } from './hook/useExtentSelection'
 
 ReactDOM.render(
   <React.StrictMode>
     <MapStateContextProvider>
-      <LayoutContextProvider>
-        <App />
-      </LayoutContextProvider>
+      <ExtentSelectionContextProvider>
+        <LayoutContextProvider>
+          <App />
+        </LayoutContextProvider>
+      </ExtentSelectionContextProvider>
     </MapStateContextProvider>
   </React.StrictMode>,
   document.getElementById('root'),

@@ -20,6 +20,7 @@ function MapControls() {
         height: '100%',
         touchAction: 'none',
         position: 'relative',
+        pointerEvents: 'all',
       }}
       onWheel={(e) => {
         const { left, top } =

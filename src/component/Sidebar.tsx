@@ -4,6 +4,7 @@ import useLayout, {
   errIsTooHighScale,
   errScaleIsNotNumber,
 } from '../hook/useLayout'
+import useExtentSelection from '../hook/useExtentSelection'
 
 interface SidebarProps {
   heightmapOpacity: string
@@ -21,6 +22,7 @@ export default function Sidebar({
   const { layout, error, createLayout, setScale, scale } = useLayout()
   const isDisabled =
     error === errIsTooHighScale || error === errScaleIsNotNumber
+  const { isSelecting, setSelecting, setSelection } = useExtentSelection()
   return (
     <div
       style={{
@@ -70,6 +72,36 @@ export default function Sidebar({
             onChange={(e) => setScale(e.target.value)}
             style={{ width: '100%' }}
           />
+        </p>
+      </Section>
+      <Section>
+        <p>
+          <div style={{ display: 'flex' }}>
+            <button
+              style={{
+                width: '100%',
+                borderRadius: '0.25rem 0 0 0.25rem',
+                border: '1px solid gray',
+                borderRight: 0,
+              }}
+              disabled={isSelecting}
+              onClick={() => setSelecting(true)}
+            >
+              {isSelecting
+                ? 'Selecting new extent...'
+                : 'Select new extent'}
+            </button>
+            <button
+              style={{
+                width: '100%',
+                borderRadius: '0 0.25rem 0.25rem 0',
+                border: '1px solid gray',
+              }}
+              onClick={() => setSelection(undefined)}
+            >
+              Clear extent
+            </button>
+          </div>
         </p>
       </Section>
       {layout ? (
