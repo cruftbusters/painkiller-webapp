@@ -15,3 +15,17 @@ export default interface Layout {
   hiResHeightmapURL: string
   hillshadeURL: string
 }
+
+export interface LayoutInProgress {
+  scale: number
+  size: {
+    width: number
+    height: number
+  }
+  bounds: {
+    left: number
+    top: number
+    right: number
+    bottom: number
+  }
+}

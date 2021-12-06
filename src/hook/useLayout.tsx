@@ -1,15 +1,7 @@
 import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
-import Layout from '../types/Layout'
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import Layout, { LayoutInProgress } from '../types/Layout'
+import { createContext, useContext, useEffect, useState } from 'react'
 import usePollLayerURLs from './usePollLayerURLs'
 import useMapState from './useMapState'
 import useExtentSelection from './useExtentSelection'
@@ -20,20 +12,31 @@ interface LayoutContext {
   error?: Error
   isDisabledReason?: string
   layout?: Layout
+  layoutInProgress: LayoutInProgress
   scale: string
-  setScale: Dispatch<SetStateAction<string>>
-  setLayout: Dispatch<SetStateAction<Layout | undefined>>
+  setScale: React.Dispatch<React.SetStateAction<string>>
+  setLayout: React.Dispatch<React.SetStateAction<Layout | undefined>>
 }
 
 const errMissingLayoutContextProvider = Error(
   'Missing ancestral layout context provider',
 )
 
+const initialLayoutInProgress = {
+  bounds: { left: 0, top: 0, right: 0, bottom: 0 },
+  scale: 0,
+  size: {
+    width: 0,
+    height: 0,
+  },
+}
+
 const layoutContext = createContext<LayoutContext>({
   createLayout: async () => {
     throw errMissingLayoutContextProvider
   },
   error: errMissingLayoutContextProvider,
+  layoutInProgress: initialLayoutInProgress,
   scale: '1.0',
   setScale: () => {
     throw errMissingLayoutContextProvider
@@ -44,7 +47,7 @@ const layoutContext = createContext<LayoutContext>({
 })
 
 interface LayoutContextProviderProps {
-  children: ReactNode
+  children: React.ReactNode
 }
 
 export function LayoutContextProvider({
@@ -68,15 +71,22 @@ export function LayoutContextProvider({
 
   const { selection } = useExtentSelection()
 
+  const [layoutInProgress, setLayoutInProgress] =
+    useState<LayoutInProgress>(initialLayoutInProgress)
+
+  useEffect(() => {
+    setLayoutInProgress(
+      createLayout(mapState, scaleAsNumber, selection) as Layout,
+    )
+  }, [mapState, scaleAsNumber, selection])
+
   return (
     <layoutContext.Provider
       children={children}
       value={{
         createLayout: async () => {
           setError(undefined)
-          const [layout, error] = await fetchCreateLayout(
-            createLayout(mapState, scaleAsNumber, selection),
-          )
+          const [layout, error] = await fetchCreateLayout(layoutInProgress)
           setLayout(layout)
           setError(error)
         },
@@ -87,6 +97,7 @@ export function LayoutContextProvider({
           ? errScaleIsNotNumber
           : undefined,
         layout,
+        layoutInProgress,
         scale,
         setScale,
         setLayout,
@@ -99,26 +110,6 @@ export const errIsTooHighScale = 'Zoom in to enable layer rendering'
 
 export const errScaleIsNotNumber =
   'Set scale to a number to enable layer rendering'
-
-async function fetchCreateLayout(layoutRequest: any) {
-  const response = await fetch(
-    'https://layouts.painkillergis.com/v1/layouts',
-    {
-      method: 'POST',
-      body: JSON.stringify(layoutRequest),
-    },
-  )
-  if (response.status < 200 || response.status >= 300) {
-    return [
-      undefined,
-      `There was an error generating layers. Try again later.\nError: got status code ${
-        response.statusText
-      }: ${await response.text()}`,
-    ]
-  } else {
-    return [await response.json(), '']
-  }
-}
 
 function createLayout(
   mapState: MapState,
@@ -155,6 +146,26 @@ function createLayout(
       size: { width, height },
       bounds: { left, top, right, bottom },
     }
+  }
+}
+
+async function fetchCreateLayout(layoutRequest: any) {
+  const response = await fetch(
+    'https://layouts.painkillergis.com/v1/layouts',
+    {
+      method: 'POST',
+      body: JSON.stringify(layoutRequest),
+    },
+  )
+  if (response.status < 200 || response.status >= 300) {
+    return [
+      undefined,
+      `There was an error generating layers. Try again later.\nError: got status code ${
+        response.statusText
+      }: ${await response.text()}`,
+    ]
+  } else {
+    return [await response.json(), '']
   }
 }
 

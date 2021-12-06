@@ -3,6 +3,7 @@ import { CSSProperties, ReactNode } from 'react'
 import useLayout from '../hook/useLayout'
 import useExtentSelection from '../hook/useExtentSelection'
 import BiButton from './BiButton'
+import { ExtentSummary, ResolutionSummary } from './Summary'
 
 interface SidebarProps {
   heightmapOpacity: string
@@ -32,7 +33,7 @@ export default function Sidebar({
       }}
     >
       <Section>
-        <Header>Layout</Header>
+        <Header>Layout Settings</Header>
         <p>
           <div style={{ display: 'flex' }}>
             <span
@@ -75,6 +76,12 @@ export default function Sidebar({
           />
         </p>
         <p>
+          <ResolutionSummary layout={layoutContext.layoutInProgress} />
+        </p>
+        <p>
+          <ExtentSummary layout={layoutContext.layoutInProgress} />
+        </p>
+        <p>
           <BiButton
             button1Props={{
               disabled: !!layoutContext.isDisabledReason,
@@ -92,41 +99,13 @@ export default function Sidebar({
       </Section>
       {layoutContext.layout ? (
         <Section>
-          <Header>Summary</Header>
+          <Header>Layout</Header>
           <p>Scale: {layoutContext.layout.scale}</p>
           <p>
-            Image Size: {layoutContext.layout.size.width}x
-            {layoutContext.layout.size.height}
-            <br />
-            World Size:{' '}
-            {Math.round(
-              layoutContext.layout.bounds.right -
-                layoutContext.layout.bounds.left,
-            )}
-            x
-            {Math.round(
-              layoutContext.layout.bounds.top -
-                layoutContext.layout.bounds.bottom,
-            )}
-            <br />
-            World/Image Resolution:{' '}
-            {Math.round(
-              Math.min(
-                (layoutContext.layout.bounds.right -
-                  layoutContext.layout.bounds.left) /
-                  layoutContext.layout.size.width,
-
-                (layoutContext.layout.bounds.top -
-                  layoutContext.layout.bounds.bottom) /
-                  layoutContext.layout.size.height,
-              ),
-            )}
+            <ResolutionSummary layout={layoutContext.layout} />
           </p>
           <p>
-            Bounds: {layoutContext.layout.bounds.left}{' '}
-            {layoutContext.layout.bounds.top}{' '}
-            {layoutContext.layout.bounds.right}{' '}
-            {layoutContext.layout.bounds.bottom} (EPSG:3857)
+            <ExtentSummary layout={layoutContext.layout} />
           </p>
         </Section>
       ) : undefined}
