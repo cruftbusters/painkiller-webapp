@@ -1,10 +1,11 @@
 import OverlayOpacity from './OverlayOpacity'
-import { CSSProperties, ReactNode } from 'react'
+import React, { CSSProperties, ReactNode } from 'react'
 import useLayout, {
   errIsTooHighScale,
   errScaleIsNotNumber,
 } from '../hook/useLayout'
 import useExtentSelection from '../hook/useExtentSelection'
+import BiButton from './BiButton'
 
 interface SidebarProps {
   heightmapOpacity: string
@@ -57,34 +58,19 @@ export default function Sidebar({
       </Section>
       <Section>
         <p>
-          <div style={{ display: 'flex' }}>
-            <button
-              style={{
-                width: '100%',
-                borderRadius: '0.25rem 0 0 0.25rem',
-                border: '1px solid gray',
-                borderRight: 0,
-                fontSize: 'inherit',
-              }}
-              disabled={isSelecting}
-              onClick={() => setSelecting(true)}
-            >
-              {isSelecting
+          <BiButton
+            button1Props={{
+              disabled: isSelecting,
+              onClick: () => setSelecting(true),
+              children: isSelecting
                 ? 'Selecting new extent...'
-                : 'Select new extent'}
-            </button>
-            <button
-              style={{
-                width: '100%',
-                borderRadius: '0 0.25rem 0.25rem 0',
-                border: '1px solid gray',
-                fontSize: 'inherit',
-              }}
-              onClick={() => setSelection(undefined)}
-            >
-              Clear extent
-            </button>
-          </div>
+                : 'Select new extent',
+            }}
+            button2Props={{
+              onClick: () => setSelection(undefined),
+              children: 'Clear extent',
+            }}
+          />
         </p>
         <p>
           <button
