@@ -27,8 +27,9 @@ export function ResolutionSummary({ layout }: SummaryProps) {
 export function ExtentSummary({ layout }: SummaryProps) {
   return (
     <>
-      Bounds: {layout.bounds.left} {layout.bounds.top}{' '}
-      {layout.bounds.right} {layout.bounds.bottom} (EPSG:3857)
+      Bounds: {Math.round(layout.bounds.left)}{' '}
+      {Math.round(layout.bounds.top)} {Math.round(layout.bounds.right)}{' '}
+      {Math.round(layout.bounds.bottom)} (EPSG:3857)
     </>
   )
 }
