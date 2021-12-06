@@ -27,7 +27,7 @@ function MapControls() {
           mapControlsRef.current.getBoundingClientRect()
         setMapState((mapState) =>
           mapState.zoom(
-            e.deltaY,
+            e.deltaY / 144 / 8,
             (e.pageX - left) / (right - left),
             (e.pageY - top) / (bottom - top),
           ),
@@ -71,14 +71,14 @@ function MapControls() {
       >
         <ZoomButton
           onClick={() =>
-            setMapState((mapState) => mapState.zoom(-144 * 2, 0.5, 0.5))
+            setMapState((mapState) => mapState.zoom(-1 / 4, 0.5, 0.5))
           }
         >
           +
         </ZoomButton>
         <ZoomButton
           onClick={() =>
-            setMapState((mapState) => mapState.zoom(144 * 2, 0.5, 0.5))
+            setMapState((mapState) => mapState.zoom(1 / 4, 0.5, 0.5))
           }
         >
           -
