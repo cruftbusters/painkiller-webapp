@@ -14,6 +14,7 @@ export default function ExtentSelector() {
         height: '100%',
         pointerEvents: isSelecting ? 'all' : 'none',
         cursor: isSelecting ? 'crosshair' : 'inherit',
+        touchAction: 'none',
       }}
       onPointerDown={(e) => {
         if (isSelecting) {
