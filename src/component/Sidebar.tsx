@@ -42,22 +42,30 @@ export default function Sidebar({
       <Section>
         <Header>Layout</Header>
         <p>
-          Scale:{' '}
-          <input
-            type="text"
-            value={scale}
-            onChange={(e) => setScale(e.target.value)}
-            style={{ float: 'right' }}
-          />
-          <input
-            type="range"
-            min="0.0"
-            max="2.0"
-            step="0.1"
-            value={scale}
-            onChange={(e) => setScale(e.target.value)}
-            style={{ width: '100%' }}
-          />
+          <div style={{ display: 'flex' }}>
+            <span
+              style={{
+                flex: '0 1 1',
+                borderRadius: '0.25rem 0 0 0.25rem',
+                border: '1px solid gray',
+                borderRight: 0,
+                padding: '0.25rem 1rem',
+              }}
+            >
+              Scale
+            </span>
+            <input
+              type="text"
+              value={scale}
+              onChange={(e) => setScale(e.target.value)}
+              style={{
+                flex: '1',
+                borderRadius: '0 0.25rem 0.25rem 0',
+                border: '1px solid gray',
+                textAlign: 'right',
+              }}
+            />
+          </div>
         </p>
       </Section>
       <Section>
