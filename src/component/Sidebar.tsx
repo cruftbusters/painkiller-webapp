@@ -1,9 +1,6 @@
 import OverlayOpacity from './OverlayOpacity'
-import React, { CSSProperties, ReactNode } from 'react'
-import useLayout, {
-  errIsTooHighScale,
-  errScaleIsNotNumber,
-} from '../hook/useLayout'
+import { CSSProperties, ReactNode } from 'react'
+import useLayout from '../hook/useLayout'
 import useExtentSelection from '../hook/useExtentSelection'
 import BiButton from './BiButton'
 
@@ -20,9 +17,14 @@ export default function Sidebar({
   setHeightmapOpacity,
   setHillshadeOpacity,
 }: SidebarProps) {
-  const { layout, error, createLayout, setScale, scale } = useLayout()
-  const isDisabled =
-    error === errIsTooHighScale || error === errScaleIsNotNumber
+  const {
+    createLayout,
+    error,
+    isDisabledReason,
+    layout,
+    scale,
+    setScale,
+  } = useLayout()
   const { isSelecting, selection, setSelecting, setSelection } =
     useExtentSelection()
   return (
@@ -82,10 +84,10 @@ export default function Sidebar({
               border: '1px solid gray',
               fontSize: 'inherit',
             }}
-            disabled={isDisabled}
+            disabled={!!isDisabledReason}
             onClick={createLayout}
           >
-            Generate layers
+            {isDisabledReason || 'Generate layers'}
           </button>
           {error ? <p>{error}</p> : undefined}
         </p>

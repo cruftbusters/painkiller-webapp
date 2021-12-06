@@ -17,6 +17,7 @@ import Selection from '../types/Selection'
 
 interface LayoutContext {
   createLayout: () => Promise<void>
+  isDisabledReason?: string
   error: string
   layout?: Layout
   scale: string
@@ -67,11 +68,12 @@ export function LayoutContextProvider({
           setLayout(layout)
           setError(error)
         },
-        error: isTooHighScale
+        isDisabledReason: isTooHighScale
           ? errIsTooHighScale
           : isNaN(scaleAsNumber)
           ? errScaleIsNotNumber
-          : error,
+          : undefined,
+        error,
         layout,
         scale,
         setScale,
@@ -80,8 +82,7 @@ export function LayoutContextProvider({
   )
 }
 
-export const errIsTooHighScale =
-  'Zoom in further to enable layer rendering'
+export const errIsTooHighScale = 'Zoom in to enable layer rendering'
 
 export const errScaleIsNotNumber =
   'Set scale to a number to enable layer rendering'
