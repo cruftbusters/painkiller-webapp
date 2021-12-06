@@ -17,15 +17,7 @@ export default function Sidebar({
   setHeightmapOpacity,
   setHillshadeOpacity,
 }: SidebarProps) {
-  const {
-    createLayout,
-    error,
-    isDisabledReason,
-    layout,
-    scale,
-    setLayout,
-    setScale,
-  } = useLayout()
+  const layoutContext = useLayout()
   const { isSelecting, selection, setSelecting, setSelection } =
     useExtentSelection()
   return (
@@ -56,8 +48,8 @@ export default function Sidebar({
             </span>
             <input
               type="text"
-              value={scale}
-              onChange={(e) => setScale(e.target.value)}
+              value={layoutContext.scale}
+              onChange={(e) => layoutContext.setScale(e.target.value)}
               style={{
                 flex: '1',
                 borderRadius: '0 0.25rem 0.25rem 0',
@@ -85,87 +77,106 @@ export default function Sidebar({
         <p>
           <BiButton
             button1Props={{
-              disabled: !!isDisabledReason,
-              onClick: createLayout,
-              children: isDisabledReason || 'Create layout',
+              disabled: !!layoutContext.isDisabledReason,
+              onClick: layoutContext.createLayout,
+              children: layoutContext.isDisabledReason || 'Create layout',
             }}
             button2Props={{
-              disabled: layout === undefined,
-              onClick: () => setLayout(undefined),
+              disabled: layoutContext.layout === undefined,
+              onClick: () => layoutContext.setLayout(undefined),
               children: 'Clear layout',
             }}
           />
-          {error ? <p>{error}</p> : undefined}
+          {layoutContext.error ? <p>{layoutContext.error}</p> : undefined}
         </p>
       </Section>
-      {layout ? (
+      {layoutContext.layout ? (
         <Section>
           <Header>Summary</Header>
-          <p>Scale: {layout.scale}</p>
+          <p>Scale: {layoutContext.layout.scale}</p>
           <p>
-            Image Size: {layout.size.width}x{layout.size.height}
+            Image Size: {layoutContext.layout.size.width}x
+            {layoutContext.layout.size.height}
             <br />
             World Size:{' '}
-            {Math.round(layout.bounds.right - layout.bounds.left)}x
-            {Math.round(layout.bounds.top - layout.bounds.bottom)}
+            {Math.round(
+              layoutContext.layout.bounds.right -
+                layoutContext.layout.bounds.left,
+            )}
+            x
+            {Math.round(
+              layoutContext.layout.bounds.top -
+                layoutContext.layout.bounds.bottom,
+            )}
             <br />
             World/Image Resolution:{' '}
             {Math.round(
               Math.min(
-                (layout.bounds.right - layout.bounds.left) /
-                  layout.size.width,
+                (layoutContext.layout.bounds.right -
+                  layoutContext.layout.bounds.left) /
+                  layoutContext.layout.size.width,
 
-                (layout.bounds.top - layout.bounds.bottom) /
-                  layout.size.height,
+                (layoutContext.layout.bounds.top -
+                  layoutContext.layout.bounds.bottom) /
+                  layoutContext.layout.size.height,
               ),
             )}
           </p>
           <p>
-            Bounds: {layout.bounds.left} {layout.bounds.top}{' '}
-            {layout.bounds.right} {layout.bounds.bottom} (EPSG:3857)
+            Bounds: {layoutContext.layout.bounds.left}{' '}
+            {layoutContext.layout.bounds.top}{' '}
+            {layoutContext.layout.bounds.right}{' '}
+            {layoutContext.layout.bounds.bottom} (EPSG:3857)
           </p>
         </Section>
       ) : undefined}
-      {layout ? (
+      {layoutContext.layout ? (
         <Section>
           <Header>Heightmap</Header>
-          {layout.heightmapURL ? (
+          {layoutContext.layout.heightmapURL ? (
             <p>
-              <a href={layout.heightmapURL}>Download heightmap preview</a>
+              <a href={layoutContext.layout.heightmapURL}>
+                Download heightmap preview
+              </a>
             </p>
           ) : undefined}
-          {layout.hiResHeightmapURL ? (
+          {layoutContext.layout.hiResHeightmapURL ? (
             <p>
-              <a href={layout.hiResHeightmapURL}>Download heightmap</a>
+              <a href={layoutContext.layout.hiResHeightmapURL}>
+                Download heightmap
+              </a>
             </p>
           ) : undefined}
-          {layout.heightmapURL ? (
+          {layoutContext.layout.heightmapURL ? (
             <OverlayOpacity
-              layout={layout}
+              layout={layoutContext.layout}
               overlayOpacity={heightmapOpacity}
               setOverlayOpacity={setHeightmapOpacity}
             />
           ) : undefined}
-          {layout.heightmapURL && layout.hiResHeightmapURL ? undefined : (
+          {layoutContext.layout.heightmapURL &&
+          layoutContext.layout.hiResHeightmapURL ? undefined : (
             <p>Generating heightmap...</p>
           )}
         </Section>
       ) : undefined}
-      {layout?.heightmapURL ? (
+      {layoutContext.layout?.heightmapURL ? (
         <Section>
           <Header>Hillshade</Header>
-          {layout?.hillshadeURL ? (
+          {layoutContext.layout?.hillshadeURL ? (
             <>
               <p>
-                <a href={layout.hillshadeURL}>Download hillshade</a>
+                <a href={layoutContext.layout.hillshadeURL}>
+                  Download hillshade
+                </a>
               </p>
               <OverlayOpacity
-                layout={layout}
+                layout={layoutContext.layout}
                 overlayOpacity={hillshadeOpacity}
                 setOverlayOpacity={setHillshadeOpacity}
               />
             </>
-          ) : layout?.heightmapURL ? (
+          ) : layoutContext.layout?.heightmapURL ? (
             <p>Generating hillshade...</p>
           ) : undefined}
         </Section>
