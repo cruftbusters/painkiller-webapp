@@ -96,6 +96,7 @@ export default function Sidebar({
       {layout ? (
         <Section>
           <Header>Summary</Header>
+          <p>Scale: {layout.scale}</p>
           <p>
             Image Size: {layout.size.width}x{layout.size.height}
             <br />
@@ -118,7 +119,6 @@ export default function Sidebar({
             Bounds: {layout.bounds.left} {layout.bounds.top}{' '}
             {layout.bounds.right} {layout.bounds.bottom} (EPSG:3857)
           </p>
-          <p>Scale: {layout.scale}</p>
         </Section>
       ) : undefined}
       {layout ? (
