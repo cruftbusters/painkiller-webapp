@@ -15,14 +15,15 @@ export default function BiButton({
   button1Props,
   button2Props,
 }: BiButtonProps) {
+  const buttonRadius = '0.25rem'
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <button
         style={{
           width: '100%',
-          borderRadius: '0.25rem 0 0 0.25rem',
+          borderRadius: `${buttonRadius} ${buttonRadius} 0 0`,
           border: '1px solid gray',
-          borderRight: 0,
+          borderBottom: 0,
           fontSize: 'inherit',
         }}
         {...button1Props}
@@ -30,7 +31,7 @@ export default function BiButton({
       <button
         style={{
           width: '100%',
-          borderRadius: '0 0.25rem 0.25rem 0',
+          borderRadius: `0 0 ${buttonRadius} ${buttonRadius}`,
           border: '1px solid gray',
           fontSize: 'inherit',
         }}
