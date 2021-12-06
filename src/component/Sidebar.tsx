@@ -72,11 +72,8 @@ export default function Sidebar({
         <p>
           <BiButton
             button1Props={{
-              disabled: isSelecting,
-              onClick: () => setSelecting(true),
-              children: isSelecting
-                ? 'Selecting new extent...'
-                : 'Select new extent',
+              onClick: () => setSelecting(!isSelecting),
+              children: isSelecting ? 'Cancel' : 'Select new extent',
             }}
             button2Props={{
               disabled: selection === undefined,
