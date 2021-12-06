@@ -35,26 +35,7 @@ export default function Sidebar({
       }}
     >
       <Section>
-        <Header>
-          <button
-            style={{
-              display: 'block',
-              width: '100%',
-              padding: '0.5rem',
-              margin: '-0.5rem',
-              border: 0,
-              boxSizing: 'content-box',
-              fontSize: 'inherit',
-              backgroundColor: isDisabled ? '#DDD' : '#AFA',
-              cursor: isDisabled ? 'not-allowed' : 'pointer',
-            }}
-            disabled={isDisabled}
-            onClick={createLayout}
-          >
-            Generate layers
-          </button>
-        </Header>
-        {error ? <p>{error}</p> : undefined}
+        <Header>Layout</Header>
         <p>
           Scale:{' '}
           <input
@@ -83,6 +64,7 @@ export default function Sidebar({
                 borderRadius: '0.25rem 0 0 0.25rem',
                 border: '1px solid gray',
                 borderRight: 0,
+                fontSize: 'inherit',
               }}
               disabled={isSelecting}
               onClick={() => setSelecting(true)}
@@ -96,12 +78,28 @@ export default function Sidebar({
                 width: '100%',
                 borderRadius: '0 0.25rem 0.25rem 0',
                 border: '1px solid gray',
+                fontSize: 'inherit',
               }}
               onClick={() => setSelection(undefined)}
             >
               Clear extent
             </button>
           </div>
+        </p>
+        <p>
+          <button
+            style={{
+              width: '100%',
+              borderRadius: '0.25rem',
+              border: '1px solid gray',
+              fontSize: 'inherit',
+            }}
+            disabled={isDisabled}
+            onClick={createLayout}
+          >
+            Generate layers
+          </button>
+          {error ? <p>{error}</p> : undefined}
         </p>
       </Section>
       {layout ? (
