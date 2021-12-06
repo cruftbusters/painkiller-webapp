@@ -23,6 +23,7 @@ export default function Sidebar({
     isDisabledReason,
     layout,
     scale,
+    setLayout,
     setScale,
   } = useLayout()
   const { isSelecting, selection, setSelecting, setSelection } =
@@ -77,18 +78,18 @@ export default function Sidebar({
           />
         </p>
         <p>
-          <button
-            style={{
-              width: '100%',
-              borderRadius: '0.25rem',
-              border: '1px solid gray',
-              fontSize: 'inherit',
+          <BiButton
+            button1Props={{
+              disabled: !!isDisabledReason,
+              onClick: createLayout,
+              children: isDisabledReason || 'Create layout',
             }}
-            disabled={!!isDisabledReason}
-            onClick={createLayout}
-          >
-            {isDisabledReason || 'Generate layers'}
-          </button>
+            button2Props={{
+              disabled: layout === undefined,
+              onClick: () => setLayout(undefined),
+              children: 'Clear layout',
+            }}
+          />
           {error ? <p>{error}</p> : undefined}
         </p>
       </Section>

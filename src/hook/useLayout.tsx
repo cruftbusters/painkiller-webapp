@@ -17,18 +17,30 @@ import Selection from '../types/Selection'
 
 interface LayoutContext {
   createLayout: () => Promise<void>
+  error?: Error
   isDisabledReason?: string
-  error: string
   layout?: Layout
   scale: string
   setScale: Dispatch<SetStateAction<string>>
+  setLayout: Dispatch<SetStateAction<Layout | undefined>>
 }
 
+const errMissingLayoutContextProvider = Error(
+  'Missing ancestral layout context provider',
+)
+
 const layoutContext = createContext<LayoutContext>({
-  createLayout: async () => {},
-  error: 'No layout context provider',
+  createLayout: async () => {
+    throw errMissingLayoutContextProvider
+  },
+  error: errMissingLayoutContextProvider,
   scale: '1.0',
-  setScale: () => {},
+  setScale: () => {
+    throw errMissingLayoutContextProvider
+  },
+  setLayout: () => {
+    throw errMissingLayoutContextProvider
+  },
 })
 
 interface LayoutContextProviderProps {
@@ -41,7 +53,7 @@ export function LayoutContextProvider({
   const { mapState } = useMapState()
   const [layout, setLayout] = useState<Layout>()
   const isTooHighScale = mapState.scale < 7
-  const [error, setError] = useState('')
+  const [error, setError] = useState<Error>()
   usePollLayerURLs(layout, setLayout)
 
   const [scale, setScale] = useState<string>('1')
@@ -61,22 +73,23 @@ export function LayoutContextProvider({
       children={children}
       value={{
         createLayout: async () => {
-          setError('')
+          setError(undefined)
           const [layout, error] = await fetchCreateLayout(
             createLayout(mapState, scaleAsNumber, selection),
           )
           setLayout(layout)
           setError(error)
         },
+        error,
         isDisabledReason: isTooHighScale
           ? errIsTooHighScale
           : isNaN(scaleAsNumber)
           ? errScaleIsNotNumber
           : undefined,
-        error,
         layout,
         scale,
         setScale,
+        setLayout,
       }}
     />
   )
