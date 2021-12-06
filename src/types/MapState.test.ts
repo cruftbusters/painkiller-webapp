@@ -99,7 +99,7 @@ describe('map state', () => {
     })
     it('zooms to center', () => {
       expect(
-        new MapState({ width: 256, height: 256 }).zoom(-114 * 8, 128, 128),
+        new MapState({ width: 256, height: 256 }).zoom(-114 * 8, 0.5, 0.5),
       ).toStrictEqual(
         new MapState({
           width: 256,
@@ -112,7 +112,7 @@ describe('map state', () => {
     })
     it('zooms to bottom right', () => {
       expect(
-        new MapState({ width: 256, height: 256 }).zoom(-114 * 8, 256, 256),
+        new MapState({ width: 256, height: 256 }).zoom(-114 * 8, 1, 1),
       ).toStrictEqual(
         new MapState({
           width: 256,

@@ -40,7 +40,7 @@ export default class MapState {
       top: this.top + (dy * maxMercatorLatitude * 2) / scaledTileSize,
     })
   }
-  zoomToCenter(dz: number): MapState {
+  zoom(dz: number, x: number, y: number): MapState {
     const lastScale = this.scale
     const nextScale = lastScale - dz / 114 / 8
     const dInverseScaledTileSize =
@@ -51,35 +51,14 @@ export default class MapState {
       scale: nextScale,
       left:
         this.left +
-        this.width * maxMercatorLongitude * dInverseScaledTileSize,
-      top:
-        this.top +
-        this.height * -maxMercatorLatitude * dInverseScaledTileSize,
-    })
-  }
-  zoom(dz: number, mouseX: number, mouseY: number): MapState {
-    const lastScale = this.scale
-    const nextScale = lastScale - dz / 114 / 8
-    const dInverseScaledTileSize =
-      (Math.pow(2, -lastScale) - Math.pow(2, -nextScale)) / this.tileSize
-
-    return new MapState({
-      ...this,
-      scale: nextScale,
-      left:
-        this.left +
-        2 *
-          this.width *
-          maxMercatorLongitude *
-          dInverseScaledTileSize *
-          (mouseX / this.width),
+        2 * this.width * maxMercatorLongitude * dInverseScaledTileSize * x,
       top:
         this.top +
         2 *
           this.height *
           -maxMercatorLatitude *
           dInverseScaledTileSize *
-          (mouseY / this.height),
+          y,
     })
   }
 }

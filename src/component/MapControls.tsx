@@ -23,10 +23,14 @@ function MapControls() {
         pointerEvents: 'all',
       }}
       onWheel={(e) => {
-        const { left, top } =
+        const { left, top, right, bottom } =
           mapControlsRef.current.getBoundingClientRect()
         setMapState((mapState) =>
-          mapState.zoom(e.deltaY, e.pageX - left, e.pageY - top),
+          mapState.zoom(
+            e.deltaY,
+            (e.pageX - left) / (right - left),
+            (e.pageY - top) / (bottom - top),
+          ),
         )
       }}
       onPointerDown={(e) => {
@@ -67,14 +71,14 @@ function MapControls() {
       >
         <ZoomButton
           onClick={() =>
-            setMapState((mapState) => mapState.zoomToCenter(-144 * 2))
+            setMapState((mapState) => mapState.zoom(-144 * 2, 0.5, 0.5))
           }
         >
           +
         </ZoomButton>
         <ZoomButton
           onClick={() =>
-            setMapState((mapState) => mapState.zoomToCenter(144 * 2))
+            setMapState((mapState) => mapState.zoom(144 * 2, 0.5, 0.5))
           }
         >
           -
