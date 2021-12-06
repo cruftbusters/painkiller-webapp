@@ -1,31 +1,27 @@
 import useExtentSelection from '../hook/useExtentSelection'
 
+const borderWidth = 2
+
 export default function ExtentSelection() {
   const { selection } = useExtentSelection()
-  const backgroundColor = 'black'
   return selection ? (
     <div
       style={{
         width: '100%',
         height: '100%',
-        display: 'grid',
-        gridTemplateRows: `${selection.top}px ${
-          selection.bottom - selection.top
-        }px 1fr`,
-        gridTemplateColumns: `${selection.left}px ${
-          selection.right - selection.left
-        }px 1fr`,
-        gridTemplateAreas: `
-        'top top top'
-        'left selection right'
-        'bottom bottom bottom'
-        `,
+        position: 'relative',
       }}
     >
-      <div style={{ gridArea: 'left', backgroundColor }} />
-      <div style={{ gridArea: 'top', backgroundColor }} />
-      <div style={{ gridArea: 'right', backgroundColor }} />
-      <div style={{ gridArea: 'bottom', backgroundColor }} />
+      <div
+        style={{
+          position: 'absolute',
+          border: `${borderWidth}px solid red`,
+          left: selection.left - borderWidth,
+          top: selection.top - borderWidth,
+          width: selection.right - selection.left,
+          height: selection.bottom - selection.top,
+        }}
+      />
     </div>
   ) : null
 }
