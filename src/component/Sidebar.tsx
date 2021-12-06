@@ -23,7 +23,8 @@ export default function Sidebar({
   const { layout, error, createLayout, setScale, scale } = useLayout()
   const isDisabled =
     error === errIsTooHighScale || error === errScaleIsNotNumber
-  const { isSelecting, setSelecting, setSelection } = useExtentSelection()
+  const { isSelecting, selection, setSelecting, setSelection } =
+    useExtentSelection()
   return (
     <div
       style={{
@@ -67,6 +68,7 @@ export default function Sidebar({
                 : 'Select new extent',
             }}
             button2Props={{
+              disabled: selection === undefined,
               onClick: () => setSelection(undefined),
               children: 'Clear extent',
             }}
