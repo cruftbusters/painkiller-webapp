@@ -126,8 +126,8 @@ function createLayout(
       selection.bottom,
     ).toEpsg3857Coordinate(mapState)
 
-    const width = selection.right - selection.left
-    const height = selection.bottom - selection.top
+    const width = Math.round(selection.right - selection.left)
+    const height = Math.round(selection.bottom - selection.top)
 
     return {
       scale,
