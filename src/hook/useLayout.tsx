@@ -5,11 +5,11 @@ import useMapState from './useMapState'
 import useLayoutInProgress from './useLayoutInProgress'
 
 interface LayoutContext {
+  clearLayout: () => void
   createLayout: () => Promise<void>
-  error?: Error
-  isDisabledReason?: string
+  createLayoutDisabledReason?: string
+  createLayoutError?: Error
   layout?: Layout
-  setLayout: React.Dispatch<React.SetStateAction<Layout | undefined>>
 }
 
 const errMissingLayoutContextProvider = Error(
@@ -17,13 +17,13 @@ const errMissingLayoutContextProvider = Error(
 )
 
 const layoutContext = createContext<LayoutContext>({
+  clearLayout: () => {
+    throw errMissingLayoutContextProvider
+  },
   createLayout: async () => {
     throw errMissingLayoutContextProvider
   },
-  error: errMissingLayoutContextProvider,
-  setLayout: () => {
-    throw errMissingLayoutContextProvider
-  },
+  createLayoutError: errMissingLayoutContextProvider,
 })
 
 interface LayoutContextProviderProps {
@@ -35,7 +35,7 @@ export function LayoutContextProvider({
 }: LayoutContextProviderProps) {
   const { mapState } = useMapState()
   const [layout, setLayout] = useState<Layout>()
-  const [error, setError] = useState<Error>()
+  const [createLayoutError, setCreateLayoutError] = useState<Error>()
   usePollLayerURLs(layout, setLayout)
 
   const { layoutInProgress, scale } = useLayoutInProgress()
@@ -44,21 +44,21 @@ export function LayoutContextProvider({
     <layoutContext.Provider
       children={children}
       value={{
+        clearLayout: () => setLayout(undefined),
         createLayout: async () => {
-          setError(undefined)
+          setCreateLayoutError(undefined)
           const [layout, error] = await createLayout(layoutInProgress)
           setLayout(layout)
-          setError(error)
+          setCreateLayoutError(error)
         },
-        error,
-        isDisabledReason:
+        createLayoutError: createLayoutError,
+        createLayoutDisabledReason:
           mapState.scale < 7
             ? errIsTooHighScale
             : isNaN(scale)
             ? errScaleIsNotNumber
             : undefined,
         layout,
-        setLayout,
       }}
     />
   )
