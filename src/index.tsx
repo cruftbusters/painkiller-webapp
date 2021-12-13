@@ -6,14 +6,17 @@ import reportWebVitals from './reportWebVitals'
 import { MapStateContextProvider } from './hook/useMapState'
 import { LayoutContextProvider } from './hook/useLayout'
 import { ExtentSelectionContextProvider } from './hook/useExtentSelection'
+import { LayoutInProgressContextProvider } from './hook/useLayoutInProgress'
 
 ReactDOM.render(
   <React.StrictMode>
     <MapStateContextProvider>
       <ExtentSelectionContextProvider>
-        <LayoutContextProvider>
-          <App />
-        </LayoutContextProvider>
+        <LayoutInProgressContextProvider>
+          <LayoutContextProvider>
+            <App />
+          </LayoutContextProvider>
+        </LayoutInProgressContextProvider>
       </ExtentSelectionContextProvider>
     </MapStateContextProvider>
   </React.StrictMode>,

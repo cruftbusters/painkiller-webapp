@@ -6,6 +6,7 @@ import {
   useContext,
   useState,
 } from 'react'
+import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
 import Selection from '../types/Selection'
 import useMapState from './useMapState'
@@ -16,6 +17,7 @@ interface ExtentSelectionContext {
   setSelecting: Dispatch<SetStateAction<boolean>>
   selection: Selection
   setSelection: Dispatch<SetStateAction<Selection>>
+  worldSelection: Selection
 }
 
 const errMissingProvider = Error(
@@ -24,16 +26,17 @@ const errMissingProvider = Error(
 
 const extentSelectionContext = createContext<ExtentSelectionContext>({
   isSelecting: false,
-  selection: { left: 0, top: 0, right: 0, bottom: 0 },
   resetSelection: () => {
     throw errMissingProvider
   },
+  selection: { left: 0, top: 0, right: 0, bottom: 0 },
   setSelecting: () => {
     throw errMissingProvider
   },
   setSelection: () => {
     throw errMissingProvider
   },
+  worldSelection: { left: 0, top: 0, right: 0, bottom: 0 },
 })
 
 interface ExtentSelectionContextProviderProps {
@@ -47,14 +50,17 @@ export function ExtentSelectionContextProvider({
   const [selection, setSelection] = useState<Selection>()
   const { mapState } = useMapState()
 
+  const selectionWithDefault = selection || getDefaultSelection(mapState)
+
   return (
     <extentSelectionContext.Provider
       value={{
         isSelecting,
         resetSelection: () => setSelection(undefined),
         setSelecting,
-        selection: selection || getDefaultSelection(mapState),
+        selection: selectionWithDefault,
         setSelection: setSelection as Dispatch<SetStateAction<Selection>>,
+        worldSelection: getWorldSelection(mapState, selectionWithDefault),
       }}
       children={children}
     />
@@ -69,6 +75,18 @@ function getDefaultSelection(mapState: MapState) {
     right: width,
     bottom: height,
   }
+}
+
+function getWorldSelection(mapState: MapState, selection: Selection) {
+  const { x: left, y: top } = new MapPixel(
+    selection.left,
+    selection.top,
+  ).toEpsg3857Coordinate(mapState)
+  const { x: right, y: bottom } = new MapPixel(
+    selection.right,
+    selection.bottom,
+  ).toEpsg3857Coordinate(mapState)
+  return { left, top, right, bottom }
 }
 
 export default function useExtentSelection() {

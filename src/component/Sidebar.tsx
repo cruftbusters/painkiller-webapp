@@ -4,6 +4,7 @@ import useLayout from '../hook/useLayout'
 import useExtentSelection from '../hook/useExtentSelection'
 import BiButton from './BiButton'
 import { ExtentSummary, ResolutionSummary } from './Summary'
+import useLayoutInProgress from '../hook/useLayoutInProgress'
 
 interface SidebarProps {
   heightmapOpacity: string
@@ -19,6 +20,8 @@ export default function Sidebar({
   setHillshadeOpacity,
 }: SidebarProps) {
   const layoutContext = useLayout()
+  const { layoutInProgress, scaleAsString, setScaleAsString } =
+    useLayoutInProgress()
   const { isSelecting, resetSelection, setSelecting } =
     useExtentSelection()
   return (
@@ -49,8 +52,8 @@ export default function Sidebar({
             </span>
             <input
               type="text"
-              value={layoutContext.scale}
-              onChange={(e) => layoutContext.setScale(e.target.value)}
+              value={scaleAsString}
+              onChange={(e) => setScaleAsString(e.target.value)}
               style={{
                 flex: '1',
                 borderRadius: '0 0.25rem 0.25rem 0',
@@ -75,10 +78,10 @@ export default function Sidebar({
           />
         </p>
         <p>
-          <ResolutionSummary layout={layoutContext.layoutInProgress} />
+          <ResolutionSummary layout={layoutInProgress} />
         </p>
         <p>
-          <ExtentSummary layout={layoutContext.layoutInProgress} />
+          <ExtentSummary layout={layoutInProgress} />
         </p>
         <p>
           <BiButton
