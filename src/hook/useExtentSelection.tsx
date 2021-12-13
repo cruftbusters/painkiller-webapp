@@ -12,11 +12,13 @@ import Selection from '../types/Selection'
 import useMapState from './useMapState'
 
 interface ExtentSelectionContext {
+  height: number
   isSelecting: boolean
   resetSelection: () => void
-  setSelecting: Dispatch<SetStateAction<boolean>>
   selection: Selection
+  setSelecting: Dispatch<SetStateAction<boolean>>
   setSelection: Dispatch<SetStateAction<Selection>>
+  width: number
   worldSelection: Selection
 }
 
@@ -25,6 +27,7 @@ const errMissingProvider = Error(
 )
 
 const extentSelectionContext = createContext<ExtentSelectionContext>({
+  height: 0,
   isSelecting: false,
   resetSelection: () => {
     throw errMissingProvider
@@ -36,6 +39,7 @@ const extentSelectionContext = createContext<ExtentSelectionContext>({
   setSelection: () => {
     throw errMissingProvider
   },
+  width: 0,
   worldSelection: { left: 0, top: 0, right: 0, bottom: 0 },
 })
 
@@ -55,11 +59,17 @@ export function ExtentSelectionContextProvider({
   return (
     <extentSelectionContext.Provider
       value={{
+        height: Math.round(
+          selectionWithDefault.bottom - selectionWithDefault.top,
+        ),
         isSelecting,
         resetSelection: () => setSelection(undefined),
-        setSelecting,
         selection: selectionWithDefault,
+        setSelecting,
         setSelection: setSelection as Dispatch<SetStateAction<Selection>>,
+        width: Math.round(
+          selectionWithDefault.right - selectionWithDefault.left,
+        ),
         worldSelection: getWorldSelection(mapState, selectionWithDefault),
       }}
       children={children}

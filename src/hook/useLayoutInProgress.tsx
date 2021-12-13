@@ -54,24 +54,20 @@ export function LayoutInProgressContextProvider({
     }
   }, [scaleAsString])
 
-  const { selection, worldSelection } = useExtentSelection()
-  const [layoutInProgress, setLayoutInProgress] =
-    useState<LayoutInProgress>(initialLayoutInProgress)
-
-  useEffect(() => {
-    const width = Math.round(selection.right - selection.left)
-    const height = Math.round(selection.bottom - selection.top)
-
-    setLayoutInProgress({
-      scale,
-      size: { width, height },
-      bounds: worldSelection,
-    })
-  }, [scale, selection, worldSelection])
+  const { height, width, worldSelection } = useExtentSelection()
 
   return (
     <layoutInProgressContext.Provider
-      value={{ layoutInProgress, scale, scaleAsString, setScaleAsString }}
+      value={{
+        layoutInProgress: {
+          scale,
+          size: { width, height },
+          bounds: worldSelection,
+        },
+        scale,
+        scaleAsString,
+        setScaleAsString,
+      }}
       children={children}
     />
   )
