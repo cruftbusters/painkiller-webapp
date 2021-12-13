@@ -19,7 +19,7 @@ export default function Sidebar({
   setHillshadeOpacity,
 }: SidebarProps) {
   const layoutContext = useLayout()
-  const { isSelecting, selection, setSelecting, setSelection } =
+  const { isSelecting, resetSelection, setSelecting } =
     useExtentSelection()
   return (
     <div
@@ -69,9 +69,8 @@ export default function Sidebar({
               children: isSelecting ? 'Cancel' : 'Select extent',
             }}
             button2Props={{
-              disabled: selection === undefined,
-              onClick: () => setSelection(undefined),
-              children: 'Clear extent',
+              onClick: resetSelection,
+              children: 'Reset extent',
             }}
           />
         </p>

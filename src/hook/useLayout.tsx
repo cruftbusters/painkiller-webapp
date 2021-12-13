@@ -114,38 +114,24 @@ export const errScaleIsNotNumber =
 function createLayout(
   mapState: MapState,
   scale: number,
-  selection: Selection | undefined,
+  selection: Selection,
 ) {
-  if (selection) {
-    const { x: left, y: top } = new MapPixel(
-      selection.left,
-      selection.top,
-    ).toEpsg3857Coordinate(mapState)
-    const { x: right, y: bottom } = new MapPixel(
-      selection.right,
-      selection.bottom,
-    ).toEpsg3857Coordinate(mapState)
+  const { x: left, y: top } = new MapPixel(
+    selection.left,
+    selection.top,
+  ).toEpsg3857Coordinate(mapState)
+  const { x: right, y: bottom } = new MapPixel(
+    selection.right,
+    selection.bottom,
+  ).toEpsg3857Coordinate(mapState)
 
-    const width = Math.round(selection.right - selection.left)
-    const height = Math.round(selection.bottom - selection.top)
+  const width = Math.round(selection.right - selection.left)
+  const height = Math.round(selection.bottom - selection.top)
 
-    return {
-      scale,
-      size: { width, height },
-      bounds: { left, top, right, bottom },
-    }
-  } else {
-    const { left, top, width, height } = mapState
-    const { x: right, y: bottom } = new MapPixel(
-      width,
-      height,
-    ).toEpsg3857Coordinate(mapState)
-
-    return {
-      scale,
-      size: { width, height },
-      bounds: { left, top, right, bottom },
-    }
+  return {
+    scale,
+    size: { width, height },
+    bounds: { left, top, right, bottom },
   }
 }
 

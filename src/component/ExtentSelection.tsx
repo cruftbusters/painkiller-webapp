@@ -4,7 +4,7 @@ const borderWidth = 2
 
 export default function ExtentSelection() {
   const { selection } = useExtentSelection()
-  return selection ? (
+  return (
     <div
       style={{
         width: '100%',
@@ -23,5 +23,5 @@ export default function ExtentSelection() {
         }}
       />
     </div>
-  ) : null
+  )
 }
