@@ -1,5 +1,5 @@
 import OverlayOpacity from './OverlayOpacity'
-import { CSSProperties, ReactNode } from 'react'
+import { CSSProperties, ReactNode, useState } from 'react'
 import useLayout from '../hook/useLayout'
 import useExtentSelection from '../hook/useExtentSelection'
 import BiButton from './BiButton'
@@ -28,8 +28,17 @@ export default function Sidebar({
   } = useLayout()
   const { layoutInProgress, scaleAsString, setScaleAsString } =
     useLayoutInProgress()
-  const { isSelecting, resetSelection, setSelecting } =
-    useExtentSelection()
+  const {
+    height,
+    isSelecting,
+    resetSelection,
+    setHeight,
+    setSelecting,
+    setWidth,
+    width,
+  } = useExtentSelection()
+  const [widthAsString, setWidthAsString] = useState<string>()
+  const [heightAsString, setHeightAsString] = useState<string>()
   return (
     <div
       style={{
@@ -44,14 +53,14 @@ export default function Sidebar({
       <Section>
         <Header>Layout Settings</Header>
         <p>
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', marginBottom: '0.25rem' }}>
             <span
               style={{
-                flex: '0 1 1',
+                flex: '0',
                 borderRadius: '0.25rem 0 0 0.25rem',
                 border: '1px solid gray',
                 borderRight: 0,
-                padding: '0.25rem 1rem',
+                padding: '0.125rem 0.5rem',
               }}
             >
               Scale
@@ -65,6 +74,83 @@ export default function Sidebar({
                 borderRadius: '0 0.25rem 0.25rem 0',
                 border: '1px solid gray',
                 textAlign: 'right',
+                padding: '0.125rem 0.5rem',
+              }}
+            />
+          </div>
+          <div style={{ display: 'flex', marginBottom: '0.25rem' }}>
+            <span
+              style={{
+                flex: '0',
+                borderRadius: '0.25rem 0 0 0.25rem',
+                border: '1px solid gray',
+                borderRight: 0,
+                padding: '0.125rem 0.5rem',
+              }}
+            >
+              Width
+            </span>
+            <input
+              type="text"
+              value={widthAsString === undefined ? width : widthAsString}
+              onChange={(e) => {
+                const widthAsString = e.target.value
+                if (widthAsString.match(/^[0-9]+$/)) {
+                  const width = parseInt(widthAsString)
+                  setWidthAsString(undefined)
+                  setWidth(width)
+                } else {
+                  setWidthAsString(widthAsString)
+                }
+              }}
+              style={{
+                flex: '1',
+                borderRadius: '0 0.25rem 0.25rem 0',
+                border: '1px solid gray',
+                textAlign: 'right',
+                padding: '0.125rem 0.5rem',
+
+                backgroundColor:
+                  widthAsString === undefined ? 'inherit' : '#FAA',
+              }}
+            />
+          </div>
+          <div style={{ display: 'flex', marginBottom: '0.25rem' }}>
+            <span
+              style={{
+                flex: '0',
+                borderRadius: '0.25rem 0 0 0.25rem',
+                border: '1px solid gray',
+                borderRight: 0,
+                padding: '0.125rem 0.5rem',
+              }}
+            >
+              Height
+            </span>
+            <input
+              type="text"
+              value={
+                heightAsString === undefined ? height : heightAsString
+              }
+              onChange={(e) => {
+                const heightAsString = e.target.value
+                if (heightAsString.match(/^[0-9]+$/)) {
+                  const height = parseInt(heightAsString)
+                  setHeightAsString(undefined)
+                  setHeight(height)
+                } else {
+                  setHeightAsString(heightAsString)
+                }
+              }}
+              style={{
+                flex: '1',
+                borderRadius: '0 0.25rem 0.25rem 0',
+                border: '1px solid gray',
+                textAlign: 'right',
+                padding: '0.125rem 0.5rem',
+
+                backgroundColor:
+                  heightAsString === undefined ? 'inherit' : '#FAA',
               }}
             />
           </div>
@@ -84,7 +170,30 @@ export default function Sidebar({
           />
         </p>
         <p>
-          <ResolutionSummary layout={layoutInProgress} />
+          Image Size: {layoutInProgress.size.width}x
+          {layoutInProgress.size.height}
+          <br />
+          World Size:{' '}
+          {Math.round(
+            layoutInProgress.bounds.right - layoutInProgress.bounds.left,
+          )}
+          x
+          {Math.round(
+            layoutInProgress.bounds.top - layoutInProgress.bounds.bottom,
+          )}
+          <br />
+          World/Image Resolution:{' '}
+          {Math.round(
+            Math.min(
+              (layoutInProgress.bounds.right -
+                layoutInProgress.bounds.left) /
+                layoutInProgress.size.width,
+
+              (layoutInProgress.bounds.top -
+                layoutInProgress.bounds.bottom) /
+                layoutInProgress.size.height,
+            ),
+          )}
         </p>
         <p>
           <ExtentSummary layout={layoutInProgress} />

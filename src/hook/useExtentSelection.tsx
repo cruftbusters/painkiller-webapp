@@ -16,8 +16,10 @@ interface ExtentSelectionContext {
   isSelecting: boolean
   resetSelection: () => void
   selection: Selection
+  setWidth: (width: number) => void
   setSelecting: Dispatch<SetStateAction<boolean>>
   setSelection: Dispatch<SetStateAction<Selection>>
+  setHeight: (height: number) => void
   width: number
   worldSelection: Selection
 }
@@ -33,10 +35,16 @@ const extentSelectionContext = createContext<ExtentSelectionContext>({
     throw errMissingProvider
   },
   selection: { left: 0, top: 0, right: 0, bottom: 0 },
+  setHeight: () => {
+    throw errMissingProvider
+  },
   setSelecting: () => {
     throw errMissingProvider
   },
   setSelection: () => {
+    throw errMissingProvider
+  },
+  setWidth: () => {
     throw errMissingProvider
   },
   width: 0,
@@ -56,20 +64,44 @@ export function ExtentSelectionContextProvider({
 
   const selectionWithDefault = selection || getDefaultSelection(mapState)
 
+  const [size, setSize] = useState<{ width: number; height: number }>()
+  const selectionWidth = Math.round(
+    selectionWithDefault.right - selectionWithDefault.left,
+  )
+  const widthWithDefault = size?.width || selectionWidth
+  const selectionHeight = Math.round(
+    selectionWithDefault.bottom - selectionWithDefault.top,
+  )
+  const heightWithDefault = size?.height || selectionHeight
+
   return (
     <extentSelectionContext.Provider
       value={{
-        height: Math.round(
-          selectionWithDefault.bottom - selectionWithDefault.top,
-        ),
+        height: heightWithDefault,
         isSelecting,
-        resetSelection: () => setSelection(undefined),
+        resetSelection: () => {
+          setSelection(undefined)
+          setSize(undefined)
+        },
         selection: selectionWithDefault,
-        setSelecting,
+        setHeight: (height) =>
+          setSize({
+            width: Math.round((height * selectionWidth) / selectionHeight),
+            height,
+          }),
+        setSelecting: (isSelecting) => {
+          if (isSelecting) {
+            setSize(undefined)
+          }
+          setSelecting(isSelecting)
+        },
         setSelection: setSelection as Dispatch<SetStateAction<Selection>>,
-        width: Math.round(
-          selectionWithDefault.right - selectionWithDefault.left,
-        ),
+        setWidth: (width) =>
+          setSize({
+            width,
+            height: Math.round((width * selectionHeight) / selectionWidth),
+          }),
+        width: widthWithDefault,
         worldSelection: getWorldSelection(mapState, selectionWithDefault),
       }}
       children={children}
