@@ -86,30 +86,7 @@ export default function Sidebar({
           />
         </p>
         <p>
-          Image Size: {layoutInProgress.size.width}x
-          {layoutInProgress.size.height}
-          <br />
-          World Size:{' '}
-          {Math.round(
-            layoutInProgress.bounds.right - layoutInProgress.bounds.left,
-          )}
-          x
-          {Math.round(
-            layoutInProgress.bounds.top - layoutInProgress.bounds.bottom,
-          )}
-          <br />
-          World/Image Resolution:{' '}
-          {Math.round(
-            Math.min(
-              (layoutInProgress.bounds.right -
-                layoutInProgress.bounds.left) /
-                layoutInProgress.size.width,
-
-              (layoutInProgress.bounds.top -
-                layoutInProgress.bounds.bottom) /
-                layoutInProgress.size.height,
-            ),
-          )}
+          <ResolutionSummary layout={layoutInProgress} />
         </p>
         <p>
           <ExtentSummary layout={layoutInProgress} />
