@@ -1,5 +1,5 @@
 import OverlayOpacity from './OverlayOpacity'
-import { CSSProperties, ReactNode, useState } from 'react'
+import { CSSProperties, ReactNode, useEffect, useState } from 'react'
 import useLayout from '../hook/useLayout'
 import useExtentSelection from '../hook/useExtentSelection'
 import BiButton from './BiButton'
@@ -26,8 +26,7 @@ export default function Sidebar({
     createLayoutError,
     layout,
   } = useLayout()
-  const { layoutInProgress, scaleAsString, setScaleAsString } =
-    useLayoutInProgress()
+  const { layoutInProgress, scale, setScale } = useLayoutInProgress()
   const {
     height,
     isSelecting,
@@ -37,8 +36,6 @@ export default function Sidebar({
     setWidth,
     width,
   } = useExtentSelection()
-  const [widthAsString, setWidthAsString] = useState<string>()
-  const [heightAsString, setHeightAsString] = useState<string>()
   return (
     <div
       style={{
@@ -53,107 +50,26 @@ export default function Sidebar({
       <Section>
         <Header>Layout Settings</Header>
         <p>
-          <div style={{ display: 'flex', marginBottom: '0.25rem' }}>
-            <span
-              style={{
-                flex: '0',
-                borderRadius: '0.25rem 0 0 0.25rem',
-                border: '1px solid gray',
-                borderRight: 0,
-                padding: '0.125rem 0.5rem',
-              }}
-            >
-              Scale
-            </span>
-            <input
-              type="text"
-              value={scaleAsString}
-              onChange={(e) => setScaleAsString(e.target.value)}
-              style={{
-                flex: '1',
-                borderRadius: '0 0.25rem 0.25rem 0',
-                border: '1px solid gray',
-                textAlign: 'right',
-                padding: '0.125rem 0.5rem',
-              }}
-            />
-          </div>
-          <div style={{ display: 'flex', marginBottom: '0.25rem' }}>
-            <span
-              style={{
-                flex: '0',
-                borderRadius: '0.25rem 0 0 0.25rem',
-                border: '1px solid gray',
-                borderRight: 0,
-                padding: '0.125rem 0.5rem',
-              }}
-            >
-              Width
-            </span>
-            <input
-              type="text"
-              value={widthAsString === undefined ? width : widthAsString}
-              onChange={(e) => {
-                const widthAsString = e.target.value
-                if (widthAsString.match(/^[0-9]+$/)) {
-                  const width = parseInt(widthAsString)
-                  setWidthAsString(undefined)
-                  setWidth(width)
-                } else {
-                  setWidthAsString(widthAsString)
-                }
-              }}
-              style={{
-                flex: '1',
-                borderRadius: '0 0.25rem 0.25rem 0',
-                border: '1px solid gray',
-                textAlign: 'right',
-                padding: '0.125rem 0.5rem',
-
-                backgroundColor:
-                  widthAsString === undefined ? 'inherit' : '#FAA',
-              }}
-            />
-          </div>
-          <div style={{ display: 'flex', marginBottom: '0.25rem' }}>
-            <span
-              style={{
-                flex: '0',
-                borderRadius: '0.25rem 0 0 0.25rem',
-                border: '1px solid gray',
-                borderRight: 0,
-                padding: '0.125rem 0.5rem',
-              }}
-            >
-              Height
-            </span>
-            <input
-              type="text"
-              value={
-                heightAsString === undefined ? height : heightAsString
-              }
-              onChange={(e) => {
-                const heightAsString = e.target.value
-                if (heightAsString.match(/^[0-9]+$/)) {
-                  const height = parseInt(heightAsString)
-                  setHeightAsString(undefined)
-                  setHeight(height)
-                } else {
-                  setHeightAsString(heightAsString)
-                }
-              }}
-              style={{
-                flex: '1',
-                borderRadius: '0 0.25rem 0.25rem 0',
-                border: '1px solid gray',
-                textAlign: 'right',
-                padding: '0.125rem 0.5rem',
-
-                backgroundColor:
-                  heightAsString === undefined ? 'inherit' : '#FAA',
-              }}
-            />
-          </div>
+          <Field
+            label="Scale"
+            value={scale.toString()}
+            check={(value) =>
+              !!value.match(/^-?([0-9]+|\.?[0-9]+|[0-9]+\.[0-9]+)$/)
+            }
+            onChange={(e) => setScale(parseFloat(e.target.value))}
+          />
+          <Field
+            label="Width"
+            value={width.toString()}
+            check={(value) => !!value.match(/^[0-9]+$/)}
+            onChange={(e) => setWidth(parseInt(e.target.value))}
+          />
+          <Field
+            label="Height"
+            value={height.toString()}
+            check={(value) => !!value.match(/^[0-9]+$/)}
+            onChange={(e) => setHeight(parseInt(e.target.value))}
+          />
         </p>
       </Section>
       <Section>
@@ -305,6 +221,58 @@ function Header({
       }}
     >
       {children}
+    </div>
+  )
+}
+
+interface FieldProps {
+  label: ReactNode
+  value: string
+  onChange: React.ChangeEventHandler<HTMLInputElement>
+  check: (eTargetValue: string) => boolean
+}
+
+function Field({ label, value, onChange, check }: FieldProps) {
+  const [internalValue, setInternalValue] = useState<string>()
+  useEffect(() => {
+    setInternalValue(value)
+  }, [value])
+  const valueWithDefault =
+    internalValue !== undefined ? internalValue : value
+
+  return (
+    <div style={{ display: 'flex', marginBottom: '0.25rem' }}>
+      <span
+        style={{
+          flex: '0',
+          borderRadius: '0.25rem 0 0 0.25rem',
+          border: '1px solid gray',
+          borderRight: 0,
+          padding: '0.125rem 0.5rem',
+        }}
+        children={label}
+      />
+      <input
+        type="text"
+        value={valueWithDefault}
+        onChange={(e) => {
+          setInternalValue(e.target.value)
+          if (check(e.target.value)) {
+            onChange(e)
+          }
+        }}
+        style={{
+          flex: '1',
+          borderRadius: '0 0.25rem 0.25rem 0',
+          border: '1px solid gray',
+          textAlign: 'right',
+          padding: '0.125rem 0.5rem',
+          backgroundColor:
+            internalValue !== undefined && !check(internalValue)
+              ? '#FAA'
+              : 'inherit',
+        }}
+      />
     </div>
   )
 }

@@ -1,18 +1,11 @@
 import { LayoutInProgress } from '../types/Layout'
-import {
-  createContext,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, SetStateAction, useContext, useState } from 'react'
 import useExtentSelection from './useExtentSelection'
 
 interface LayoutInProgressContext {
   layoutInProgress: LayoutInProgress
   scale: number
-  scaleAsString: string
-  setScaleAsString: React.Dispatch<SetStateAction<string>>
+  setScale: React.Dispatch<SetStateAction<number>>
 }
 
 const errMissingLayoutInProgressContextProvider = Error(
@@ -31,8 +24,7 @@ const initialLayoutInProgress = {
 const layoutInProgressContext = createContext<LayoutInProgressContext>({
   layoutInProgress: initialLayoutInProgress,
   scale: 1,
-  scaleAsString: '1.0',
-  setScaleAsString: () => {
+  setScale: () => {
     throw errMissingLayoutInProgressContextProvider
   },
 })
@@ -44,16 +36,7 @@ interface LayoutInProgressContextProviderProps {
 export function LayoutInProgressContextProvider({
   children,
 }: LayoutInProgressContextProviderProps) {
-  const [scaleAsString, setScaleAsString] = useState<string>('1')
   const [scale, setScale] = useState(1)
-  useEffect(() => {
-    if (scaleAsString.match(/^-?[0-9]*(\.[0-9]*)?$/)) {
-      setScale(parseFloat(scaleAsString))
-    } else {
-      setScale(NaN)
-    }
-  }, [scaleAsString])
-
   const { height, width, worldSelection } = useExtentSelection()
 
   return (
@@ -65,8 +48,7 @@ export function LayoutInProgressContextProvider({
           bounds: worldSelection,
         },
         scale,
-        scaleAsString,
-        setScaleAsString,
+        setScale,
       }}
       children={children}
     />
