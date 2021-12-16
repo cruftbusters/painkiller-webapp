@@ -6,6 +6,7 @@ import {
   useContext,
   useState,
 } from 'react'
+import Epsg3857Coordinate from '../types/Epsg3857Coordinate'
 import MapPixel from '../types/MapPixel'
 import MapState from '../types/MapState'
 import Selection from '../types/Selection'
@@ -18,7 +19,7 @@ interface ExtentSelectionContext {
   selection: Selection
   setWidth: (width: number) => void
   setSelecting: Dispatch<SetStateAction<boolean>>
-  setSelection: Dispatch<SetStateAction<Selection>>
+  setSelection: (selection: Selection) => void
   setHeight: (height: number) => void
   width: number
   worldSelection: Selection
@@ -59,20 +60,26 @@ export function ExtentSelectionContextProvider({
   children,
 }: ExtentSelectionContextProviderProps) {
   const [isSelecting, setSelecting] = useState(false)
-  const [selection, setSelection] = useState<Selection>()
+  const [worldSelection, setWorldSelection] = useState<Selection>()
   const { mapState } = useMapState()
 
-  const selectionWithDefault = selection || getDefaultSelection(mapState)
+  const screenSelectionWithDefault = worldSelection
+    ? getScreenSelection(mapState, worldSelection)
+    : getDefaultSelection(mapState)
 
   const [size, setSize] = useState<{ width: number; height: number }>()
-  const selectionWidth = Math.round(
-    selectionWithDefault.right - selectionWithDefault.left,
+  const screenSelectionWidth = Math.round(
+    screenSelectionWithDefault.right - screenSelectionWithDefault.left,
   )
-  const widthWithDefault = size?.width || selectionWidth
-  const selectionHeight = Math.round(
-    selectionWithDefault.bottom - selectionWithDefault.top,
+  const widthWithDefault = size?.width || screenSelectionWidth
+  const screenSelectionHeight = Math.round(
+    screenSelectionWithDefault.bottom - screenSelectionWithDefault.top,
   )
-  const heightWithDefault = size?.height || selectionHeight
+  const heightWithDefault = size?.height || screenSelectionHeight
+
+  const worldSelectionWithDefault =
+    worldSelection ||
+    getWorldSelection(mapState, getDefaultSelection(mapState))
 
   return (
     <extentSelectionContext.Provider
@@ -80,13 +87,15 @@ export function ExtentSelectionContextProvider({
         height: heightWithDefault,
         isSelecting,
         resetSelection: () => {
-          setSelection(undefined)
+          setWorldSelection(undefined)
           setSize(undefined)
         },
-        selection: selectionWithDefault,
+        selection: screenSelectionWithDefault,
         setHeight: (height) =>
           setSize({
-            width: Math.round((height * selectionWidth) / selectionHeight),
+            width: Math.round(
+              (height * screenSelectionWidth) / screenSelectionHeight,
+            ),
             height,
           }),
         setSelecting: (isSelecting) => {
@@ -95,14 +104,22 @@ export function ExtentSelectionContextProvider({
           }
           setSelecting(isSelecting)
         },
-        setSelection: setSelection as Dispatch<SetStateAction<Selection>>,
+        setSelection: (selection) => {
+          setSize({
+            width: selection.right - selection.left,
+            height: selection.bottom - selection.top,
+          })
+          setWorldSelection(getWorldSelection(mapState, selection))
+        },
         setWidth: (width) =>
           setSize({
             width,
-            height: Math.round((width * selectionHeight) / selectionWidth),
+            height: Math.round(
+              (width * screenSelectionHeight) / screenSelectionWidth,
+            ),
           }),
         width: widthWithDefault,
-        worldSelection: getWorldSelection(mapState, selectionWithDefault),
+        worldSelection: worldSelectionWithDefault,
       }}
       children={children}
     />
@@ -117,6 +134,18 @@ function getDefaultSelection(mapState: MapState) {
     right: width,
     bottom: height,
   }
+}
+
+function getScreenSelection(mapState: MapState, selection: Selection) {
+  const { x: left, y: top } = new Epsg3857Coordinate(
+    selection.left,
+    selection.top,
+  ).toMapPixel(mapState)
+  const { x: right, y: bottom } = new Epsg3857Coordinate(
+    selection.right,
+    selection.bottom,
+  ).toMapPixel(mapState)
+  return { left, top, right, bottom }
 }
 
 function getWorldSelection(mapState: MapState, selection: Selection) {
